@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Glass Portfolio</title>
+  <title>Premium Glass UI</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Top pill glass navbar -->
-  <nav class="glass-nav">
+
+  <!-- Top Pill Glass Navbar -->
+  <nav class="navbar glass">
     <div class="logo">Developer51709</div>
 
     <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -24,19 +25,20 @@
     <button id="themeToggle" class="theme-btn">🌙</button>
   </nav>
 
-  <!-- Glass bottom navigation bar -->
-  <nav class="glass-bottom-nav">
+  <!-- Bottom Glass Navigation -->
+  <nav class="bottom-nav glass">
     <button class="bottom-item" data-target="#home">Home</button>
     <button class="bottom-item" data-target="#projects">Work</button>
     <button class="bottom-item" data-target="#about">About</button>
     <button class="bottom-item" data-target="#contact">Contact</button>
   </nav>
 
-  <!-- Hero / Home -->
+  <!-- HERO -->
   <section id="home" class="hero parallax-panel">
-    <div class="hero-inner tilt">
-      <h1>Hello, I’m <span>YourName</span></h1>
-      <p>I build fast, modern, glassy interfaces without any frameworks.</p>
+    <div class="hero-inner tilt glass">
+      <h1>Hello, I’m <span>Developer51709</span></h1>
+      <p>I build premium, modern, liquid‑glass interfaces using pure HTML, CSS, and JavaScript.</p>
+
       <div class="hero-actions">
         <button class="glass-btn" onclick="scrollToSection('#projects')">View Projects</button>
         <button class="glass-btn secondary" onclick="scrollToSection('#contact')">Contact Me</button>
@@ -44,29 +46,33 @@
     </div>
   </section>
 
-  <!-- Projects -->
+  <!-- PROJECTS -->
   <section id="projects" class="section parallax-panel">
     <h2 class="section-title">Projects</h2>
+
     <div class="grid">
-      <div class="card tilt scroll-reactive">
+      <div class="card glass tilt scroll-reactive">
         <h3>Project One</h3>
-        <p>A clean, responsive landing page with glassmorphism.</p>
+        <p>A clean, responsive landing page with realistic glass UI.</p>
       </div>
-      <div class="card tilt scroll-reactive">
+
+      <div class="card glass tilt scroll-reactive">
         <h3>Project Two</h3>
-        <p>A dashboard UI with animated glass panels.</p>
+        <p>A dashboard UI with animated glass panels and parallax.</p>
       </div>
-      <div class="card tilt scroll-reactive">
+
+      <div class="card glass tilt scroll-reactive">
         <h3>Project Three</h3>
         <p>A portfolio site optimized for mobile and desktop.</p>
       </div>
     </div>
   </section>
 
-  <!-- About -->
+  <!-- ABOUT -->
   <section id="about" class="section parallax-panel">
     <h2 class="section-title">About</h2>
-    <div class="about-content tilt scroll-reactive">
+
+    <div class="about-card glass tilt scroll-reactive">
       <p>
         I focus on performance, clean design, and modern UI patterns—without relying on heavy frameworks.
         This site is built with pure HTML, CSS, and JavaScript to prove that point.
@@ -74,19 +80,20 @@
     </div>
   </section>
 
-  <!-- Contact -->
+  <!-- CONTACT -->
   <section id="contact" class="section parallax-panel">
     <h2 class="section-title">Contact</h2>
-    <div class="contact-card tilt scroll-reactive">
-      <p>Email: <a href="mailto:you@example.com">you@example.com</a></p>
-      <button class="glass-btn" onclick="window.location.href='mailto:you@example.com'">
+
+    <div class="contact-card glass tilt scroll-reactive">
+      <p>Email: <a href="developer51709@proton.me">developer51709@proton.me</a></p>
+      <button class="glass-btn" onclick="window.location.href='developer51709@proton.me'">
         Send Email
       </button>
     </div>
   </section>
 
   <footer>
-    © 2025 developer51709. Built with pure HTML, CSS & JS.
+    © 2025 Developer51709 — Built with pure HTML, CSS & JS.
   </footer>
 
   <script src="script.js"></script>
