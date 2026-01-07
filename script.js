@@ -1,10 +1,14 @@
+// ----------------------------------------------------------
 // Smooth scroll
+// ----------------------------------------------------------
 function scrollToSection(selector) {
   const el = document.querySelector(selector);
   if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
+// ----------------------------------------------------------
 // Theme toggle
+// ----------------------------------------------------------
 const toggle = document.getElementById("themeToggle");
 const body = document.body;
 
@@ -19,7 +23,9 @@ toggle.addEventListener("click", () => {
   localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
 });
 
+// ----------------------------------------------------------
 // Mobile nav
+// ----------------------------------------------------------
 const hamburger = document.getElementById("hamburgerBtn");
 const navLinks = document.getElementById("navLinks");
 
@@ -27,14 +33,18 @@ hamburger.addEventListener("click", () => {
   navLinks.classList.toggle("show");
 });
 
+// ----------------------------------------------------------
 // Bottom nav
+// ----------------------------------------------------------
 document.querySelectorAll(".bottom-item").forEach(btn => {
   btn.addEventListener("click", () => {
     scrollToSection(btn.dataset.target);
   });
 });
 
+// ----------------------------------------------------------
 // 3D tilt
+// ----------------------------------------------------------
 document.querySelectorAll(".tilt").forEach(card => {
   card.addEventListener("mousemove", (e) => {
     const rect = card.getBoundingClientRect();
@@ -50,7 +60,9 @@ document.querySelectorAll(".tilt").forEach(card => {
   });
 });
 
+// ----------------------------------------------------------
 // Parallax + scroll reactive
+// ----------------------------------------------------------
 const panels = document.querySelectorAll(".parallax-panel");
 const reactive = document.querySelectorAll(".scroll-reactive");
 
@@ -73,3 +85,79 @@ function handleScroll() {
 
 window.addEventListener("scroll", handleScroll);
 window.addEventListener("load", handleScroll);
+
+// ----------------------------------------------------------
+// Ripple effect for dropdown menu
+// ----------------------------------------------------------
+navLinks.addEventListener("click", (e) => {
+  const rect = navLinks.getBoundingClientRect();
+  const ripple = document.createElement("span");
+  ripple.classList.add("ripple");
+
+  ripple.style.left = `${e.clientX - rect.left}px`;
+  ripple.style.top = `${e.clientY - rect.top}px`;
+
+  navLinks.appendChild(ripple);
+
+  setTimeout(() => ripple.remove(), 600);
+});
+
+// ----------------------------------------------------------
+// Parallax glow movement
+// ----------------------------------------------------------
+document.querySelectorAll(".glass").forEach(glass => {
+  glass.addEventListener("mousemove", e => {
+    const rect = glass.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    glass.style.setProperty("--glow-x", `${x}%`);
+    glass.style.setProperty("--glow-y", `${y}%`);
+  });
+
+  glass.addEventListener("mouseleave", () => {
+    glass.style.setProperty("--glow-x", `50%`);
+    glass.style.setProperty("--glow-y", `50%`);
+  });
+});
+
+// ----------------------------------------------------------
+// Scroll-activated glow
+// ----------------------------------------------------------
+function updateGlowOnScroll() {
+  document.querySelectorAll(".glass").forEach(el => {
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.85) {
+      el.classList.add("glow-active");
+    }
+  });
+}
+
+window.addEventListener("scroll", updateGlowOnScroll);
+window.addEventListener("load", updateGlowOnScroll);
+
+// ----------------------------------------------------------
+// Scroll-direction reactive background gradient
+// ----------------------------------------------------------
+let lastScroll = 0;
+let targetAngle = 120;
+let currentAngle = 120;
+
+function animateGradient() {
+  currentAngle += (targetAngle - currentAngle) * 0.08;
+  document.documentElement.style.setProperty("--bg-angle", `${currentAngle}deg`);
+  requestAnimationFrame(animateGradient);
+}
+
+animateGradient();
+
+window.addEventListener("scroll", () => {
+  const current = window.scrollY;
+
+  if (current > lastScroll) {
+    targetAngle = 160; // scrolling down
+  } else {
+    targetAngle = 80; // scrolling up
+  }
+
+  lastScroll = current;
+});
