@@ -41,7 +41,7 @@ body {
   --glass-inner: rgba(255, 255, 255, 0.9);
   --glass-shadow: rgba(0, 0, 0, 0.18);
 
-  --glow-strength: 0.35;
+  --glow-strength: 0.28;
 }
 
 /* Dark Mode */
@@ -77,7 +77,7 @@ body.dark {
 }
 
 /* ----------------------------------------------------------
-   REALISTIC LIQUID GLASS
+   REALISTIC LIQUID GLASS (Unified Glow System)
 ---------------------------------------------------------- */
 
 .glass {
@@ -90,10 +90,6 @@ body.dark {
   position: relative;
   overflow: hidden;
 
-  /* Breathing pulse */
-  animation: glassPulse 6s ease-in-out infinite;
-
-  /* Parallax glow defaults */
   --glow-x: 50%;
   --glow-y: 50%;
 }
@@ -112,7 +108,7 @@ body.dark {
   pointer-events: none;
 }
 
-/* Glow + shimmer layer */
+/* Unified glow + shimmer layer */
 .glass::after {
   content: "";
   position: absolute;
@@ -121,50 +117,47 @@ body.dark {
 
   background:
     radial-gradient(circle at center,
-      rgba(255, 255, 255, 0.18),
-      rgba(255, 255, 255, 0.05) 60%,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.04) 60%,
       transparent 100%
     ),
     linear-gradient(
       120deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(255, 255, 255, 0.25) 50%,
-      rgba(255, 255, 255, 0.12) 100%
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 255, 255, 0.10) 100%
     );
 
   background-size: 200% 200%;
-  animation: shimmerMove 12s ease-in-out infinite;
+  animation: shimmerMove 14s ease-in-out infinite;
 
   opacity: var(--glow-strength);
-  transition: opacity 0.4s ease, transform 0.4s ease, background-position 0.15s ease-out;
+  transform: scale(1);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease,
+    background-position 0.15s ease-out;
 
   background-position: var(--glow-x) var(--glow-y), center;
 }
 
 /* Hover glow */
 .glass:hover::after {
-  opacity: calc(var(--glow-strength) + 0.15);
-  transform: scale(1.05);
-}
-
-/* Scroll-reactive glow */
-.glow-active::after {
-  opacity: calc(var(--glow-strength) + 0.10);
+  opacity: calc(var(--glow-strength) + 0.12);
   transform: scale(1.03);
 }
 
-/* Shimmer animation */
-@keyframes shimmerMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Scroll glow */
+.glow-active::after {
+  opacity: calc(var(--glow-strength) + 0.10);
+  transform: scale(1.02);
 }
 
-/* Breathing pulse */
-@keyframes glassPulse {
-  0% { box-shadow: 0 8px 32px var(--glass-shadow); }
-  50% { box-shadow: 0 12px 38px rgba(255, 255, 255, 0.25); }
-  100% { box-shadow: 0 8px 32px var(--glass-shadow); }
+/* Subtle shimmer */
+@keyframes shimmerMove {
+  0% { background-position: 40% 50%; }
+  50% { background-position: 60% 50%; }
+  100% { background-position: 40% 50%; }
 }
 
 /* ----------------------------------------------------------
