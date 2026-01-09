@@ -2,419 +2,594 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Respectable Browser Pro Max Extreme Deluxe Premium Edition</title>
-
+  <title>Respectable Browser Internal HyperCore OmniPanel™</title>
   <style>
     body {
+      background: #050608;
+      color: #0f0;
+      font-family: "Courier New", monospace;
       margin: 0;
-      padding: 40px 0;
-      background: linear-gradient(135deg, #e8ecf3, #f7f9fc);
-      font-family: "Segoe UI", Roboto, sans-serif;
-
-      /* FIX: allow scrolling on mobile */
-      display: block;
-      overflow-y: auto;
-      overflow-x: hidden;
-
-      min-height: 100vh;
-      height: auto;
-
-      animation: fadeIn 1.2s ease forwards;
+      padding: 0;
+      overflow: hidden;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0 }
-      to { opacity: 1 }
+    .boot-screen, .main-ui {
+      position: absolute;
+      inset: 0;
+      padding: 30px;
+      box-sizing: border-box;
     }
 
-    .container {
-      text-align: center;
-      max-width: 850px;
-      padding: 40px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    .boot-screen {
+      background: #000;
+      color: #0f0;
+      font-size: 14px;
+    }
 
-      /* FIX: center without flexbox */
-      margin: 0 auto 60px auto;
-
-      animation: slideUp 1s ease forwards;
+    .boot-line {
       opacity: 0;
-      transform: translateY(40px);
+      animation: bootLine 0.4s forwards;
     }
 
-    @keyframes slideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes bootLine {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .main-ui {
+      display: none;
+      background: radial-gradient(circle at top, #111 0, #050608 60%, #000 100%);
+      color: #0f0;
     }
 
     h1 {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #222;
-      position: relative;
-      display: inline-block;
-      animation: fadeInText 1.4s ease forwards;
-    }
-
-    @keyframes fadeInText {
-      from { opacity: 0; transform: translateY(10px) }
-      to { opacity: 1; transform: translateY(0) }
-    }
-
-    h1::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -6px;
-      width: 0%;
-      height: 3px;
-      background: #4a90e2;
-      animation: underline 1.6s ease forwards 0.6s;
-    }
-
-    @keyframes underline {
-      from { width: 0% }
-      to { width: 100% }
-    }
-
-    p {
-      font-size: 18px;
-      color: #555;
-      margin-top: 20px;
-      opacity: 0;
-      animation: fadeIn 1.6s ease forwards 1s;
-    }
-
-    /* Slideshow */
-    .slideshow {
-      margin-top: 30px;
-      height: 160px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .slide {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      opacity: 0;
-      transform: translateX(40px);
-      transition: all 0.6s ease;
+      margin: 0 0 10px 0;
       font-size: 20px;
-      color: #333;
+      text-shadow: 0 0 8px #0f0;
+    }
+
+    .subtitle {
+      color: #0a0;
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1.5fr;
+      grid-template-rows: auto auto;
+      gap: 16px;
+      height: calc(100vh - 80px);
+    }
+
+    .panel {
+      border: 1px solid #0f0;
       padding: 10px;
-    }
-
-    .slide.active {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    /* Broken progress bar */
-    .progress-container {
-      margin-top: 30px;
-      width: 100%;
-      background: #eee;
-      border-radius: 10px;
+      box-sizing: border-box;
+      background: rgba(0, 0, 0, 0.7);
+      position: relative;
       overflow: hidden;
-      height: 20px;
-      position: relative;
     }
 
-    .progress-bar {
+    .panel-title {
+      font-size: 12px;
+      margin-bottom: 6px;
+      color: #8f8;
+      text-transform: uppercase;
+    }
+
+    .log {
+      font-size: 11px;
+      line-height: 1.4;
       height: 100%;
-      width: 3%;
-      background: #4a90e2;
-      transition: width 0.4s ease;
+      overflow-y: auto;
+      padding-right: 4px;
     }
 
-    /* Backwards spinner */
-    .spinner {
-      margin: 20px auto;
-      border: 6px solid #ddd;
-      border-top: 6px solid #4a90e2;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spinBackwards 1s linear infinite;
+    .meter {
+      margin-top: 10px;
     }
 
-    @keyframes spinBackwards {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(-360deg); }
-    }
-
-    /* Buttons */
-    .button {
-      margin-top: 25px;
-      padding: 14px 32px;
-      font-size: 18px;
-      border: none;
-      border-radius: 10px;
-      background: #4a90e2;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s ease;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    }
-
-    .button:hover {
-      background: #3a7ccc;
-      transform: translateY(-2px);
-    }
-
-    /* Overreacting continue button */
-    .button.dramatic:hover {
-      animation: shake 0.3s ease;
-      background: #e24a4a;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0) }
-      25% { transform: translateX(-4px) }
-      50% { transform: translateX(4px) }
-      75% { transform: translateX(-4px) }
-      100% { transform: translateX(0) }
-    }
-
-    /* Impossible checkbox */
-    .checkbox-container {
-      margin-top: 20px;
-      user-select: none;
-    }
-
-    .checkbox-container input {
-      transform: scale(1.4);
-      margin-right: 10px;
-    }
-
-    /* Fake benchmark chart */
-    .chart {
-      margin-top: 30px;
-      text-align: left;
-      font-size: 16px;
-    }
-
-    .bar {
+    .meter-bar {
+      width: 100%;
       height: 12px;
-      background: #ccc;
-      margin: 6px 0;
+      border: 1px solid #0f0;
       position: relative;
+      overflow: hidden;
     }
 
-    .bar span {
-      display: block;
-      height: 100%;
-      background: #4a90e2;
-    }
-
-    /* License Modal */
-    .license-modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
+    .meter-fill {
+      position: absolute;
       left: 0;
       top: 0;
-      width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: center;
+      width: 8%;
+      background: linear-gradient(90deg, #f00, #ff0);
+      animation: wiggle 0.4s infinite alternate;
+    }
+
+    @keyframes wiggle {
+      from { transform: translateX(-2px); }
+      to { transform: translateX(4px); }
+    }
+
+    .meter-label {
+      font-size: 11px;
+      margin-top: 4px;
+      color: #f66;
+    }
+
+    .danger-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .danger-button {
+      background: #200;
+      color: #f66;
+      border: 1px solid #f00;
+      font-family: inherit;
+      font-size: 11px;
+      padding: 4px 8px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .danger-button:hover {
+      background: #400;
+    }
+
+    .bios-menu, .status-list {
+      font-size: 11px;
+      line-height: 1.5;
+      white-space: pre;
+    }
+
+    .terminal-input {
+      display: flex;
       align-items: center;
-      padding: 20px;
+      margin-top: 6px;
+      font-size: 11px;
     }
 
-    .license-content {
-      background: white;
-      padding: 30px;
-      border-radius: 14px;
-      max-width: 600px;
-      width: 100%;
-      max-height: 80vh;
+    .terminal-input span {
+      margin-right: 4px;
+    }
+
+    .terminal-input input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #0f0;
+      color: #0f0;
+      font-family: inherit;
+      font-size: 11px;
+      flex: 1;
+      outline: none;
+    }
+
+    .chat-log {
+      font-size: 11px;
+      line-height: 1.4;
+      height: 100%;
       overflow-y: auto;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      animation: slideUp 0.4s ease;
+      padding-right: 4px;
     }
 
-    .license-text {
-      text-align: left;
-      margin-top: 20px;
-      max-height: 50vh;
-      overflow-y: auto;
-      padding-right: 10px;
+    .chat-entry {
+      margin-bottom: 6px;
     }
 
-    /* Mobile responsiveness */
-    @media (max-width: 600px) {
-      .container {
-        width: 90%;
-        padding: 20px;
-      }
-      h1 {
-        font-size: 26px;
-      }
-      .slide {
-        font-size: 18px;
-      }
+    .chat-user {
+      color: #8f8;
+    }
+
+    .chat-text {
+      color: #ccc;
+    }
+
+    .overlay-panic {
+      position: absolute;
+      inset: 0;
+      background: #000;
+      color: #f00;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 18px;
+      text-shadow: 0 0 10px #f00;
+      z-index: 10;
+    }
+
+    .overlay-panic p {
+      margin: 6px 0;
+    }
+
+    .shake {
+      animation: shakeAnim 0.3s;
+    }
+
+    @keyframes shakeAnim {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-4px, 2px); }
+      50% { transform: translate(4px, -2px); }
+      75% { transform: translate(-3px, 3px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .dark-mode-toggle {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 10px;
+      cursor: pointer;
+      color: #ff0;
+      text-decoration: underline;
+    }
+
+    .bright-mode {
+      background: #fdfdfd;
+      color: #111;
+    }
+
+    .bright-mode .panel {
+      border-color: #333;
+      background: #fff;
+    }
+
+    .bright-mode .panel-title {
+      color: #333;
+    }
+
+    .bright-mode .meter-bar {
+      border-color: #333;
+    }
+
+    .bright-mode .meter-fill {
+      background: linear-gradient(90deg, #f80, #f00);
+    }
+
+    .bright-mode .danger-button {
+      background: #fee;
+      color: #900;
+      border-color: #c00;
+    }
+
+    .bright-mode .chat-user {
+      color: #006;
+    }
+
+    .bright-mode .chat-text {
+      color: #333;
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>Welcome to Respectable Browser Pro Max Extreme Deluxe Premium Edition</h1>
-    <p>The browser that manages to get worse and more regrettable with every update :)</p>
+  <!-- Fake boot screen -->
+  <div class="boot-screen" id="boot">
+    <div id="bootLines"></div>
+  </div>
 
-    <!-- Slideshow -->
-    <div class="slideshow">
-      <div class="slide active">• Enjoy lightning‑fast performance (when it feels like it)</div>
-      <div class="slide">• Search literally anything — even places that should NOT be search engines</div>
-      <div class="slide">• Experience our patented “Unstable Rendering Technology™”</div>
-      <div class="slide">• Built‑in support for IRS, Roblox, and other essential browsing destinations</div>
-      <div class="slide">• Now with 37% more unnecessary animations</div>
-      <div class="slide">• Proudly worse than the last version</div>
+  <!-- Panic overlay -->
+  <div class="overlay-panic" id="panicOverlay">
+    <div>
+      <p>*** KERNEL PANIC ***</p>
+      <p>Reason: You clicked something you shouldn't have.</p>
+      <p>System will reboot in: never</p>
     </div>
+  </div>
 
-    <button class="button" onclick="nextSlide()">Next</button>
+  <!-- Main UI -->
+  <div class="main-ui" id="ui">
+    <div class="dark-mode-toggle" id="darkToggle">Toggle Dark Mode (makes it worse)</div>
+    <h1>Respectable Browser Internal HyperCore OmniPanel™</h1>
+    <div class="subtitle">Unauthorized access detected. Proceeding anyway.</div>
 
-    <!-- Broken progress bar -->
-    <div class="progress-container">
-      <div class="progress-bar" id="progress"></div>
-    </div>
+    <div class="layout">
+      <!-- Left: Logs + Terminal -->
+      <div class="panel">
+        <div class="panel-title">SYSTEM EVENT LOG</div>
+        <div class="log" id="systemLog">
+          <div>[BOOT] Initializing HyperCore subsystems…</div>
+          <div>[INFO] Loading unnecessary modules…</div>
+          <div>[WARN] Unloading recently loaded modules for fun…</div>
+          <div>[INFO] Re-loading modules we just unloaded…</div>
+          <div>[ERROR] No errors found. This is suspicious.</div>
+        </div>
+      </div>
 
-    <!-- Backwards spinner -->
-    <div class="spinner"></div>
+      <div class="panel">
+        <div class="panel-title">R.E.G.R.E.T.™ INTERACTIVE TERMINAL</div>
+        <div class="log" id="terminalLog">
+          <div>R.E.G.R.E.T.™ v0.0.1-pre-alpha</div>
+          <div>Type "help" for a list of unhelpful commands.</div>
+        </div>
+        <div class="terminal-input">
+          <span>&gt;</span>
+          <input id="terminalInput" autocomplete="off" />
+        </div>
+      </div>
 
-    <!-- Impossible checkbox -->
-    <div class="checkbox-container">
-      <label>
-        <input type="checkbox" id="telemetry" checked onclick="forceCheck()">  
-        Send anonymous usage data to improve your disappointment
-      </label>
-    </div>
-
-    <!-- Fake AI assistant -->
-    <p><strong>Meet R.E.G.R.E.T.™</strong><br>
-    Respectable Enhanced Guidance & Recommendation Engine Technology<br>
-    Helping you make worse decisions, faster.</p>
-
-    <!-- Fake benchmark chart -->
-    <div class="chart">
-      <strong>Independent Benchmark Results</strong><br><br>
-      Chrome <div class="bar"><span style="width: 100%"></span></div>
-      Firefox <div class="bar"><span style="width: 95%"></span></div>
-      Safari <div class="bar"><span style="width: 90%"></span></div>
-      Edge <div class="bar"><span style="width: 88%"></span></div>
-      Respectable Browser PMXEDPE™ <div class="bar"><span style="width: 7%"></span></div>
-    </div>
-
-    <!-- License Agreement Button -->
-    <button class="button" onclick="openLicense()">View License Agreement</button>
-
-    <!-- Buttons -->
-    <button class="button dramatic" onclick="continueToBrowser()">Continue</button>
-    <button class="button" onclick="skipSetup()">Skip Setup (Not Recommended)</button>
-
-    <!-- License Agreement Modal -->
-    <div id="licenseModal" class="license-modal">
-      <div class="license-content">
-        <h2>Respectable Browser License Agreement</h2>
-
-        <div class="license-text">
-          <p><strong>IMPORTANT:</strong> By reading this, you agree that you have read it.</p>
-
-          <p>1. By using Respectable Browser Pro Max Extreme Deluxe Premium Edition™, you acknowledge that you may experience:</p>
-          <ul>
-            <li>• Mild confusion</li>
-            <li>• Severe confusion</li>
-            <li>• Existential dread</li>
-            <li>• Tabs that rearrange themselves for no reason</li>
-            <li>• Occasional emotional damage</li>
-          </ul>
-
-          <p>2. You agree not to question why the browser needs access to your toaster.</p>
-
-          <p>3. You understand that any resemblance to a functional browser is purely coincidental.</p>
-
-          <p>4. You accept that updates may make the browser worse, better, or sentient. No guarantees.</p>
-
-          <p>5. You agree that clicking “I Agree” means you agree, even if you don’t agree.</p>
-
-          <p>6. You acknowledge that declining this agreement is not supported at this time.</p>
-
-          <p>7. You consent to the use of R.E.G.R.E.T.™ (Respectable Enhanced Guidance & Recommendation Engine Technology), even though it has been known to make questionable decisions.</p>
-
-          <p>8. You understand that the browser may occasionally beep loudly for dramatic effect.</p>
-
-          <p>9. You agree that any bugs are actually “features” unless proven otherwise.</p>
-
-          <p>10. You accept that this agreement is legally binding in at least one parallel universe.</p>
-
-          <p>Thank you for choosing Respectable Browser PMXEDPE™. We apologize in advance.</p>
+      <!-- Right: Stability + Danger Zone -->
+      <div class="panel">
+        <div class="panel-title">SYSTEM STABILITY METER</div>
+        <div class="meter">
+          <div class="meter-bar">
+            <div class="meter-fill"></div>
+          </div>
+          <div class="meter-label">SYSTEM STABILITY: 2% — Warning: This is normal.</div>
         </div>
 
-        <button class="button" onclick="closeLicense()">I Agree (I Guess)</button>
-        <button class="button" onclick="declineLicense()">Decline</button>
+        <div class="panel-title" style="margin-top: 12px;">QUANTUM ENTANGLEMENT STATUS</div>
+        <div class="status-list" id="quantumStatus">
+Entanglement: UNSTABLE
+Coherence: IMAGINARY
+Quantum Drift: INCREASING
+Probability of Functionality: 0.0003%
+        </div>
+
+        <div class="panel-title" style="margin-top: 12px;">DANGER ZONE</div>
+        <div class="danger-buttons" id="dangerZone">
+          <button class="danger-button" data-action="catastrophic">Enable Catastrophic Mode</button>
+          <button class="danger-button" data-action="safety">Disable All Safety Features</button>
+          <button class="danger-button" data-action="turbo">Activate Turbo Lag</button>
+          <button class="danger-button" data-action="quantum">Engage Quantum Rendering Engine</button>
+          <button class="danger-button" data-action="purge">Purge Cache (and Hope for the Best)</button>
+          <button class="danger-button" data-action="selfdestruct">Self-Destruct Browser</button>
+          <button class="danger-button" data-action="panic">Kernel Panic Simulator</button>
+        </div>
+      </div>
+
+      <!-- Bottom-right: BIOS + Chat -->
+      <div class="panel">
+        <div class="panel-title">RESPECTABLE BROWSER BIOS v0.0.1-pre-alpha</div>
+        <div class="bios-menu" id="biosMenu">
+1. Enable Turbo Mode (slows browser down)
+2. Disable Turbo Mode (slows browser down differently)
+3. Memory Test (fails)
+4. Exit BIOS (does nothing)
+        </div>
+
+        <div class="panel-title" style="margin-top: 10px;">TOASTER CONNECTIVITY TEST</div>
+        <div class="status-list" id="toasterStatus">
+Searching for toaster…
+Toaster found: NO
+Searching harder…
+Toaster found: STILL NO
+Conclusion: User owns a rebellious toaster.
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">INTERNAL DEVELOPER CHAT LOGS (LEAKED)</div>
+        <div class="chat-log" id="chatLog">
+          <div class="chat-entry">
+            <span class="chat-user">[dev-01]</span>
+            <span class="chat-text">Who added the toaster API?</span>
+          </div>
+          <div class="chat-entry">
+            <span class="chat-user">[dev-02]</span>
+            <span class="chat-text">We need to remove this page before release.</span>
+          </div>
+          <div class="chat-entry">
+            <span class="chat-user">[dev-03]</span>
+            <span class="chat-text">Too late, it's already in production.</span>
+          </div>
+          <div class="chat-entry">
+            <span class="chat-user">[legal]</span>
+            <span class="chat-text">If anyone finds this page, deny everything.</span>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 
   <script>
-    /* Slideshow */
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
+    // Fake boot sequence
+    const bootLines = [
+      "BOOTING RESPECTABLE BROWSER INTERNAL HYPERCORE OMNIPANEL...",
+      "Loading core modules...",
+      "Loading more modules...",
+      "Unloading unnecessary modules...",
+      "Re-loading unnecessary modules (for safety)...",
+      "Initializing R.E.G.R.E.T.™...",
+      "Checking toaster connectivity...",
+      "Toaster not found. Proceeding anyway...",
+      "Scanning for user dignity...",
+      "User dignity: NOT FOUND",
+      "Preparing disappointment...",
+      "Boot sequence complete. Probably."
+    ];
 
-    function nextSlide() {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
+    const bootContainer = document.getElementById("bootLines");
+    const bootScreen = document.getElementById("boot");
+    const mainUI = document.getElementById("ui");
+
+    let bootIndex = 0;
+    function runBoot() {
+      if (bootIndex < bootLines.length) {
+        const line = document.createElement("div");
+        line.className = "boot-line";
+        line.style.animationDelay = (bootIndex * 0.15) + "s";
+        line.textContent = bootLines[bootIndex];
+        bootContainer.appendChild(line);
+        bootIndex++;
+        setTimeout(runBoot, 120);
+      } else {
+        setTimeout(() => {
+          bootScreen.style.display = "none";
+          mainUI.style.display = "block";
+        }, 1200);
+      }
     }
+    runBoot();
 
-    /* Broken progress bar */
-    let progress = 3;
+    // System log spam
+    const systemLog = document.getElementById("systemLog");
+    const systemMessages = [
+      "[INFO] HyperCore temperature: nominally concerning.",
+      "[WARN] Detected 0 issues. This cannot be correct.",
+      "[DEBUG] R.E.G.R.E.T.™ is thinking about thinking.",
+      "[ERROR] Failed to fail gracefully.",
+      "[INFO] Quantum Drift increased by 0.3%.",
+      "[WARN] User clicked something suspicious.",
+      "[DEBUG] Toaster ping timeout.",
+      "[INFO] Stability check: still 2%.",
+      "[ERROR] Unexpected success encountered. Aborting.",
+      "[INFO] Logging more logs to log the logs."
+    ];
+
     setInterval(() => {
-      const bar = document.getElementById('progress');
-      progress += (Math.random() * 4 - 2); // goes up and down randomly
-      progress = Math.max(0, Math.min(12, progress)); // never reaches 100
-      bar.style.width = progress + "%";
-    }, 600);
+      const msg = document.createElement("div");
+      msg.textContent = systemMessages[Math.floor(Math.random() * systemMessages.length)];
+      systemLog.appendChild(msg);
+      systemLog.scrollTop = systemLog.scrollHeight;
+    }, 1500);
 
-    /* Impossible checkbox */
-    function forceCheck() {
-      const box = document.getElementById('telemetry');
-      box.checked = true;
-      box.style.animation = "shake 0.3s";
-      setTimeout(() => box.style.animation = "", 300);
+    // R.E.G.R.E.T. terminal
+    const terminalLog = document.getElementById("terminalLog");
+    const terminalInput = document.getElementById("terminalInput");
+
+    function addTerminalLine(text) {
+      const line = document.createElement("div");
+      line.textContent = text;
+      terminalLog.appendChild(line);
+      terminalLog.scrollTop = terminalLog.scrollHeight;
     }
 
-    /* Skip setup button that does nothing */
-    function skipSetup() {
-      alert("Skipping setup is currently unavailable. Please enjoy the full onboarding experience.");
+    terminalInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const value = terminalInput.value.trim();
+        addTerminalLine("> " + value);
+        handleTerminalCommand(value);
+        terminalInput.value = "";
+      }
+    });
+
+    function handleTerminalCommand(cmd) {
+      const lower = cmd.toLowerCase();
+      if (!cmd) {
+        addTerminalLine("R.E.G.R.E.T.™: I regret to inform you that you typed nothing.");
+        return;
+      }
+      if (lower === "help") {
+        addTerminalLine("Available commands: help, regret, regret harder, panic, apologize, toaster.connect()");
+      } else if (lower === "regret") {
+        addTerminalLine("R.E.G.R.E.T.™: I regret everything.");
+      } else if (lower === "regret harder") {
+        addTerminalLine("R.E.G.R.E.T.™: I regret to inform you that my regret capacity is already at 100%.");
+      } else if (lower === "panic") {
+        addTerminalLine("R.E.G.R.E.T.™: Initiating panic protocol...");
+        triggerPanic();
+      } else if (lower === "apologize") {
+        addTerminalLine("R.E.G.R.E.T.™: I apologize for any inconvenience, including this one.");
+      } else if (lower === "toaster.connect()" || lower === "toaster.connect") {
+        addTerminalLine("R.E.G.R.E.T.™: Attempting to connect to toaster...");
+        setTimeout(() => {
+          addTerminalLine("R.E.G.R.E.T.™: Connection failed. Toaster is emotionally unavailable.");
+        }, 800);
+      } else {
+        addTerminalLine("R.E.G.R.E.T.™: I regret to inform you that I cannot do that.");
+      }
     }
 
-    /* Continue button */
-    function continueToBrowser() {
-      alert("Warning: Continuing may result in a functional browser experience.");
-      window.location.href = "blank.html";
+    // Danger Zone buttons
+    const dangerZone = document.getElementById("dangerZone");
+    const panicOverlay = document.getElementById("panicOverlay");
+
+    const dangerMessages = {
+      catastrophic: "Catastrophic Mode enabled. Nothing changed, but it feels worse.",
+      safety: "All safety features disabled. This has no practical effect.",
+      turbo: "Turbo Lag activated. Everything will feel slower, but only psychologically.",
+      quantum: "Quantum Rendering Engine failed to initialize. Reason: insufficient vibes.",
+      purge: "Cache purged. Or maybe not. You'll never know.",
+      selfdestruct: "Self-destruct sequence initiated. Just kidding. Or am I?"
+    };
+
+    dangerZone.addEventListener("click", (e) => {
+      if (e.target.classList.contains("danger-button")) {
+        const action = e.target.getAttribute("data-action");
+        document.body.classList.add("shake");
+        setTimeout(() => document.body.classList.remove("shake"), 300);
+
+        if (action === "panic") {
+          triggerPanic();
+          return;
+        }
+
+        const msg = dangerMessages[action] || "Unknown chaos protocol executed.";
+        const line = document.createElement("div");
+        line.textContent = "[DANGER] " + msg;
+        systemLog.appendChild(line);
+        systemLog.scrollTop = systemLog.scrollHeight;
+      }
+    });
+
+    function triggerPanic() {
+      panicOverlay.style.display = "flex";
+      setTimeout(() => {
+        panicOverlay.style.display = "none";
+      }, 2000);
     }
 
-    /* License Modal */
-    function openLicense() {
-      document.getElementById('licenseModal').style.display = 'flex';
-    }
+    // Fake BIOS interactions (just logs)
+    const biosMenu = document.getElementById("biosMenu");
+    biosMenu.addEventListener("click", () => {
+      const line = document.createElement("div");
+      line.textContent = "[BIOS] Feature not implemented. Probably for the best.";
+      systemLog.appendChild(line);
+      systemLog.scrollTop = systemLog.scrollHeight;
+    });
 
-    function closeLicense() {
-      document.getElementById('licenseModal').style.display = 'none';
-    }
+    // Dark mode toggle that makes everything brighter
+    const darkToggle = document.getElementById("darkToggle");
+    darkToggle.addEventListener("click", () => {
+      document.body.classList.toggle("bright-mode");
+    });
 
-    function declineLicense() {
-      alert("Declining the license agreement is currently not supported. Please reconsider your life choices.");
-    }
+    // Periodic fake quantum status updates
+    const quantumStatus = document.getElementById("quantumStatus");
+    const quantumLines = [
+      "Entanglement: UNSTABLE",
+      "Coherence: IMAGINARY",
+      "Quantum Drift: INCREASING",
+      "Probability of Functionality: 0.0003%"
+    ];
+
+    setInterval(() => {
+      const drift = (Math.random() * 10).toFixed(1);
+      quantumStatus.textContent =
+        "Entanglement: UNSTABLE\n" +
+        "Coherence: IMAGINARY\n" +
+        "Quantum Drift: " + drift + "%\n" +
+        "Probability of Functionality: 0.0003%";
+    }, 3000);
+
+    // Periodic fake dev chat messages
+    const chatLog = document.getElementById("chatLog");
+    const devMessages = [
+      { user: "dev-04", text: "Did anyone document the HyperCore OmniPanel?" },
+      { user: "dev-05", text: "No, but we named it something impressive." },
+      { user: "ops", text: "CPU usage just spiked to 300%. Is that possible?" },
+      { user: "dev-01", text: "If QA asks, this page doesn't exist." },
+      { user: "qa", text: "We found a hidden page. Should we file a bug?" },
+      { user: "dev-02", text: "No, file it under 'Features'." },
+      { user: "pm", text: "Can we ship this as an enterprise feature?" },
+      { user: "legal", text: "We strongly advise against everything you're doing." }
+    ];
+
+    setInterval(() => {
+      const entry = devMessages[Math.floor(Math.random() * devMessages.length)];
+      const div = document.createElement("div");
+      div.className = "chat-entry";
+      div.innerHTML =
+        '<span class="chat-user">[' + entry.user + ']</span> ' +
+        '<span class="chat-text">' + entry.text + '</span>';
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }, 5000);
   </script>
 </body>
 </html>
