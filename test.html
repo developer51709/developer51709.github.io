@@ -264,6 +264,72 @@
     .bright-mode .chat-text {
       color: #333;
     }
+
+    /* MOBILE FIXES */
+    @media (max-width: 700px) {
+
+      body {
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .main-ui {
+        padding: 20px;
+        height: auto;
+      }
+
+      .layout {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        gap: 20px;
+      }
+
+      .panel {
+        height: auto;
+        max-height: none;
+      }
+
+      .log,
+      .chat-log {
+        max-height: 200px;
+      }
+
+      .meter-bar {
+        height: 10px;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .subtitle {
+        font-size: 11px;
+      }
+
+      .panel-title {
+        font-size: 10px;
+      }
+
+      .danger-buttons {
+        flex-direction: column;
+      }
+
+      .danger-button {
+        width: 100%;
+        text-align: center;
+      }
+
+      .overlay-panic {
+        font-size: 14px;
+        padding: 20px;
+      }
+
+      .boot-screen {
+        font-size: 12px;
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -497,7 +563,7 @@ Conclusion: User owns a rebellious toaster.
 
     // Danger Zone buttons
     const dangerZone = document.getElementById("dangerZone");
-    const panicOverlay = document.getElementById("panicOverlay");
+        const panicOverlay = document.getElementById("panicOverlay");
 
     const dangerMessages = {
       catastrophic: "Catastrophic Mode enabled. Nothing changed, but it feels worse.",
@@ -534,7 +600,7 @@ Conclusion: User owns a rebellious toaster.
       }, 2000);
     }
 
-    // Fake BIOS interactions (just logs)
+    // Fake BIOS interactions
     const biosMenu = document.getElementById("biosMenu");
     biosMenu.addEventListener("click", () => {
       const line = document.createElement("div");
@@ -543,21 +609,14 @@ Conclusion: User owns a rebellious toaster.
       systemLog.scrollTop = systemLog.scrollHeight;
     });
 
-    // Dark mode toggle that makes everything brighter
+    // Dark mode toggle
     const darkToggle = document.getElementById("darkToggle");
     darkToggle.addEventListener("click", () => {
       document.body.classList.toggle("bright-mode");
     });
 
-    // Periodic fake quantum status updates
+    // Quantum status updates
     const quantumStatus = document.getElementById("quantumStatus");
-    const quantumLines = [
-      "Entanglement: UNSTABLE",
-      "Coherence: IMAGINARY",
-      "Quantum Drift: INCREASING",
-      "Probability of Functionality: 0.0003%"
-    ];
-
     setInterval(() => {
       const drift = (Math.random() * 10).toFixed(1);
       quantumStatus.textContent =
@@ -567,7 +626,7 @@ Conclusion: User owns a rebellious toaster.
         "Probability of Functionality: 0.0003%";
     }, 3000);
 
-    // Periodic fake dev chat messages
+    // Developer chat log spam
     const chatLog = document.getElementById("chatLog");
     const devMessages = [
       { user: "dev-04", text: "Did anyone document the HyperCore OmniPanel?" },
