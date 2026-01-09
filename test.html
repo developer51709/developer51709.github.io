@@ -7,16 +7,18 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
+      padding: 40px 0;
       background: linear-gradient(135deg, #e8ecf3, #f7f9fc);
       font-family: "Segoe UI", Roboto, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      height: auto;
+
+      /* FIX: allow scrolling on mobile */
+      display: block;
       overflow-y: auto;
       overflow-x: hidden;
+
+      min-height: 100vh;
+      height: auto;
+
       animation: fadeIn 1.2s ease forwards;
     }
 
@@ -32,10 +34,13 @@
       background: white;
       border-radius: 18px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+
+      /* FIX: center without flexbox */
+      margin: 0 auto 60px auto;
+
       animation: slideUp 1s ease forwards;
       opacity: 0;
       transform: translateY(40px);
-      max-height: none;
     }
 
     @keyframes slideUp {
@@ -208,6 +213,54 @@
       background: #4a90e2;
     }
 
+    /* License Modal */
+    .license-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .license-content {
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      animation: slideUp 0.4s ease;
+    }
+
+    .license-text {
+      text-align: left;
+      margin-top: 20px;
+      max-height: 50vh;
+      overflow-y: auto;
+      padding-right: 10px;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 26px;
+      }
+      .slide {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 
@@ -259,9 +312,56 @@
       Respectable Browser PMXEDPE™ <div class="bar"><span style="width: 7%"></span></div>
     </div>
 
+    <!-- License Agreement Button -->
+    <button class="button" onclick="openLicense()">View License Agreement</button>
+
     <!-- Buttons -->
     <button class="button dramatic" onclick="continueToBrowser()">Continue</button>
     <button class="button" onclick="skipSetup()">Skip Setup (Not Recommended)</button>
+
+    <!-- License Agreement Modal -->
+    <div id="licenseModal" class="license-modal">
+      <div class="license-content">
+        <h2>Respectable Browser License Agreement</h2>
+
+        <div class="license-text">
+          <p><strong>IMPORTANT:</strong> By reading this, you agree that you have read it.</p>
+
+          <p>1. By using Respectable Browser Pro Max Extreme Deluxe Premium Edition™, you acknowledge that you may experience:</p>
+          <ul>
+            <li>• Mild confusion</li>
+            <li>• Severe confusion</li>
+            <li>• Existential dread</li>
+            <li>• Tabs that rearrange themselves for no reason</li>
+            <li>• Occasional emotional damage</li>
+          </ul>
+
+          <p>2. You agree not to question why the browser needs access to your toaster.</p>
+
+          <p>3. You understand that any resemblance to a functional browser is purely coincidental.</p>
+
+          <p>4. You accept that updates may make the browser worse, better, or sentient. No guarantees.</p>
+
+          <p>5. You agree that clicking “I Agree” means you agree, even if you don’t agree.</p>
+
+          <p>6. You acknowledge that declining this agreement is not supported at this time.</p>
+
+          <p>7. You consent to the use of R.E.G.R.E.T.™ (Respectable Enhanced Guidance & Recommendation Engine Technology), even though it has been known to make questionable decisions.</p>
+
+          <p>8. You understand that the browser may occasionally beep loudly for dramatic effect.</p>
+
+          <p>9. You agree that any bugs are actually “features” unless proven otherwise.</p>
+
+          <p>10. You accept that this agreement is legally binding in at least one parallel universe.</p>
+
+          <p>Thank you for choosing Respectable Browser PMXEDPE™. We apologize in advance.</p>
+        </div>
+
+        <button class="button" onclick="closeLicense()">I Agree (I Guess)</button>
+        <button class="button" onclick="declineLicense()">Decline</button>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -301,6 +401,19 @@
     function continueToBrowser() {
       alert("Warning: Continuing may result in a functional browser experience.");
       window.location.href = "blank.html";
+    }
+
+    /* License Modal */
+    function openLicense() {
+      document.getElementById('licenseModal').style.display = 'flex';
+    }
+
+    function closeLicense() {
+      document.getElementById('licenseModal').style.display = 'none';
+    }
+
+    function declineLicense() {
+      alert("Declining the license agreement is currently not supported. Please reconsider your life choices.");
     }
   </script>
 </body>
