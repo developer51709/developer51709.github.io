@@ -13,6 +13,8 @@ https://developer51709.github.io/
 
 https://developer51709.github.io/embed-builder.html
 
+https://developer51709.github.io/announcement-tool.html
+
 ---
 
 ### Other Pages
