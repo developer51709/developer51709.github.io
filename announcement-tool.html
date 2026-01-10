@@ -17,6 +17,13 @@
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 600;
     }
 
     .panel {
@@ -25,8 +32,9 @@
       padding: 20px;
       border-radius: 12px;
       flex: 1;
-      min-width: 300px;
+      min-width: 320px;
       box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      box-sizing: border-box;
     }
 
     input, textarea, select, button {
@@ -38,6 +46,12 @@
       background: #2b2d31;
       color: white;
       font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
     button {
@@ -50,6 +64,53 @@
       background: #4752C4;
     }
 
+    /* Fields UI */
+    h3 {
+      margin-top: 12px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .field {
+      background: #232428;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      cursor: grab;
+    }
+
+    .field.dragging {
+      opacity: 0.4;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .field-row input[type="text"] {
+      flex: 1;
+    }
+
+    .remove-btn {
+      background: #ED4245;
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      user-select: none;
+    }
+
+    .remove-btn:hover {
+      background: #A12F33;
+    }
+
     /* Discord embed preview */
     .embed {
       background: #2b2d31;
@@ -60,6 +121,9 @@
       word-wrap: break-word;
       font-size: 14px;
       line-height: 1.3;
+      color: #fff;
+      position: relative;
+      box-sizing: border-box;
     }
 
     .embed-title {
@@ -87,6 +151,7 @@
       max-width: 100%;
       border-radius: 4px;
       margin-top: 10px;
+      display: block;
     }
 
     .embed-footer {
@@ -96,6 +161,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      min-height: 1em;
     }
 
     .embed-footer img {
@@ -104,9 +170,28 @@
       border-radius: 50%;
     }
 
+    .embed-field {
+      margin-bottom: 8px;
+    }
+
+    .embed-field-name {
+      font-weight: 600;
+      color: #fff;
+      display: block;
+    }
+
+    .embed-field-value {
+      color: #dcddde;
+      white-space: pre-line;
+    }
+
     @media (max-width: 700px) {
       body {
         flex-direction: column;
+      }
+
+      .panel {
+        width: 100%;
       }
     }
   </style>
@@ -128,7 +213,6 @@
     <option value="#ED4245">Red</option>
     <option value="#FEE75C">Gold</option>
     <option value="#EB459E">Pink</option>
-    <option value="#000000">Black</option>
   </select>
 
   <input id="color" placeholder="Custom Color (hex)" oninput="updatePreview()">
@@ -138,7 +222,11 @@
   <input id="footer" placeholder="Footer Text" oninput="updatePreview()">
   <input id="footerIcon" placeholder="Footer Icon URL" oninput="updatePreview()">
 
-  <button onclick="sendEmbed()">Send Announcement</button>
+  <h3>Embed Fields</h3>
+  <div id="fieldsContainer"></div>
+  <button type="button" onclick="addField()">Add Field</button>
+
+  <button style="margin-top: 16px;" onclick="sendEmbed()">Send Announcement</button>
 </div>
 
 <div class="panel">
@@ -148,12 +236,15 @@
     <img id="pThumbnail" class="embed-thumbnail" style="display:none;">
     <div class="embed-title" id="pTitle">Your title here</div>
     <div class="embed-description" id="pDescription">Your description here</div>
+    <div id="pFields"></div>
     <img id="pImage" class="embed-image" style="display:none;">
     <div class="embed-footer" id="pFooter"></div>
   </div>
 </div>
 
 <script>
+let fieldCount = 0;
+
 function updatePreview() {
     const title = document.getElementById("title").value;
     const desc = document.getElementById("description").value;
@@ -163,29 +254,36 @@ function updatePreview() {
     const footer = document.getElementById("footer").value;
     const footerIcon = document.getElementById("footerIcon").value;
 
+    // Title & description
     document.getElementById("pTitle").textContent = title || "Your title here";
     document.getElementById("pDescription").textContent = desc || "Your description here";
 
+    // Color strip
     if (color) {
         document.querySelector(".embed").style.borderColor = color;
+    } else {
+        document.querySelector(".embed").style.borderColor = "#5865F2";
     }
 
-    const thumb = document.getElementById("pThumbnail");
+    // Thumbnail
+    const thumbEl = document.getElementById("pThumbnail");
     if (thumbnail) {
-        thumb.src = thumbnail;
-        thumb.style.display = "block";
+        thumbEl.src = thumbnail;
+        thumbEl.style.display = "block";
     } else {
-        thumb.style.display = "none";
+        thumbEl.style.display = "none";
     }
 
-    const img = document.getElementById("pImage");
+    // Main image
+    const imgEl = document.getElementById("pImage");
     if (image) {
-        img.src = image;
-        img.style.display = "block";
+        imgEl.src = image;
+        imgEl.style.display = "block";
     } else {
-        img.style.display = "none";
+        imgEl.style.display = "none";
     }
 
+    // Footer
     const footerEl = document.getElementById("pFooter");
     footerEl.innerHTML = "";
 
@@ -200,6 +298,34 @@ function updatePreview() {
         text.textContent = footer;
         footerEl.appendChild(text);
     }
+
+    // Fields preview
+    const pFields = document.getElementById("pFields");
+    pFields.innerHTML = "";
+
+    const fields = [...document.querySelectorAll(".field")];
+
+    fields.forEach(f => {
+        const name = f.querySelector(".field-name").value;
+        const value = f.querySelector(".field-value").value;
+
+        if (!name && !value) return;
+
+        const div = document.createElement("div");
+        div.className = "embed-field";
+
+        const nameEl = document.createElement("div");
+        nameEl.className = "embed-field-name";
+        nameEl.textContent = name || "\u200b";
+
+        const valueEl = document.createElement("div");
+        valueEl.className = "embed-field-value";
+        valueEl.textContent = value || "\u200b";
+
+        div.appendChild(nameEl);
+        div.appendChild(valueEl);
+        pFields.appendChild(div);
+    });
 }
 
 function applyPresetColor() {
@@ -210,29 +336,128 @@ function applyPresetColor() {
     }
 }
 
+function addField() {
+    const container = document.getElementById("fieldsContainer");
+
+    const field = document.createElement("div");
+    field.className = "field";
+    field.draggable = true;
+    field.dataset.index = fieldCount++;
+
+    field.innerHTML = `
+        <div class="field-row">
+            <input type="text" placeholder="Field Name" class="field-name" oninput="updatePreview()">
+            <input type="text" placeholder="Field Value" class="field-value" oninput="updatePreview()">
+        </div>
+        <label style="font-size: 13px;">
+            <input type="checkbox" class="field-inline" onchange="updatePreview()" style="width:auto; margin-right:6px;">
+            Inline
+        </label>
+        <div class="remove-btn" onclick="this.parentElement.remove(); updatePreview()">Remove Field</div>
+    `;
+
+    enableDrag(field);
+    container.appendChild(field);
+    updatePreview();
+}
+
+function enableDrag(field) {
+    field.addEventListener("dragstart", () => {
+        field.classList.add("dragging");
+    });
+
+    field.addEventListener("dragend", () => {
+        field.classList.remove("dragging");
+        updatePreview();
+    });
+
+    const container = document.getElementById("fieldsContainer");
+    if (!container.dataset.dragBound) {
+        container.addEventListener("dragover", e => {
+            e.preventDefault();
+            const dragging = document.querySelector(".field.dragging");
+            if (!dragging) return;
+            const after = getDragAfterElement(container, e.clientY);
+            if (after == null) {
+                container.appendChild(dragging);
+            } else {
+                container.insertBefore(dragging, after);
+            }
+        });
+        container.dataset.dragBound = "true";
+    }
+}
+
+function getDragAfterElement(container, y) {
+    const elements = [...container.querySelectorAll(".field:not(.dragging)")];
+
+    return elements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) {
+            return { offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY, element: null }).element;
+}
+
+function collectFieldsForWebhook() {
+    const fields = [...document.querySelectorAll(".field")].map(f => ({
+        name: f.querySelector(".field-name").value,
+        value: f.querySelector(".field-value").value,
+        inline: f.querySelector(".field-inline").checked
+    }));
+
+    return fields.filter(f => f.name || f.value);
+}
+
 function sendEmbed() {
-    const webhook = document.getElementById("webhook").value;
+    const webhook = document.getElementById("webhook").value.trim();
+    if (!webhook) {
+        alert("Please enter a webhook URL.");
+        return;
+    }
+
+    const colorHex = document.getElementById("color").value.trim() || "#5865F2";
+    let colorInt = parseInt(colorHex.replace("#", ""), 16);
+    if (isNaN(colorInt)) {
+        colorInt = parseInt("5865F2", 16);
+    }
 
     const embed = {
-        title: document.getElementById("title").value,
-        description: document.getElementById("description").value,
-        color: parseInt(document.getElementById("color").value.replace("#", ""), 16),
+        title: document.getElementById("title").value || null,
+        description: document.getElementById("description").value || null,
+        color: colorInt,
         thumbnail: { url: document.getElementById("thumbnail").value || null },
         image: { url: document.getElementById("image").value || null },
         footer: {
-            text: document.getElementById("footer").value,
+            text: document.getElementById("footer").value || null,
             icon_url: document.getElementById("footerIcon").value || null
-        }
+        },
+        fields: collectFieldsForWebhook()
     };
+
+    // Clean up null-ish objects
+    if (!embed.thumbnail.url) delete embed.thumbnail;
+    if (!embed.image.url) delete embed.image;
+    if (!embed.footer.text && !embed.footer.icon_url) delete embed.footer;
+    if (!embed.fields.length) delete embed.fields;
 
     fetch(webhook, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ embeds: [embed] })
     })
-    .then(() => alert("Announcement sent"))
-    .catch(err => alert("Error: " + err));
+    .then(res => {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        alert("Announcement sent!");
+    })
+    .catch(err => alert("Error sending announcement: " + err.message));
 }
+
+// Initialize with one empty field
+addField();
 </script>
 
 </body>
