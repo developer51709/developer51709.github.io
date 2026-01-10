@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Discord Announcement Sender</title>
+  <style>
+    body { font-family: Arial; max-width: 800px; margin: 40px auto; display: flex; gap: 40px; }
+    input, textarea, select { width: 100%; margin-bottom: 12px; padding: 8px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+
+    /* Simple Discord-style preview */
+    #preview {
+      background: #2b2d31;
+      padding: 20px;
+      border-radius: 8px;
+      color: white;
+      width: 100%;
+    }
+    .embed {
+      border-left: 4px solid #5865F2;
+      padding-left: 12px;
+    }
+    .embed-title { font-size: 18px; font-weight: bold; margin-bottom: 6px; }
+    .embed-description { white-space: pre-line; margin-bottom: 10px; }
+    .embed-footer { font-size: 12px; opacity: 0.7; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+<div style="flex: 1;">
+  <h2>Discord Announcement Embed Sender</h2>
+
+  <input id="webhook" placeholder="Webhook URL">
+
+  <input id="title" placeholder="Embed Title" oninput="updatePreview()">
+  <textarea id="description" placeholder="Embed Description" oninput="updatePreview()"></textarea>
+
+  <select id="presetColor" onchange="applyPresetColor()">
+    <option value="">Choose a preset color…</option>
+    <option value="#5865F2">Discord Blurple</option>
+    <option value="#57F287">Green</option>
+    <option value="#ED4245">Red</option>
+    <option value="#FEE75C">Gold</option>
+    <option value="#EB459E">Pink</option>
+  </select>
+
+  <input id="color" placeholder="Custom Color (hex)" oninput="updatePreview()">
+
+  <input id="thumbnail" placeholder="Thumbnail URL" oninput="updatePreview()">
+  <input id="image" placeholder="Image URL" oninput="updatePreview()">
+  <input id="footer" placeholder="Footer Text" oninput="updatePreview()">
+
+  <button onclick="sendEmbed()">Send Announcement</button>
+</div>
+
+<div id="preview" style="flex: 1;">
+  <h3>Live Preview</h3>
+  <div class="embed" id="embedPreview">
+    <div class="embed-title" id="pTitle">Your title here</div>
+    <div class="embed-description" id="pDescription">Your description here</div>
+    <img id="pImage" style="max-width: 100%; display: none; margin-top: 10px;">
+    <div class="embed-footer" id="pFooter"></div>
+  </div>
+</div>
+
+<script>
+function updatePreview() {
+    const title = document.getElementById("title").value;
+    const desc = document.getElementById("description").value;
+    const color = document.getElementById("color").value;
+    const image = document.getElementById("image").value;
+    const footer = document.getElementById("footer").value;
+
+    document.getElementById("pTitle").textContent = title || "Your title here";
+    document.getElementById("pDescription").textContent = desc || "Your description here";
+
+    // Update color bar
+    if (color) {
+        document.querySelector(".embed").style.borderColor = color;
+    }
+
+    // Image preview
+    const img = document.getElementById("pImage");
+    if (image) {
+        img.src = image;
+        img.style.display = "block";
+    } else {
+        img.style.display = "none";
+    }
+
+    // Footer
+    document.getElementById("pFooter").textContent = footer;
+}
+
+function applyPresetColor() {
+    const preset = document.getElementById("presetColor").value;
+    if (preset) {
+        document.getElementById("color").value = preset;
+        updatePreview();
+    }
+}
+
+function sendEmbed() {
+    const webhook = document.getElementById("webhook").value;
+
+    const embed = {
+        title: document.getElementById("title").value,
+        description: document.getElementById("description").value,
+        color: parseInt(document.getElementById("color").value.replace("#", ""), 16),
+        thumbnail: { url: document.getElementById("thumbnail").value || null },
+        image: { url: document.getElementById("image").value || null },
+        footer: { text: document.getElementById("footer").value }
+    };
+
+    fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ embeds: [embed] })
+    })
+    .then(() => alert("Announcement sent"))
+    .catch(err => alert("Error: " + err));
+}
+</script>
+
+</body>
+</html>
