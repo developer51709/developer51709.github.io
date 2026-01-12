@@ -25,7 +25,7 @@ https://developer51709.github.io/zero‑width-steganography-tool.html
 ---
 
 ### Clone of mineogo's website :)
-> He accused me of being a skid and I got bored so I created an exact clone of [his website](mineogo.is-a.dev) lol
+> He accused me of being a skid and I got bored so I created an exact clone of [his website](https://mineogo.is-a.dev/) lol
 
 https://developer51709.github.io/mineogo
 
