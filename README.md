@@ -18,14 +18,18 @@ https://developer51709.github.io/announcement-tool.html
 ---
 
 ### Zero‑Width Steganography Tool
->
+> A proof‑of‑concept tool that hides text inside normal messages using zero‑width characters.
 
 https://developer51709.github.io/zero‑width-steganography-tool.html
 
 ---
 
+### Clone of mineogo's website :)
+> He accused me of being a skid and I got bored so I created an exact clone of [his website](mineogo.is-a.dev) lol
+
+https://developer51709.github.io/mineogo
+
 ### Other Pages
 
 https://developer51709.github.io/test.html
-https://developer51709.github.io/testing
 https://developer51709.github.io/partnership.html
