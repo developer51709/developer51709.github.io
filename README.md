@@ -11,6 +11,8 @@ https://developer51709.github.io/
 ### Embed builder/editor
 > This is a simple tool for making and editing Discord embeds using webhooks.
 
+https://developer51709.github.io/embed-tool
+
 https://developer51709.github.io/embed-builder.html
 
 https://developer51709.github.io/announcement-tool.html
