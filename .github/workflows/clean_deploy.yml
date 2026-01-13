@@ -15,10 +15,38 @@ jobs:
   cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete old github-pages artifacts
+      - name: Delete old github-pages artifacts (safe mode)
         uses: actions/github-script@v7
         with:
           script: |
+            async function safeDelete(id) {
+              for (let attempt = 1; attempt <= 5; attempt++) {
+                try {
+                  console.log(`Attempt ${attempt}: deleting artifact ${id}`);
+                  await github.rest.actions.deleteArtifact({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    artifact_id: id
+                  });
+                  console.log(`Deleted artifact ${id}`);
+                  return;
+                } catch (err) {
+                  const status = err.status || err.response?.status;
+                  console.log(`Error deleting ${id}: ${status}`);
+
+                  // Ignore errors that mean "already gone" or "GitHub glitch"
+                  if ([404, 410, 502, 500].includes(status)) {
+                    console.log(`Ignoring error ${status} for artifact ${id}`);
+                    return;
+                  }
+
+                  // Retry for other errors
+                  await new Promise(r => setTimeout(r, 1000 * attempt));
+                }
+              }
+              console.log(`Failed to delete artifact ${id} after retries`);
+            }
+
             const artifacts = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -27,12 +55,8 @@ jobs:
 
             for (const artifact of artifacts.data.artifacts) {
               if (artifact.name === "github-pages") {
-                console.log(`Deleting artifact: ${artifact.id} (${artifact.name})`);
-                await github.rest.actions.deleteArtifact({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  artifact_id: artifact.id
-                });
+                console.log(`Cleaning artifact: ${artifact.id}`);
+                await safeDelete(artifact.id);
               }
             }
 
