@@ -11,7 +11,7 @@ https://developer51709.github.io/
 ### Linara Translator
 > Linara is a language that I invented because I got bored :)
 
-https://developer51709.github.io/linara
+https://developer51709.github.io/Linara
 
 ---
 
