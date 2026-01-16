@@ -1,18 +1,25 @@
 // =========================
-// Core data
+// Core data: Linara <-> English
 // =========================
 
-// Base bilingual dictionary: English lemma ↔ Linara root
-// You can expand this as Linara grows.
+// Base bilingual lexicon (lemmas)
 const lexicon = {
-    nouns: {
-        "i": "mi",      // pronoun
+    pronouns: {
+        "i": "mi",
         "you": "ta",
+        "he": "li",
+        "she": "li",
+        "we": "nu",
+        "they": "lin",
+        "you_pl": "tun"
+    },
+    nouns: {
         "house": "palo",
         "water": "nalu",
         "friend": "suni",
         "food": "kera",
-        "day": "dina"
+        "day": "dina",
+        "morning": "mora"
     },
     verbs: {
         "eat": "kema",
@@ -21,86 +28,120 @@ const lexicon = {
         "go": "vani",
         "come": "ravi",
         "sleep": "soma",
-        "speak": "tari"
+        "speak": "tari",
+        "be": "es" // copula particle
     },
     adjectives: {
         "good": "meli",
         "bad": "sari",
         "big": "tova",
-        "small": "neli"
+        "small": "neli",
+        "tired": "soma-li" // example derived form
+    },
+    particles: {
+        "hello": "sava",
+        "question": "ka"
     }
 };
 
-// Reverse lexicon (Linara → English)
+// Reverse lexicon (Linara -> English)
 const reverseLexicon = {
+    pronouns: {},
     nouns: {},
     verbs: {},
-    adjectives: {}
+    adjectives: {},
+    particles: {}
 };
 
-for (const pos of ["nouns", "verbs", "adjectives"]) {
+for (const pos of Object.keys(lexicon)) {
     for (const [en, lin] of Object.entries(lexicon[pos])) {
         reverseLexicon[pos][lin] = en;
     }
 }
 
-// Linara morphology rules
+// Morphology rules
 const linaraMorph = {
-    // tense suffixes
     past: "ta",
     future: "lo",
-    // plural suffix
     plural: "n",
-    // negation prefix
     negPrefix: "ma"
 };
 
+// Greetings and phrases
+const greetingWordsEn = ["hello", "hi", "hey"];
+const greetingLin = "sava";
+
 // =========================
-// Utility helpers
+// Utilities
 // =========================
 
 function tokenize(text) {
     return text
-        .toLowerCase()
-        .replace(/[^a-zA-Z\s']/g, "")
+        .trim()
         .split(/\s+/)
         .filter(Boolean);
 }
 
+function normalizeWord(word) {
+    return word.toLowerCase().replace(/[^a-z']/g, "");
+}
+
+function isCapitalized(word) {
+    return /^[A-Z][a-zA-Z]*$/.test(word);
+}
+
 function isAuxiliary(word) {
-    return ["will", "did", "do", "does", "am", "is", "are", "was", "were"].includes(word);
+    const w = normalizeWord(word);
+    return ["will", "did", "do", "does", "am", "is", "are", "was", "were"].includes(w);
 }
 
 function isNegation(word) {
-    return ["not", "don't", "dont", "didn't", "didnt", "no"].includes(word);
+    const w = normalizeWord(word);
+    return ["not", "don't", "dont", "didn't", "didnt", "no"].includes(w);
+}
+
+function isQuestionMark(text) {
+    return /\?$/.test(text.trim());
 }
 
 function isPluralEnglish(word) {
-    // naive plural detection: ends with "s" and not "is"
-    return word.endsWith("s") && !word.endsWith("is");
+    const w = normalizeWord(word);
+    return w.endsWith("s") && !w.endsWith("is");
 }
 
 function stripPluralEnglish(word) {
-    if (isPluralEnglish(word)) {
-        return word.slice(0, -1);
-    }
+    if (isPluralEnglish(word)) return word.slice(0, -1);
     return word;
 }
 
+function pluralizeEnglish(word) {
+    if (word.endsWith("y")) return word.slice(0, -1) + "ies";
+    if (word.endsWith("s")) return word + "es";
+    return word + "s";
+}
+
+function capitalize(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // =========================
-// Part-of-speech tagging (very simple)
+// POS tagging (English)
 // =========================
 
 function tagEnglish(tokens) {
-    // returns array of {word, pos}
-    return tokens.map(token => {
-        if (lexicon.nouns[token]) return { word: token, pos: "N" };
-        if (lexicon.verbs[token]) return { word: token, pos: "V" };
-        if (lexicon.adjectives[token]) return { word: token, pos: "ADJ" };
-        if (["i", "you", "he", "she", "we", "they"].includes(token)) return { word: token, pos: "PRON" };
-        if (isAuxiliary(token)) return { word: token, pos: "AUX" };
-        if (isNegation(token)) return { word: token, pos: "NEG" };
-        return { word: token, pos: "X" }; // unknown
+    return tokens.map(raw => {
+        const word = normalizeWord(raw);
+
+        if (lexicon.pronouns[word]) return { raw, word, pos: "PRON" };
+        if (lexicon.nouns[word]) return { raw, word, pos: "N" };
+        if (lexicon.verbs[word]) return { raw, word, pos: "V" };
+        if (lexicon.adjectives[word]) return { raw, word, pos: "ADJ" };
+        if (greetingWordsEn.includes(word)) return { raw, word, pos: "GREETING" };
+        if (isAuxiliary(word)) return { raw, word, pos: "AUX" };
+        if (isNegation(word)) return { raw, word, pos: "NEG" };
+        if (isCapitalized(raw)) return { raw, word: raw, pos: "NAME" };
+        return { raw, word, pos: "X" };
     });
 }
 
@@ -109,31 +150,56 @@ function tagEnglish(tokens) {
 // =========================
 
 function englishToLinara(input) {
-    const tokens = tokenize(input);
-    if (tokens.length === 0) return "";
+    if (!input.trim()) return "";
 
-    const tagged = tagEnglish(tokens);
+    const isQuestion = isQuestionMark(input);
+    const rawTokens = tokenize(input);
+    const tagged = tagEnglish(rawTokens);
 
-    // Very simple clause model: [SUBJ] [AUX?] [NEG?] [VERB] [OBJ?]
+    // 1. Handle greetings + "I am NAME"
+    const greetingToken = tagged.find(t => t.pos === "GREETING");
+    let nameAfterIam = null;
+
+    for (let i = 0; i < tagged.length - 2; i++) {
+        const t = tagged[i];
+        const next = tagged[i + 1];
+        const next2 = tagged[i + 2];
+
+        if (t.word === "i" && next.word === "am" && next2.pos === "NAME") {
+            nameAfterIam = next2.raw;
+            break;
+        }
+        if (t.raw.toLowerCase() === "i'm" && next.pos === "NAME") {
+            nameAfterIam = next.raw;
+            break;
+        }
+    }
+
+    if (greetingToken && nameAfterIam) {
+        // "Hello, I am Nyxen." -> "Sava mi Nyxen."
+        return `${capitalize(greetingLin)} mi ${nameAfterIam}.`;
+    }
+
+    // 2. General clause parsing: SVO
     let subject = null;
     let verb = null;
     let object = null;
+    let adjectivesForObject = [];
     let tense = "present";
     let negated = false;
     let objectPlural = false;
 
-    // crude parse
     for (let i = 0; i < tagged.length; i++) {
         const t = tagged[i];
 
-        if (!subject && (t.pos === "PRON" || t.pos === "N")) {
-            subject = t.word;
+        if (!subject && (t.pos === "PRON" || t.pos === "N" || t.pos === "NAME")) {
+            subject = t;
             continue;
         }
 
         if (t.pos === "AUX") {
             if (t.word === "will") tense = "future";
-            if (t.word === "did" || t.word === "was" || t.word === "were") tense = "past";
+            if (["did", "was", "were"].includes(t.word)) tense = "past";
             continue;
         }
 
@@ -143,45 +209,83 @@ function englishToLinara(input) {
         }
 
         if (!verb && (t.pos === "V" || t.pos === "X")) {
-            verb = t.word;
+            verb = t;
             continue;
         }
 
-        if (!object && (t.pos === "N" || t.pos === "X")) {
-            object = t.word;
-            objectPlural = isPluralEnglish(object);
-            object = stripPluralEnglish(object);
+        if (!object && (t.pos === "N" || t.pos === "NAME" || t.pos === "X")) {
+            object = t;
+            objectPlural = isPluralEnglish(t.raw);
             continue;
+        }
+
+        if (object && t.pos === "ADJ") {
+            adjectivesForObject.push(t);
         }
     }
 
     // Map subject
-    let linSubj = subject && lexicon.nouns[subject] ? lexicon.nouns[subject] : subject;
+    let linSubj = null;
+    if (subject) {
+        if (subject.pos === "PRON") {
+            linSubj = lexicon.pronouns[subject.word] || subject.raw;
+        } else if (subject.pos === "N") {
+            linSubj = lexicon.nouns[subject.word] || subject.raw;
+        } else if (subject.pos === "NAME") {
+            linSubj = subject.raw;
+        } else {
+            linSubj = subject.raw;
+        }
+    }
 
-    // Map verb root
-    let linVerbRoot = verb && lexicon.verbs[verb] ? lexicon.verbs[verb] : verb;
+    // Map verb
+    let linVerbRoot = null;
+    if (verb) {
+        if (lexicon.verbs[verb.word]) {
+            linVerbRoot = lexicon.verbs[verb.word];
+        } else {
+            linVerbRoot = verb.word;
+        }
+    }
 
-    // Apply tense
     let linVerb = linVerbRoot || "";
     if (tense === "past") linVerb += linaraMorph.past;
     if (tense === "future") linVerb += linaraMorph.future;
-
-    // Apply negation
-    if (negated && linVerb) {
-        linVerb = linaraMorph.negPrefix + "-" + linVerb;
-    }
+    if (negated && linVerb) linVerb = linaraMorph.negPrefix + "-" + linVerb;
 
     // Map object
-    let linObj = object && lexicon.nouns[object] ? lexicon.nouns[object] : object;
-    if (linObj && objectPlural) {
-        linObj += linaraMorph.plural;
+    let linObj = null;
+    if (object) {
+        if (object.pos === "N") {
+            linObj = lexicon.nouns[object.word] || object.raw;
+        } else if (object.pos === "NAME") {
+            linObj = object.raw;
+        } else {
+            linObj = object.raw;
+        }
+        if (objectPlural) linObj += linaraMorph.plural;
     }
 
-    // Build SOV order: Subject Object Verb
+    // Map adjectives (after noun)
+    let linAdj = adjectivesForObject.map(a => lexicon.adjectives[a.word] || a.raw);
+
+    // Build SOV: Subject Object (Adjectives) Verb
     const parts = [];
     if (linSubj) parts.push(capitalize(linSubj));
-    if (linObj) parts.push(linObj);
+    if (linObj) {
+        parts.push(linObj);
+        if (linAdj.length) parts.push(linAdj.join(" "));
+    }
     if (linVerb) parts.push(linVerb);
+
+    // If no verb but we have "I am NAME" style without greeting
+    if (!linVerb && subject && object && object.pos === "NAME") {
+        // "I am Nyxen." -> "Mi Nyxen."
+        return `${capitalize(linSubj)} ${object.raw}.`;
+    }
+
+    // Question particle
+    if (isQuestion) parts.push(lexicon.particles.question);
 
     return parts.join(" ") + ".";
 }
@@ -191,13 +295,48 @@ function englishToLinara(input) {
 // =========================
 
 function linaraToEnglish(input) {
-    const tokens = tokenize(input);
+    if (!input.trim()) return "";
+
+    const isQuestion = isQuestionMark(input);
+    let tokens = tokenize(input).map(t => t.replace(/[.?!]/g, ""));
+
     if (tokens.length === 0) return "";
 
-    // SOV: [SUBJ] [OBJ] [VERB]
+    // Handle greeting pattern: "Sava mi Name"
+    if (normalizeWord(tokens[0]) === greetingLin) {
+        if (tokens[1] && normalizeWord(tokens[1]) === "mi" && tokens[2]) {
+            const name = tokens[2];
+            return `Hello, I am ${name}.`;
+        }
+        return "Hello.";
+    }
+
+    // Assume SOV: [SUBJ] [OBJ ... ADJ?] [VERB?] [ka?]
+    // Strip question particle if present
+    if (normalizeWord(tokens[tokens.length - 1]) === lexicon.particles.question) {
+        tokens = tokens.slice(0, -1);
+    }
+
     let linSubj = tokens[0] || null;
-    let linObj = tokens[1] || null;
-    let linVerb = tokens[2] || null;
+    let linVerb = null;
+    let linObj = null;
+    let linAdj = [];
+
+    if (tokens.length === 1) {
+        // Single word: try to map directly
+        linSubj = tokens[0];
+    } else if (tokens.length === 2) {
+        linSubj = tokens[0];
+        linVerb = tokens[1];
+    } else {
+        linSubj = tokens[0];
+        linVerb = tokens[tokens.length - 1];
+        linObj = tokens[1];
+
+        if (tokens.length > 3) {
+            linAdj = tokens.slice(2, tokens.length - 1);
+        }
+    }
 
     let negated = false;
     let tense = "present";
@@ -218,23 +357,32 @@ function linaraToEnglish(input) {
     }
 
     // Map subject
-    let enSubj = mapLinaraToEnglishWord(linSubj);
+    let enSubj = mapLinaraToEnglishWord(linSubj, ["pronouns", "nouns"]) || linSubj;
 
-    // Map object and plural
+    // Map object + plural
     let enObj = null;
     let objPlural = false;
     if (linObj) {
-        if (linObj.endsWith(linaraMorph.plural)) {
+        let baseObj = linObj;
+        if (baseObj.endsWith(linaraMorph.plural)) {
             objPlural = true;
-            linObj = linObj.slice(0, -linaraMorph.plural.length);
+            baseObj = baseObj.slice(0, -linaraMorph.plural.length);
         }
-        enObj = mapLinaraToEnglishWord(linObj);
+        enObj = mapLinaraToEnglishWord(baseObj, ["nouns"]) || baseObj;
     }
 
-    // Map verb
-    let enVerb = mapLinaraToEnglishWord(linVerb, "verb");
+    // Map adjectives
+    let enAdj = linAdj.map(a => mapLinaraToEnglishWord(a, ["adjectives"]) || a);
 
-    // Build English SVO with auxiliaries
+    // Map verb
+    let enVerb = linVerb ? mapLinaraToEnglishWord(linVerb, ["verbs"]) || linVerb : null;
+
+    // If no verb and we have "Mi Nyxen" style
+    if (!enVerb && enSubj && enObj && isCapitalized(enObj)) {
+        return `I am ${enObj}.`;
+    }
+
+    // Build English SVO
     const parts = [];
 
     if (enSubj) {
@@ -244,7 +392,6 @@ function linaraToEnglish(input) {
     if (tense === "future") {
         parts.push("will");
     } else if (tense === "past") {
-        // naive past: "did" + base verb
         parts.push("did");
     }
 
@@ -257,41 +404,27 @@ function linaraToEnglish(input) {
     }
 
     if (enObj) {
-        if (objPlural) {
-            parts.push(pluralizeEnglish(enObj));
-        } else {
-            parts.push(enObj);
+        let objStr = enObj;
+        if (objPlural) objStr = pluralizeEnglish(objStr);
+        if (enAdj.length) {
+            objStr = `${enAdj.join(" ")} ${objStr}`;
         }
+        parts.push(objStr);
     }
 
-    return parts.join(" ") + ".";
+    let sentence = parts.join(" ");
+    if (isQuestion) sentence += "?";
+    else sentence += ".";
+
+    return sentence;
 }
 
-function mapLinaraToEnglishWord(word, forcePos = null) {
+function mapLinaraToEnglishWord(word, posList) {
     if (!word) return null;
-
-    if (!forcePos || forcePos === "noun") {
-        if (reverseLexicon.nouns[word]) return reverseLexicon.nouns[word];
+    for (const pos of posList) {
+        if (reverseLexicon[pos][word]) return reverseLexicon[pos][word];
     }
-    if (!forcePos || forcePos === "verb") {
-        if (reverseLexicon.verbs[word]) return reverseLexicon.verbs[word];
-    }
-    if (!forcePos || forcePos === "adj") {
-        if (reverseLexicon.adjectives[word]) return reverseLexicon.adjectives[word];
-    }
-    return word;
-}
-
-function pluralizeEnglish(word) {
-    // naive pluralization
-    if (word.endsWith("y")) return word.slice(0, -1) + "ies";
-    if (word.endsWith("s")) return word + "es";
-    return word + "s";
-}
-
-function capitalize(str) {
-    if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    return null;
 }
 
 // =========================
