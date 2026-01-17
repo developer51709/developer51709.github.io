@@ -1,0 +1,46 @@
+/* ---------- MOBILE LAYOUT ---------- */
+@media (max-width: 900px) {
+
+  .server-list {
+    display: none;
+  }
+
+  .channel-list {
+    display: none;
+  }
+
+  /* Mobile drawers */
+  .mobile-drawer {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    background: #2b2d31;
+    z-index: 50;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .mobile-drawer.open {
+    transform: translateX(0);
+  }
+
+  /* Server drawer */
+  .mobile-drawer.server {
+    width: 72px;
+    background: #1e1f22;
+  }
+
+  /* Chat header gets menu buttons */
+  .chat-header {
+    justify-content: space-between;
+  }
+
+  .mobile-menu-button {
+    font-size: 22px;
+    cursor: pointer;
+    padding: 6px;
+  }
+}
