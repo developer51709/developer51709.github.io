@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zero‑Downtime Deploys — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Zero‑Downtime Deploys</h1>
+    <p>Deploy new versions of your bot without interrupting uptime.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Seamless Updates</h2>
+    <p>
+        Linavo launches your new bot version in a temporary environment, verifies it’s healthy,
+        and only then switches traffic over — ensuring your bot never goes offline.
+    </p>
+
+    <h2>Automatic Health Checks</h2>
+    <p>
+        Linavo tests your bot’s startup, Discord connection, and event loop stability before promoting the new version.
+    </p>
+
+    <h2>Rollback Support</h2>
+    <p>
+        If something goes wrong, Linavo instantly reverts to the previous stable version.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Deployment Flow Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
