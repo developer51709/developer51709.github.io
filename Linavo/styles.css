@@ -151,6 +151,20 @@ h1, h2, h3 {
     margin-top: 30px;
 }
 
+/* Features Overview */
+.features-overview {
+    padding: 60px 20px;
+}
+
+.link-card {
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-card:hover {
+    transform: translateY(-5px);
+}
+
 /* Footer */
 footer {
     text-align: center;
