@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rate Limit Visualizer — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Rate Limit Visualizer</h1>
+    <p>Understand your Discord API usage with real‑time rate limit tracking.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Real‑Time Monitoring</h2>
+    <p>
+        See exactly which endpoints your bot is hitting and how close you are to Discord’s limits.
+    </p>
+
+    <h2>Prevent API Lockouts</h2>
+    <p>
+        Identify spammy commands or inefficient code before it becomes a problem.
+    </p>
+
+    <h2>Visual Insights</h2>
+    <p>
+        Graphs and charts make it easy to understand your bot’s API behavior.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Rate Limit Graph Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
