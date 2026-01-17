@@ -10,6 +10,9 @@ window.MOBILE = {
   createButtons() {
     const header = document.getElementById("chat-header");
 
+    // Prevent duplicates
+    if (header.querySelector(".mobile-menu-button")) return;
+
     // Server drawer button
     const serverBtn = document.createElement("span");
     serverBtn.className = "mobile-menu-button";
