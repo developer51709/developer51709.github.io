@@ -10,11 +10,13 @@ window.MOBILE = {
   createButtons() {
     const header = document.getElementById("chat-header");
 
+    // Server drawer button
     const serverBtn = document.createElement("span");
     serverBtn.className = "mobile-menu-button";
     serverBtn.textContent = "☰";
     serverBtn.onclick = () => this.toggleDrawer("server");
 
+    // Channel drawer button
     const channelBtn = document.createElement("span");
     channelBtn.className = "mobile-menu-button";
     channelBtn.textContent = "≡";
@@ -29,12 +31,70 @@ window.MOBILE = {
       type === "server" ? "mobile-server-drawer" : "mobile-channel-drawer"
     );
 
-    drawer.classList.toggle("open");
+    const backdrop = document.getElementById("mobile-backdrop");
+    const isOpen = drawer.classList.contains("open");
 
+    // Close drawer
+    if (isOpen) {
+      drawer.classList.remove("open");
+      backdrop.classList.remove("open");
+      return;
+    }
+
+    // Open drawer
+    drawer.classList.add("open");
+    backdrop.classList.add("open");
+
+    // Clicking backdrop closes drawer
+    backdrop.onclick = () => {
+      drawer.classList.remove("open");
+      backdrop.classList.remove("open");
+    };
+
+    // Populate drawer content
+    drawer.innerHTML = document.getElementById(
+      type === "server" ? "server-list" : "channel-list"
+    ).innerHTML;
+
+    // Re-bind click events inside drawer
+    this.bindDrawerEvents(drawer, type);
+  },
+
+  bindDrawerEvents(drawer, type) {
+    // ------------------------------
+    // SERVER DRAWER
+    // ------------------------------
     if (type === "server") {
-      drawer.innerHTML = document.getElementById("server-list").innerHTML;
-    } else {
-      drawer.innerHTML = document.getElementById("channel-list").innerHTML;
+      const icons = drawer.querySelectorAll(".server-icon");
+
+      icons.forEach((icon, index) => {
+        icon.onclick = () => {
+          const serverKey = index === 0 ? "testing" : "main";
+
+          UI.switchServer(serverKey);
+
+          drawer.classList.remove("open");
+          document.getElementById("mobile-backdrop").classList.remove("open");
+        };
+      });
+    }
+
+    // ------------------------------
+    // CHANNEL DRAWER
+    // ------------------------------
+    if (type === "channel") {
+      const channels = drawer.querySelectorAll(".channel");
+
+      channels.forEach((ch) => {
+        const name = ch.textContent.trim();
+
+        ch.onclick = () => {
+          UI.switchChannel(name);
+
+          drawer.classList.remove("open");
+          document.getElementById("mobile-backdrop").classList.remove("open");
+        };
+      });
     }
   }
 };
