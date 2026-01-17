@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linavo Features</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Linavo</div>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="features.html" class="active">Features</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="features.html" class="active">Features</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <section class="page-header fade-in">
+        <h1>Platform Features</h1>
+        <p>Explore everything Linavo offers to make Discord bot hosting smarter, faster, and more reliable.</p>
+    </section>
+
+    <section class="features-overview fade-in">
+        <div class="feature-grid">
+
+            <a href="features/github.html" class="feature-card link-card">
+                <h3>Full GitHub Integration</h3>
+                <p>Deploy directly from your repository with automatic updates and branch control.</p>
+            </a>
+
+            <a href="features/smart-throttling.html" class="feature-card link-card">
+                <h3>Smart Throttling</h3>
+                <p>Prevent random suspensions with intelligent resource management.</p>
+            </a>
+
+            <a href="features/analytics.html" class="feature-card link-card">
+                <h3>Deep Analytics</h3>
+                <p>Event loop metrics, profiling, crash forensics, and performance insights.</p>
+            </a>
+
+            <a href="features/api-endpoints.html" class="feature-card link-card">
+                <h3>Built‑In API Endpoints</h3>
+                <p>Instant access to uptime, status, metrics, and project insights.</p>
+            </a>
+
+            <a href="features/cli.html" class="feature-card link-card">
+                <h3>Linavo CLI</h3>
+                <p>A powerful command‑line interface for deployments, logs, and automation.</p>
+            </a>
+
+            <a href="features/file-manager.html" class="feature-card link-card">
+                <h3>File Manager & Editor</h3>
+                <p>Edit, upload, and manage files directly from the dashboard.</p>
+            </a>
+
+            <a href="features/auto-deps.html" class="feature-card link-card">
+                <h3>Auto Dependency Generator</h3>
+                <p>Automatically create requirements.txt files by scanning your project.</p>
+            </a>
+
+            <a href="features/crash-forensics.html" class="feature-card link-card">
+                <h3>Crash Forensics</h3>
+                <p>Automatic crash reports with stack traces, logs, and environment snapshots.</p>
+            </a>
+
+            <a href="features/rate-limit-visualizer.html" class="feature-card link-card">
+                <h3>Rate Limit Visualizer</h3>
+                <p>Understand Discord API usage with real‑time rate limit tracking.</p>
+            </a>
+
+            <a href="features/zero-downtime.html" class="feature-card link-card">
+                <h3>Zero‑Downtime Deploys</h3>
+                <p>Deploy new versions without interrupting your bot’s uptime.</p>
+            </a>
+
+            <a href="features/safe-mode.html" class="feature-card link-card">
+                <h3>Safe Mode</h3>
+                <p>Debug broken deployments without triggering restart loops.</p>
+            </a>
+
+            <a href="features/team-tools.html" class="feature-card link-card">
+                <h3>Team Collaboration Tools</h3>
+                <p>Invite team members, manage roles, and collaborate efficiently.</p>
+            </a>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Linavo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("open");
+        }
+    </script>
+</body>
+</html>
