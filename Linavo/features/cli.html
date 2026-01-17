@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linavo CLI — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Linavo CLI</h1>
+    <p>A powerful command‑line interface for deployments, logs, automation, and more.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Fast & Scriptable</h2>
+    <p>
+        Deploy, restart, view logs, manage environment variables, and automate workflows —
+        all from your terminal.
+    </p>
+
+    <h2>Perfect for CI/CD</h2>
+    <p>
+        Integrate Linavo directly into GitHub Actions, GitLab CI, or any automation pipeline.
+    </p>
+
+    <h2>Developer‑Friendly Commands</h2>
+    <p>
+        The CLI is designed to be intuitive, predictable, and powerful.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future CLI Screenshot Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
