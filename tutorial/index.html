@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bot Tutorial</title>
+
+  <!-- Base + Discord UI + Mobile Styles -->
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/discord.css" />
+  <link rel="stylesheet" href="styles/mobile.css" />
+
+  <!-- Config Files -->
+  <script src="config/config.js"></script>
+  <script src="config/servers.js"></script>
+  <script src="config/steps.js"></script>
+  <script src="config/messages.js"></script>
+  <script src="config/theme.js"></script>
+
+  <!-- Core Scripts -->
+  <script src="scripts/ui.js" defer></script>
+  <script src="scripts/renderer.js" defer></script>
+  <script src="scripts/tutorial.js" defer></script>
+  <script src="scripts/mobile.js" defer></script>
+</head>
+
+<body>
+
+  <!-- SERVER LIST (left sidebar) -->
+  <div id="server-list" class="server-list"></div>
+
+  <!-- CHANNEL LIST (middle sidebar) -->
+  <div id="channel-list" class="channel-list"></div>
+
+  <!-- MAIN CHAT AREA -->
+  <div id="chat-area" class="chat-area">
+
+    <!-- Top bar (server name, channel name) -->
+    <div id="chat-header" class="chat-header"></div>
+
+    <!-- Messages -->
+    <div id="messages" class="messages"></div>
+
+    <!-- Input area -->
+    <div class="chat-input">
+      <input id="chat-input-field" type="text" placeholder="Message #channel" autocomplete="off" />
+    </div>
+  </div>
+
+  <!-- MOBILE DRAWERS -->
+  <div id="mobile-server-drawer" class="mobile-drawer server"></div>
+  <div id="mobile-channel-drawer" class="mobile-drawer channel"></div>
+
+</body>
+</html>
