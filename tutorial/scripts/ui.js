@@ -1,5 +1,5 @@
 // ------------------------------
-// UI ENGINE
+// UI ENGINE (UPDATED)
 // ------------------------------
 
 window.UI = {
@@ -36,6 +36,10 @@ window.UI = {
     this.currentServer = serverKey;
     RENDER.channels(serverKey);
     RENDER.chatHeader(serverKey);
+
+    // Re-add mobile buttons after header re-render
+    MOBILE.createButtons();
+
     RENDER.clearMessages();
     TUTORIAL.onServerSwitch(serverKey);
   },
@@ -43,6 +47,10 @@ window.UI = {
   switchChannel(channelName) {
     this.currentChannel = channelName;
     RENDER.chatHeader(this.currentServer, channelName);
+
+    // Re-add mobile buttons after header re-render
+    MOBILE.createButtons();
+
     RENDER.clearMessages();
     TUTORIAL.onChannelSwitch(channelName);
   },
