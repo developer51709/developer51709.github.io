@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Throttling — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Smart Throttling</h1>
+    <p>Prevent random suspensions with intelligent resource management.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Fair, Transparent Limits</h2>
+    <p>
+        Linavo monitors your bot’s resource usage and applies soft throttling instead of suspensions.
+        This ensures your bot stays online even during unexpected spikes.
+    </p>
+
+    <h2>Automatic Abuse Detection</h2>
+    <p>
+        If your bot exceeds safe thresholds repeatedly, Linavo provides clear explanations and logs —
+        never silent suspensions or unexplained downtime.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Graph Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
