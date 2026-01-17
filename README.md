@@ -8,6 +8,13 @@ https://developer51709.github.io/
 
 ---
 
+### Discord Bot Tutorial
+> I got tired of people asking how to use my bot
+
+https://developer51709.github.io/tutorial
+
+---
+
 ### Linara Translator
 > Linara is a language that I invented because I got bored :)
 
