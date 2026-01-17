@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Linavo</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Linavo</div>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="features.html">Features</a>
+            <a href="about.html" class="active">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="about.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <section class="page-header fade-in">
+        <h1>About Linavo</h1>
+        <p>Built for developers. Designed for reliability. Powered by innovation.</p>
+    </section>
+
+    <section class="about-section fade-in">
+        <h2>Our Mission</h2>
+        <p>
+            Linavo was created with a simple goal: to redefine what Discord bot hosting can be.
+            Developers deserve more than the bare minimum — they deserve tools that empower them,
+            insights that guide them, and a platform that works with them, not against them.
+        </p>
+    </section>
+
+    <section class="about-section fade-in">
+        <h2>Why Linavo Exists</h2>
+        <p>
+            Most hosting platforms offer the same basic experience: a container, a console, and a restart button.
+            But Discord bot developers face unique challenges — unpredictable resource usage, dependency issues,
+            rate limits, crashes, and deployment headaches. Linavo was built to solve these problems at the source.
+        </p>
+        <p>
+            From smart throttling to deep analytics, from GitHub integration to built‑in API endpoints,
+            Linavo gives developers the tools they’ve always needed but never had.
+        </p>
+    </section>
+
+    <section class="about-section fade-in">
+        <h2>What Makes Linavo Different</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Developer‑First Philosophy</h3>
+                <p>
+                    Every feature is designed to make development easier, faster, and more intuitive.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Transparency & Reliability</h3>
+                <p>
+                    No random suspensions, no unexplained downtime — just predictable, stable hosting.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Smart Automation</h3>
+                <p>
+                    Automated profiling, dependency generation, and deployment pipelines save time and reduce errors.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Powerful Insights</h3>
+                <p>
+                    Event loop metrics, crash forensics, and performance analytics give developers full visibility.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section fade-in">
+        <h2>The Future of Linavo</h2>
+        <p>
+            Linavo is just getting started. As the platform grows, so will its capabilities — more automation,
+            deeper analytics, expanded integrations, and tools that push the boundaries of what bot hosting can be.
+        </p>
+        <p>
+            Our vision is to build the most advanced, developer‑friendly Discord bot platform in the world.
+        </p>
+    </section>
+
+    <footer>
+        <p>© 2026 Linavo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("open");
+        }
+    </script>
+</body>
+</html>
