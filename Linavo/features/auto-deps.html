@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Dependency Generator — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Auto Dependency Generator</h1>
+    <p>Automatically create a complete requirements.txt by scanning your project.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Smart Dependency Detection</h2>
+    <p>
+        Linavo scans your Python files, detects imports, and builds a full dependency list.
+    </p>
+
+    <h2>Version Resolution</h2>
+    <p>
+        Linavo checks PyPI for compatible versions and suggests stable or latest builds.
+    </p>
+
+    <h2>Perfect for Beginners</h2>
+    <p>
+        No more deployment errors caused by missing or outdated requirements.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Dependency Scan Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
