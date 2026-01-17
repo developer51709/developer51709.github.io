@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linavo — Next‑Generation Discord Bot Hosting</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Linavo</div>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="features.html">Features</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+
+    <section class="hero fade-in">
+        <h1>Linavo</h1>
+        <p>The next‑generation Discord bot hosting platform built for developers who expect more.</p>
+
+        <div class="cta-buttons">
+            <a href="features.html" class="btn-primary">Explore Features</a>
+            <a href="#" class="btn-secondary disabled">Donate (Coming Soon)</a>
+        </div>
+    </section>
+
+    <section class="features-preview fade-in">
+        <h2>Why Developers Choose Linavo</h2>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Full GitHub Integration</h3>
+                <p>Deploy directly from your repository with seamless auto‑updates.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Smart Throttling</h3>
+                <p>No random suspensions — Linavo handles resource spikes intelligently.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Deep Analytics</h3>
+                <p>Event loop metrics, profiling, crash forensics, and performance insights.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Built‑In API Endpoints</h3>
+                <p>Uptime, status, metrics, and project insights available instantly.</p>
+            </div>
+        </div>
+
+        <a href="features.html" class="btn-primary center">View All Features</a>
+    </section>
+
+    <footer>
+        <p>© 2026 Linavo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("open");
+        }
+    </script>
+</body>
+</html>
