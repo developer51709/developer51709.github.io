@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Linavo</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Linavo</div>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="features.html">Features</a>
+            <a href="about.html">About</a>
+            <a href="contact.html" class="active">Contact</a>
+        </nav>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="about.html">About</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+
+    <section class="page-header fade-in">
+        <h1>Contact Us</h1>
+        <p>Have questions? Want to get involved? We’d love to hear from you.</p>
+    </section>
+
+    <section class="contact-section fade-in">
+        <h2>Get in Touch</h2>
+
+        <div class="contact-grid">
+            <div class="contact-card">
+                <h3>Email</h3>
+                <p>Reach out anytime:</p>
+                <p><strong>support@linavo.dev</strong></p>
+            </div>
+
+            <div class="contact-card">
+                <h3>Discord</h3>
+                <p>Join our community server:</p>
+                <a href="#" class="btn-primary">Join Discord</a>
+            </div>
+
+            <div class="contact-card">
+                <h3>Feedback</h3>
+                <p>Have ideas or suggestions?</p>
+                <a href="#" class="btn-secondary">Submit Feedback</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Linavo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById("mobileMenu");
+            menu.classList.toggle("open");
+        }
+    </script>
+</body>
+</html>
