@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crash Forensics — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Crash Forensics</h1>
+    <p>Automatic crash reports with stack traces, logs, and environment snapshots.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Instant Crash Reports</h2>
+    <p>
+        When your bot crashes, Linavo captures the stack trace, logs, and system state automatically.
+    </p>
+
+    <h2>Debug Faster</h2>
+    <p>
+        No more guessing — see exactly what caused the crash and how to fix it.
+    </p>
+
+    <h2>Historical Crash Logs</h2>
+    <p>
+        Review past crashes to identify patterns and long‑term issues.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Crash Report Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
