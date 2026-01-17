@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Integration — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="logo">Linavo</div>
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../features.html" class="active">Features</a>
+            <a href="../about.html">About</a>
+            <a href="../contact.html">Contact</a>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+
+    <section class="page-header fade-in">
+        <h1>Full GitHub Integration</h1>
+        <p>Deploy your bot directly from your GitHub repository with seamless automation.</p>
+    </section>
+
+    <section class="feature-detail fade-in">
+        <h2>Effortless Deployments</h2>
+        <p>
+            Linavo connects directly to your GitHub account, allowing you to deploy your bot with a single click.
+            Choose your repository, select a branch, and Linavo handles the rest — cloning, building, and launching
+            your bot automatically.
+        </p>
+
+        <h2>Automatic Updates</h2>
+        <p>
+            Push a commit to your repository and Linavo instantly rebuilds and redeploys your bot. No manual steps,
+            no downtime, no hassle.
+        </p>
+
+        <h2>Branch Control</h2>
+        <p>
+            Deploy from any branch. Perfect for testing, staging, and production workflows.
+        </p>
+
+        <div class="placeholder-box">
+            <p>Future Screenshot Placeholder</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Linavo — All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("mobileMenu").classList.toggle("open");
+        }
+    </script>
+</body>
+</html>
