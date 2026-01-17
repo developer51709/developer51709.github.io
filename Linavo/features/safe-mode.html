@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Safe Mode — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Safe Mode</h1>
+    <p>Debug broken deployments without triggering restart loops.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Crash‑Loop Protection</h2>
+    <p>
+        If your bot crashes repeatedly, Linavo automatically enters Safe Mode to prevent endless restart cycles.
+    </p>
+
+    <h2>Minimal Environment</h2>
+    <p>
+        Your bot launches with reduced load, allowing you to diagnose issues without interference.
+    </p>
+
+    <h2>Debug Tools Built‑In</h2>
+    <p>
+        Access logs, crash reports, and environment snapshots directly from the dashboard.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Safe Mode UI Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
