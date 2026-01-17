@@ -165,6 +165,18 @@ h1, h2, h3 {
     transform: translateY(-5px);
 }
 
+.feature-note {
+    text-align: center;
+    background: #eef2ff;
+    border-left: 4px solid #4f46e5;
+    padding: 12px 20px;
+    margin: 20px auto 0;
+    max-width: 700px;
+    border-radius: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
 /* Footer */
 footer {
     text-align: center;
