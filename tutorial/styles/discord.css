@@ -13,36 +13,39 @@
 .server-icon {
   width: 48px;
   height: 48px;
-  background: #5865f2;
+  background: #313338;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
-  color: white;
-  transition: border-radius 0.2s, background 0.2s;
+  font-weight: 600;
+  color: #dbdee1;
+  transition: border-radius 0.25s ease, background 0.25s ease;
 }
 
 .server-icon:hover {
   border-radius: 16px;
-  background: #4752c4;
+  background: #5865f2;
+  color: white;
 }
 
 /* ---------- CHANNEL LIST ---------- */
 .channel-list {
   width: 240px;
   background: #2b2d31;
-  padding: 12px;
+  padding: 12px 8px;
   overflow-y: auto;
   border-right: 1px solid #1e1f22;
 }
 
 .category-label {
   font-size: 12px;
+  font-weight: 600;
   color: #949ba4;
-  margin: 16px 0 6px 4px;
+  margin: 18px 0 6px 4px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .channel {
@@ -53,11 +56,13 @@
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  font-size: 15px;
+  line-height: 20px;
 }
 
 .channel:hover {
-  background: #393c41;
-  color: #dbdee1;
+  background: #3f4248;
+  color: #f2f3f5;
 }
 
 .channel.active {
@@ -69,12 +74,16 @@
 .channel-icon {
   width: 16px;
   height: 16px;
-  opacity: 0.8;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .channel-icon.text::before {
   content: "#";
   font-size: 16px;
+  font-weight: 600;
 }
 
 .channel-icon.voice::before {
@@ -98,29 +107,34 @@
   display: flex;
   align-items: center;
   padding: 0 16px;
-  font-weight: bold;
-  color: #fff;
+  font-weight: 600;
+  color: #f2f3f5;
+  font-size: 16px;
 }
 
 /* Messages */
 .messages {
   flex: 1;
-  padding: 16px;
+  padding: 20px 16px;
   overflow-y: auto;
 }
 
 .message {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
 }
 
 .message-author {
-  font-weight: bold;
-  color: #fff;
+  font-weight: 600;
+  color: #f2f3f5;
+  margin-bottom: 2px;
 }
 
 .message-text {
-  margin-left: 4px;
   color: #dbdee1;
+  font-size: 15px;
+  line-height: 20px;
 }
 
 /* Chat input */
@@ -130,16 +144,21 @@
   padding: 8px 16px;
   display: flex;
   align-items: center;
+  border-top: 1px solid #1e1f22;
 }
 
 .chat-input input {
   width: 100%;
-  padding: 10px 12px;
-  border-radius: 6px;
+  padding: 12px 14px;
+  border-radius: 8px;
   border: none;
   background: #1e1f22;
-  color: #fff;
-  font-size: 14px;
+  color: #f2f3f5;
+  font-size: 15px;
+}
+
+.chat-input input::placeholder {
+  color: #6d6f78;
 }
 
 .chat-input input:focus {
