@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Command Usage Analytics — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Command Usage Analytics</h1>
+    <p>Track command popularity, performance, and error rates in real time.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Usage Tracking</h2>
+    <p>
+        See which commands are used most often and which are rarely touched.
+    </p>
+
+    <h2>Error Monitoring</h2>
+    <p>
+        Identify commands that frequently fail or cause issues.
+    </p>
+
+    <h2>Performance Insights</h2>
+    <p>
+        Measure execution time to find slow or inefficient commands.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future Command Analytics Graph Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
