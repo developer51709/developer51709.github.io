@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Built‑In API Endpoints — Linavo</title>
+    <link rel="stylesheet" href="../styles.css" />
+</head>
+
+<body>
+<header class="navbar">
+    <div class="logo">Linavo</div>
+    <nav class="nav-links">
+        <a href="../index.html">Home</a>
+        <a href="../features.html" class="active">Features</a>
+        <a href="../about.html">About</a>
+        <a href="../contact.html">Contact</a>
+    </nav>
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="../features.html" class="active">Features</a>
+    <a href="../about.html">About</a>
+    <a href="../contact.html">Contact</a>
+</nav>
+
+<section class="page-header fade-in">
+    <h1>Built‑In API Endpoints</h1>
+    <p>Instant access to uptime, status, metrics, and project insights.</p>
+</section>
+
+<section class="feature-detail fade-in">
+    <h2>Instant Status Data</h2>
+    <p>
+        Linavo automatically provides endpoints for uptime, online status, shard health,
+        and other essential bot metrics — no setup required.
+    </p>
+
+    <h2>Perfect for Dashboards</h2>
+    <p>
+        Use these endpoints to power custom dashboards, status pages, or monitoring tools.
+    </p>
+
+    <h2>Secure & Configurable</h2>
+    <p>
+        Enable or disable endpoints per project and protect them with API keys.
+    </p>
+
+    <div class="placeholder-box">
+        <p>Future API Example Placeholder</p>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Linavo — All rights reserved.</p>
+</footer>
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mobileMenu").classList.toggle("open");
+    }
+</script>
+</body>
+</html>
