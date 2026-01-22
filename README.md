@@ -8,6 +8,20 @@ https://developer51709.github.io/
 
 ---
 
+### Lucid Raiding™ Website
+> This is the website for Lucid Raiding™
+
+https://developer51709.github.io/lucid-raiding
+
+---
+
+### Discord Safety Guide
+> This is a safety guide for Discord server owners and admins
+
+https://developer51709.github.io/discord-safety-guide.html
+
+---
+
 ### Discord Bot Tutorial
 > I got tired of people asking how to use my bot
 
