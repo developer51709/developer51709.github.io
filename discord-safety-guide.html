@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord Server Safety Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #05060a;
+      --bg-elevated: #0d0f16;
+      --bg-soft: #151827;
+      --accent: #4f8cff;
+      --accent-soft: rgba(79, 140, 255, 0.12);
+      --accent-strong: #7aa4ff;
+      --danger: #ff4f6a;
+      --text-main: #f5f7ff;
+      --text-muted: #a3a7c2;
+      --border-subtle: #262a3f;
+      --radius-lg: 14px;
+      --radius-md: 10px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.4);
+      --transition-fast: 0.18s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151827 0, #05060a 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-shell {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px 14px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #0b0d15, #05060a);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: var(--shadow-subtle);
+      position: sticky;
+      top: 8px;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: radial-gradient(circle at 30% 0, #7aa4ff, #4f8cff 40%, #151827);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e9efff;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 10px 25px rgba(79, 140, 255, 0.55);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    nav {
+      display: flex;
+      gap: 4px;
+      padding: 2px;
+      border-radius: 999px;
+      background: rgba(10, 12, 20, 0.9);
+    }
+
+    .nav-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), color var(--transition-fast),
+        transform var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-btn span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .nav-btn.active {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      transform: translateY(-0.5px);
+    }
+
+    .nav-btn.active span.dot {
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.25);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.97);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card {
+      background: radial-gradient(circle at top left, #151827, #05060a 55%);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(
+        circle at top right,
+        rgba(79, 140, 255, 0.12),
+        transparent 55%
+      );
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .page {
+      display: none;
+      animation: fadeIn 0.22s ease-out;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .page-kicker {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent-strong);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-kicker::before {
+      content: "";
+      width: 18px;
+      height: 1px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-strong), transparent);
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 650;
+      letter-spacing: 0.01em;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 640px;
+      line-height: 1.5;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(10, 12, 20, 0.9);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent-strong);
+      box-shadow: 0 0 0 4px rgba(79, 140, 255, 0.25);
+    }
+
+    .pill-danger {
+      border-color: rgba(255, 79, 106, 0.4);
+      background: rgba(40, 8, 16, 0.9);
+      color: #ff9dad;
+    }
+
+    .pill-danger .pill-dot {
+      background: var(--danger);
+      box-shadow: 0 0 0 4px rgba(255, 79, 106, 0.25);
+    }
+
+    .grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    @media (min-width: 720px) {
+      .grid.two {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      }
+    }
+
+    .section-block {
+      background: rgba(5, 6, 12, 0.9);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 10px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 550;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-badge {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(79, 140, 255, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .section-body {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .list {
+      margin: 4px 0 0;
+      padding-left: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .list li {
+      padding-left: 2px;
+    }
+
+    .callout {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(79, 140, 255, 0.4);
+      background: linear-gradient(
+        135deg,
+        rgba(79, 140, 255, 0.16),
+        rgba(5, 6, 12, 0.95)
+      );
+      padding: 9px 10px;
+      font-size: 12px;
+      color: #dde6ff;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .callout-icon {
+      font-size: 14px;
+      margin-top: 1px;
+    }
+
+    .callout-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .callout-title {
+      font-weight: 550;
+      font-size: 12px;
+    }
+
+    .callout-text {
+      font-size: 12px;
+      color: #c4cffc;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .footer-nav span {
+      opacity: 0.8;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 7px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(10, 12, 20, 0.95);
+      color: var(--text-main);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background var(--transition-fast), transform var(--transition-fast),
+        box-shadow var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4f8cff, #7aa4ff);
+      border-color: rgba(122, 164, 255, 0.9);
+      color: #05060a;
+      box-shadow: 0 12px 30px rgba(79, 140, 255, 0.55);
+    }
+
+    .btn-ghost {
+      background: rgba(5, 6, 12, 0.9);
+    }
+
+    .btn:active {
+      transform: scale(0.97) translateY(1px);
+      box-shadow: none;
+    }
+
+    .btn-primary:active {
+      box-shadow: 0 4px 16px rgba(79, 140, 255, 0.55);
+    }
+
+    .btn-icon {
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 4px 4px 0;
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 540px) {
+      .card {
+        padding: 20px 18px 18px;
+      }
+      .page-title {
+        font-size: 22px;
+      }
+      .page-subtitle {
+        font-size: 13px;
+      }
+    }
+
+    @media (min-width: 840px) {
+      header {
+        padding-inline: 16px;
+      }
+      .card {
+        padding: 22px 20px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div class="brand">
+        <div class="brand-logo">S</div>
+        <div class="brand-text">
+          <div class="brand-title">Server Shield</div>
+          <div class="brand-subtitle">Discord Safety Guide · Admin Edition</div>
+        </div>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-page="page-basics">
+          <span class="dot"></span>
+          Basics
+        </button>
+        <button class="nav-btn" data-page="page-perms">
+          <span class="dot"></span>
+          Permissions
+        </button>
+        <button class="nav-btn" data-page="page-bots">
+          <span class="dot"></span>
+          Bots & Apps
+        </button>
+        <button class="nav-btn" data-page="page-raids">
+          <span class="dot"></span>
+          Raids
+        </button>
+        <button class="nav-btn" data-page="page-checklist">
+          <span class="dot"></span>
+          Checklist
+        </button>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card">
+        <div class="card-inner">
+          <!-- PAGE 1: BASICS -->
+          <div class="page active" id="page-basics">
+            <div class="page-header">
+              <div class="page-kicker">Page 1 · Foundations</div>
+              <div class="page-title">Core safety mindset for Discord servers</div>
+              <div class="page-subtitle">
+                Your goal isn’t to make your server “unraidable”—that doesn’t exist.
+                Your goal is to make attacks <strong>boring, expensive, and short‑lived</strong>
+                while keeping things welcoming for normal members.
+              </div>
+              <div class="pill-row">
+                <div class="pill">
+                  <span class="pill-dot"></span>
+                  <span>Secure by default</span>
+                </div>
+                <div class="pill">
+                  <span class="pill-dot"></span>
+                  <span>Trust is earned, not assumed</span>
+                </div>
+                <div class="pill pill-danger">
+                  <span class="pill-dot"></span>
+                  <span>Assume abuse will be attempted</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">
+                    Threat model in one minute
+                  </div>
+                  <div class="section-badge">Start here</div>
+                </div>
+                <div class="section-body">
+                  Think in three layers:
+                  <ul class="list">
+                    <li><strong>People:</strong> trolls, raiders, compromised accounts.</li>
+                    <li><strong>Automation:</strong> bots, webhooks, external apps.</li>
+                    <li><strong>Surfaces:</strong> channels, DMs, voice, threads, reactions.</li>
+                  </ul>
+                  If something can receive input, it can be abused. Design with that assumption.
+                </div>
+              </div>
+
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">Quick wins for any server size</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Enable <strong>verification level</strong> (email / phone) for new users.</li>
+                    <li>Turn on <strong>2FA for moderators</strong> and owners.</li>
+                    <li>Lock powerful permissions to <strong>very few roles</strong>.</li>
+                    <li>Use a <strong>logging channel</strong> for joins, bans, and role changes.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout">
+              <div class="callout-icon">💡</div>
+              <div class="callout-body">
+                <div class="callout-title">Principle: friction for attackers, flow for regulars</div>
+                <div class="callout-text">
+                  Add friction where abuse happens (new accounts, mass actions), not where normal
+                  conversation happens. Most safety mistakes come from flipping that balance.
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-nav">
+              <span>Page 1 of 5</span>
+              <div class="btn-row">
+                <button class="btn btn-primary" data-next="page-perms">
+                  <span>Next: Permissions</span>
+                  <span class="btn-icon">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE 2: PERMISSIONS -->
+          <div class="page" id="page-perms">
+            <div class="page-header">
+              <div class="page-kicker">Page 2 · Access control</div>
+              <div class="page-title">Roles, permissions, and blast radius</div>
+              <div class="page-subtitle">
+                Most catastrophic incidents aren’t “hacks”—they’re <strong>over‑powered roles</strong>
+                in the wrong hands. Your job is to shrink the blast radius of any single account.
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">Dangerous permissions to lock down</div>
+                  <div class="section-badge">High risk</div>
+                </div>
+                <div class="section-body">
+                  Treat these like admin keys:
+                  <ul class="list">
+                    <li><strong>Administrator</strong> – avoid using it; prefer explicit perms.</li>
+                    <li><strong>Manage Server / Roles / Channels</strong> – tiny, trusted group only.</li>
+                    <li><strong>Ban / Kick Members</strong> – log every use.</li>
+                    <li><strong>Mention @everyone / @here</strong> – keep to staff roles.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">New member containment</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Use a <strong>“New” role</strong> with limited channels.</li>
+                    <li>Disable image / file sending for brand‑new users.</li>
+                    <li>Require a short <strong>intro or reaction</strong> to unlock full access.</li>
+                    <li>Keep <strong>staff‑only channels</strong> fully hidden from regular roles.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">Category & channel overrides</div>
+              </div>
+              <div class="section-body">
+                <ul class="list">
+                  <li>Set strict permissions on the <strong>category</strong>, then inherit downward.</li>
+                  <li>Keep moderation / logs in a <strong>separate locked category</strong>.</li>
+                  <li>Double‑check that no public role can:
+                    <ul class="list">
+                      <li>Manage channels</li>
+                      <li>Manage webhooks</li>
+                      <li>Manage messages in staff channels</li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout">
+              <div class="callout-icon">🛡️</div>
+              <div class="callout-body">
+                <div class="callout-title">Principle: assume one staff account will be compromised</div>
+                <div class="callout-text">
+                  Design your roles so that even if one moderator account is stolen, the attacker
+                  can’t instantly destroy the server. That’s the real test of your permission setup.
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-nav">
+              <span>Page 2 of 5</span>
+              <div class="btn-row">
+                <button class="btn btn-ghost" data-next="page-basics">
+                  <span class="btn-icon">←</span>
+                  <span>Back</span>
+                </button>
+                <button class="btn btn-primary" data-next="page-bots">
+                  <span>Next: Bots & Apps</span>
+                  <span class="btn-icon">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE 3: BOTS & EXTERNAL APPS -->
+          <div class="page" id="page-bots">
+            <div class="page-header">
+              <div class="page-kicker">Page 3 · Automation</div>
+              <div class="page-title">Bots, webhooks, and external apps</div>
+              <div class="page-subtitle">
+                Automation is your biggest ally and your biggest risk. Treat every bot and external
+                app like a staff member with its own trust level and blast radius.
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">Bot safety rules</div>
+                  <div class="section-badge">Essential</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Only add bots from <strong>trusted sources</strong> with active maintenance.</li>
+                    <li>Give bots <strong>only the permissions they truly need</strong>.</li>
+                    <li>Keep a <strong>list of all bots</strong> and what they’re for.</li>
+                    <li>Remove bots you no longer use—idle bots are hidden risk.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">Webhooks & “headless” senders</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Rotate webhook URLs if they might have leaked.</li>
+                    <li>Delete webhooks from channels you archive or remove.</li>
+                    <li>Restrict who can <strong>create or manage webhooks</strong>.</li>
+                    <li>Log unexpected webhook activity in a staff channel.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">External app & interaction‑based exploits</div>
+                <div class="section-badge">Watch closely</div>
+              </div>
+              <div class="section-body">
+                External apps and interaction tokens can be abused to send messages or trigger heavy
+                actions without using a traditional bot token.
+                <ul class="list">
+                  <li>Be wary of apps that ask for <strong>wide OAuth scopes</strong> (like reading messages).</li>
+                  <li>Audit your server’s <strong>integrations list</strong> regularly.</li>
+                  <li>Ask bot developers how they <strong>rate‑limit interactions</strong> and follow‑ups.</li>
+                  <li>Disable “anyone can add apps” if your server doesn’t need it.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout">
+              <div class="callout-icon">🔍</div>
+              <div class="callout-body">
+                <div class="callout-title">Red flags to investigate immediately</div>
+                <div class="callout-text">
+                  Sudden bursts of messages from unknown bots or webhooks, new integrations you
+                  don’t recognize, or members reporting strange DMs from “apps” they never installed.
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-nav">
+              <span>Page 3 of 5</span>
+              <div class="btn-row">
+                <button class="btn btn-ghost" data-next="page-perms">
+                  <span class="btn-icon">←</span>
+                  <span>Back</span>
+                </button>
+                <button class="btn btn-primary" data-next="page-raids">
+                  <span>Next: Raids</span>
+                  <span class="btn-icon">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE 4: RAIDS & INCIDENT RESPONSE -->
+          <div class="page" id="page-raids">
+            <div class="page-header">
+              <div class="page-kicker">Page 4 · Incidents</div>
+              <div class="page-title">Raids, spam, and what to do in the moment</div>
+              <div class="page-subtitle">
+                When something blows up, you don’t want to improvise. You want a short, clear
+                playbook that any staff member can follow under pressure.
+              </div>
+            </div>
+
+            <div class="grid two">
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">Immediate actions during a raid</div>
+                  <div class="section-badge">Live use</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Turn on or tighten <strong>slowmode</strong> in targeted channels.</li>
+                    <li>Temporarily lock <strong>message sending</strong> for public roles.</li>
+                    <li>Pause <strong>new joins</strong> if your setup allows it.</li>
+                    <li>Use your bot’s <strong>mass mute / quarantine</strong> tools if available.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="section-block">
+                <div class="section-header">
+                  <div class="section-title">After the dust settles</div>
+                </div>
+                <div class="section-body">
+                  <ul class="list">
+                    <li>Review logs: who joined, who spammed, which tools were used.</li>
+                    <li>Adjust <strong>verification level</strong> and new‑user permissions.</li>
+                    <li>Remove any suspicious bots or integrations.</li>
+                    <li>Write a short <strong>post‑mortem</strong> for staff: what worked, what didn’t.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">External‑app style raid attempts</div>
+              </div>
+              <div class="section-body">
+                Some raiders try to abuse interaction tokens or external apps to send bursts of
+                messages that don’t look like normal bot traffic.
+                <ul class="list">
+                  <li>Watch for <strong>follow‑up spam</strong> triggered by button presses.</li>
+                  <li>Ask bot devs to add <strong>per‑user cooldowns</strong> on interactive UIs.</li>
+                  <li>Prefer bots that <strong>log interaction abuse</strong> to a staff channel.</li>
+                  <li>If a tool behaves suspiciously, <strong>remove it first, debug later</strong>.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout">
+              <div class="callout-icon">📌</div>
+              <div class="callout-body">
+                <div class="callout-title">Have one “panic role” and one “panic person”</div>
+                <div class="callout-text">
+                  Decide in advance who can flip emergency switches (slowmode, role locks, bot
+                  commands) and make sure they know exactly what to do. Chaos loves ambiguity.
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-nav">
+              <span>Page 4 of 5</span>
+              <div class="btn-row">
+                <button class="btn btn-ghost" data-next="page-bots">
+                  <span class="btn-icon">←</span>
+                  <span>Back</span>
+                </button>
+                <button class="btn btn-primary" data-next="page-checklist">
+                  <span>Next: Checklist</span>
+                  <span class="btn-icon">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE 5: CHECKLIST -->
+          <div class="page" id="page-checklist">
+            <div class="page-header">
+              <div class="page-kicker">Page 5 · Quick review</div>
+              <div class="page-title">Server safety checklist</div>
+              <div class="page-subtitle">
+                Use this page as a quick audit. If you can honestly check most of these boxes,
+                your server is already ahead of the majority.
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">Configuration</div>
+                <div class="section-badge">Server</div>
+              </div>
+              <div class="section-body">
+                <ul class="list">
+                  <li>[ ] Verification level is set above “None”.</li>
+                  <li>[ ] 2FA is required for moderators and admins.</li>
+                  <li>[ ] There is a dedicated <strong>logs channel</strong> for joins, bans, and role changes.</li>
+                  <li>[ ] New users have <strong>limited permissions</strong> and channels.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">Roles & permissions</div>
+                <div class="section-badge">Access</div>
+              </div>
+              <div class="section-body">
+                <ul class="list">
+                  <li>[ ] Only a few roles can manage roles, channels, or the server.</li>
+                  <li>[ ] @everyone cannot send images/files in sensitive channels.</li>
+                  <li>[ ] Staff channels are fully hidden from regular members.</li>
+                  <li>[ ] No unnecessary use of the <strong>Administrator</strong> permission.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">Bots, apps & webhooks</div>
+                <div class="section-badge">Automation</div>
+              </div>
+              <div class="section-body">
+                <ul class="list">
+                  <li>[ ] Every bot in the server is known and has a purpose.</li>
+                  <li>[ ] Bots only have the permissions they actually need.</li>
+                  <li>[ ] Webhooks are tracked and rotated if they might leak.</li>
+                  <li>[ ] Integrations list is reviewed regularly for unknown apps.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="section-block">
+              <div class="section-header">
+                <div class="section-title">Incident readiness</div>
+                <div class="section-badge">Response</div>
+              </div>
+              <div class="section-body">
+                <ul class="list">
+                  <li>[ ] Staff know how to enable slowmode and lock channels quickly.</li>
+                  <li>[ ] There is a simple raid playbook pinned in a staff channel.</li>
+                  <li>[ ] One or two people are clearly responsible for “panic actions”.</li>
+                  <li>[ ] After incidents, you review what to improve next time.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="callout">
+              <div class="callout-icon">✅</div>
+              <div class="callout-body">
+                <div class="callout-title">You don’t need perfection to be safe</div>
+                <div class="callout-text">
+                  You just need to be safer and more prepared than the average server. Most raiders
+                  are lazy—if your defenses are thoughtful, they move on.
+                </div>
+              </div>
+            </div>
+
+            <div class="footer-nav">
+              <span>Page 5 of 5</span>
+              <div class="btn-row">
+                <button class="btn btn-ghost" data-next="page-raids">
+                  <span class="btn-icon">←</span>
+                  <span>Back</span>
+                </button>
+                <button class="btn btn-primary" data-next="page-basics">
+                  <span>Back to start</span>
+                  <span class="btn-icon">⟳</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Server Shield · Single‑file Discord safety guide · Customize text to match your community.
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      const pages = Array.from(document.querySelectorAll(".page"));
+      const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
+      const nextButtons = Array.from(document.querySelectorAll("[data-next]"));
+
+      function showPage(id) {
+        pages.forEach((p) => p.classList.toggle("active", p.id === id));
+        navButtons.forEach((btn) =>
+          btn.classList.toggle("active", btn.dataset.page === id)
+        );
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      navButtons.forEach((btn) => {
+        btn.addEventListener("click", () => showPage(btn.dataset.page));
+      });
+
+      nextButtons.forEach((btn) => {
+        btn.addEventListener("click", () => showPage(btn.dataset.next));
+      });
+    })();
+  </script>
+</body>
+</html>
