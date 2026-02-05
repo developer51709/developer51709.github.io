@@ -446,6 +446,46 @@
       font-size: 14px;
     }
 
+    .checkbox {
+      width: 14px;
+      height: 14px;
+      margin-right: 6px;
+      appearance: none;
+      background: rgba(10, 12, 20, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      margin-top: -2px;
+      flex-shrink: 0;
+      outline: none;
+    }
+
+    .checkbox:checked {
+      background: linear-gradient(135deg, #4f8cff, #7aa4ff);
+      border-color: rgba(122, 164, 255, 0.9);
+      box-shadow: 0 0 0 1px rgba(79, 140, 255, 0.25);
+      position: relative;
+      z-index: 1;
+      background-size: 100% 100%;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+    }
+
+    .checkbox:checked::after {
+      content: "✔";
+      color: white;
+      font-size: 12px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -58%);
+      pointer-events: none;
+    }
+
     footer {
       padding: 4px 4px 0;
       text-align: center;
@@ -881,10 +921,10 @@
               </div>
               <div class="section-body">
                 <ul class="list">
-                  <li>[ ] Verification level is set above “None”.</li>
-                  <li>[ ] 2FA is required for moderators and admins.</li>
-                  <li>[ ] There is a dedicated <strong>logs channel</strong> for joins, bans, and role changes.</li>
-                  <li>[ ] New users have <strong>limited permissions</strong> and channels.</li>
+                  <li><input type="checkbox" class="checkbox"> Verification level is set above “None”.</li>
+                  <li><input type="checkbox" class="checkbox"> 2FA is required for moderators and admins.</li>
+                  <li><input type="checkbox" class="checkbox"> There is a dedicated <strong>logs channel</strong> for joins, bans, and role changes.</li>
+                  <li><input type="checkbox" class="checkbox"> New users have <strong>limited permissions</strong> and channels.</li>
                 </ul>
               </div>
             </div>
@@ -896,10 +936,10 @@
               </div>
               <div class="section-body">
                 <ul class="list">
-                  <li>[ ] Only a few roles can manage roles, channels, or the server.</li>
-                  <li>[ ] @everyone cannot send images/files in sensitive channels.</li>
-                  <li>[ ] Staff channels are fully hidden from regular members.</li>
-                  <li>[ ] No unnecessary use of the <strong>Administrator</strong> permission.</li>
+                  <li><input type="checkbox" class="checkbox"> Only a few roles can manage roles, channels, or the server.</li>
+                  <li><input type="checkbox" class="checkbox"> @everyone cannot send images/files in sensitive channels.</li>
+                  <li><input type="checkbox" class="checkbox"> Staff channels are fully hidden from regular members.</li>
+                  <li><input type="checkbox" class="checkbox"> No unnecessary use of the <strong>Administrator</strong> permission.</li>
                 </ul>
               </div>
             </div>
@@ -911,10 +951,10 @@
               </div>
               <div class="section-body">
                 <ul class="list">
-                  <li>[ ] Every bot in the server is known and has a purpose.</li>
-                  <li>[ ] Bots only have the permissions they actually need.</li>
-                  <li>[ ] Webhooks are tracked and rotated if they might leak.</li>
-                  <li>[ ] Integrations list is reviewed regularly for unknown apps.</li>
+                  <li><input type="checkbox" class="checkbox"> Every bot in the server is known and has a purpose.</li>
+                  <li><input type="checkbox" class="checkbox"> Bots only have the permissions they actually need.</li>
+                  <li><input type="checkbox" class="checkbox"> Webhooks are tracked and rotated if they might leak.</li>
+                  <li><input type="checkbox" class="checkbox"> Integrations list is reviewed regularly for unknown apps.</li>
                 </ul>
               </div>
             </div>
@@ -926,10 +966,10 @@
               </div>
               <div class="section-body">
                 <ul class="list">
-                  <li>[ ] Staff know how to enable slowmode and lock channels quickly.</li>
-                  <li>[ ] There is a simple raid playbook pinned in a staff channel.</li>
-                  <li>[ ] One or two people are clearly responsible for “panic actions”.</li>
-                  <li>[ ] After incidents, you review what to improve next time.</li>
+                  <li><input type="checkbox" class="checkbox"> Staff know how to enable slowmode and lock channels quickly.</li>
+                  <li><input type="checkbox" class="checkbox"> There is a simple raid playbook pinned in a staff channel.</li>
+                  <li><input type="checkbox" class="checkbox"> One or two people are clearly responsible for “panic actions”.</li>
+                  <li><input type="checkbox" class="checkbox"> After incidents, you review what to improve next time.</li>
                 </ul>
               </div>
             </div>
