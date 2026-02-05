@@ -1,6 +1,17 @@
-modules = ["web"]
-[agent]
-expertMode = true
+run = "python3 -m http.server 8000"
+modules = ["python-3.11"]
+
+[env]
+PORT = "8000"
+
+[interpreter]
+command = ["bash", "-c"]
+
+[unitTest]
+language = "python3"
 
 [nix]
-channel = "stable-25_05"
+
+[[ports]]
+localPort = 8000
+externalPort = 80
