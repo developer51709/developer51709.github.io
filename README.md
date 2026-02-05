@@ -15,6 +15,13 @@ https://developer51709.github.io/lucid-raiding
 
 ---
 
+### IQ Test
+> This is a fake IQ test to wase someones time :)
+
+https://developer51709.github.io/iq_test.html
+
+---
+
 ### Discord Safety Guide
 > This is a safety guide for Discord server owners and admins
 
