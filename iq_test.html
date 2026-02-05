@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Professional Cognitive Assessment</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
+    .app-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+      max-width: 720px;
+      width: 100%;
+      padding: 32px 32px 28px;
+      position: relative;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: 0.02em;
+    }
+    .subtitle {
+      margin: 0 0 24px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+    .progress-bar-outer {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5, #6366f1);
+      transition: width 0.3s ease;
+    }
+    .question-number {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+    .question-text {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .option-btn {
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      background: #f9fafb;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+    }
+    .option-btn:hover {
+      background: #eef2ff;
+      border-color: #4f46e5;
+      transform: translateY(-1px);
+    }
+    .option-btn:active {
+      transform: translateY(0);
+    }
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .tos-link {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 11px;
+      color: #9ca3af;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .tos-link:hover {
+      color: #6b7280;
+    }
+    .loading-section {
+      text-align: center;
+      padding: 24px 8px 8px;
+    }
+    .loading-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+    .loading-bar-outer {
+      width: 100%;
+      height: 10px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+      margin: 16px auto 10px;
+    }
+    .loading-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #4f46e5, #22c55e);
+      transition: width 0.4s ease;
+    }
+    .loading-status {
+      font-size: 13px;
+      color: #6b7280;
+      min-height: 18px;
+      margin-bottom: 6px;
+    }
+    .loading-sub {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .error-box {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      font-size: 13px;
+      text-align: left;
+      display: none;
+    }
+    .error-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .error-code {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+    }
+    /* TOS modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+    .modal {
+      background: #ffffff;
+      border-radius: 12px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+    }
+    .modal-header {
+      padding: 16px 20px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .modal-close {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 18px;
+      color: #6b7280;
+    }
+    .modal-body {
+      padding: 14px 20px 16px;
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+    .modal-footer {
+      padding: 10px 20px 12px;
+      border-top: 1px solid #e5e7eb;
+      font-size: 11px;
+      color: #9ca3af;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tos-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 11px;
+    }
+    @media (max-width: 640px) {
+      .card {
+        padding: 24px 18px 20px;
+      }
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      .tos-link {
+        right: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="card">
+    <div class="tos-link" id="tosLink">Terms of Service</div>
+
+    <h1>Professional Cognitive Assessment</h1>
+    <p class="subtitle">
+      Please respond honestly. This assessment is for “research-grade” insight into your abstract reasoning profile.
+    </p>
+
+    <div class="meta-row">
+      <div class="pill">
+        <span class="pill-dot"></span>
+        Live session · Secure
+      </div>
+      <div>Estimated duration: 12–18 minutes</div>
+    </div>
+
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="progressBar"></div>
+    </div>
+
+    <div id="questionSection">
+      <div class="question-number" id="questionNumber"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="footer-row">
+        <div id="questionHint">Answer intuitively; there are no “wrong” perceptions.</div>
+        <div id="questionCounter"></div>
+      </div>
+    </div>
+
+    <div id="loadingSection" class="loading-section" style="display:none;">
+      <div class="loading-title">Finalizing cognitive profile…</div>
+      <div class="loading-status" id="loadingStatus"></div>
+      <div class="loading-bar-outer">
+        <div class="loading-bar-inner" id="loadingBar"></div>
+      </div>
+      <div class="loading-sub" id="loadingSub"></div>
+
+      <div class="error-box" id="errorBox">
+        <div class="error-title">We were unable to generate your IQ score.</div>
+        <div class="error-code">
+          Error 872‑B: Quantum Biscuit Overflow detected in the Paradox Normalization Module.<br>
+          Suggested action: Gently apologize to your nearest household appliance and try again in 4–6 business dreams.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOS Modal -->
+<div class="modal-backdrop" id="tosModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Unified Cognitive Services Terms of Service</h2>
+      <button class="modal-close" id="closeTos">&times;</button>
+    </div>
+    <div class="modal-body" id="tosBody">
+      <!-- Endless TOS text will be appended here -->
+    </div>
+    <div class="modal-footer">
+      <span class="tos-tag">Auto‑expanding clause stream</span>
+      <span>Scrolling indicates your enthusiastic, irrevocable, and possibly unconscious consent.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- Fake IQ questions ----------
+  const baseQuestions = [
+    "How many thoughts does a cloud have on a mildly confident Tuesday?",
+    "Select the most emotionally stable triangle.",
+    "Which color best describes the sound of your handwriting?",
+    "Pick the most circular square.",
+    "Rate your confidence in this question.",
+    "Which number feels like it knows a secret?",
+    "Choose the direction that smells the most like nostalgia.",
+    "Identify the quietest rectangle in a crowded room.",
+    "Which option is technically upside‑down, philosophically?",
+    "Select the word that blinks the slowest in your mind.",
+    "Which season would win in a staring contest?",
+    "Choose the least suspicious shadow.",
+    "Which cloud shape would you trust with your passwords?",
+    "Pick the most introverted exclamation mark.",
+    "Which door leads to slightly better Wi‑Fi?",
+    "Select the most responsible spoon.",
+    "Which day of the week is the loudest?",
+    "Choose the square that is trying its best.",
+    "Which line segment is overthinking everything?",
+    "Pick the circle that secretly wants to be a hexagon."
+  ];
+
+  const baseOptions = [
+    ["0", "7", "Depends on humidity", "Clouds prefer not to say"],
+    ["The one with boundaries", "The one with equal sides", "The one in therapy", "The one that left the chat"],
+    ["Blue", "Left", "Mildly crunchy", "Unsubscribe"],
+    ["□", "■", "⬜", "This one feels round‑ish"],
+    ["Very", "Extremely", "Unreasonably", "I no longer understand anything"],
+    ["3", "19", "44 but only on weekends", "π when provoked"],
+    ["North", "Slightly left of reality", "Backwards", "Whichever way the ducks approve"],
+    ["The long one", "The short one", "The one avoiding eye contact", "All of the above"],
+    ["‘Maybe’", "‘Definitely’", "‘Potato’", "‘Loading…’"],
+    ["Spring", "Autumn", "Tuesday", "Buffering"],
+    ["The small one", "The tall one", "The one humming softly", "The one pretending to be a lamp"],
+    ["Cumulus", "Stratus", "Cirrus", "The one shaped like regret"],
+    ["!", "?!", "...", "!!!"],
+    ["Door A", "Door B", "Door C", "The door that wasn’t here a second ago"],
+    ["Teaspoon", "Tablespoon", "Wooden spoon", "Existential spoon"],
+    ["Monday", "Friday", "Someday", "The day after updates"],
+    ["The slightly crooked one", "The confident one", "The one with impostor syndrome", "All of them equally"],
+    ["Segment AB", "Segment BC", "Segment CD", "Segment ‘It’s complicated’"],
+    ["The perfect circle", "The almost circle", "The rebellious circle", "The hexagon in denial"]
+  ];
+
+  const TOTAL_QUESTIONS = 60;
+  const questions = [];
+
+  for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+    const baseIndex = i % baseQuestions.length;
+    const qText = `Q${i + 1}. ` + baseQuestions[baseIndex];
+    const opts = baseOptions[baseIndex] || ["Option A", "Option B", "Option C", "Option D"];
+    questions.push({ q: qText, a: opts });
+  }
+
+  let currentIndex = 0;
+
+  const questionNumberEl = document.getElementById("questionNumber");
+  const questionTextEl = document.getElementById("questionText");
+  const optionsGridEl = document.getElementById("optionsGrid");
+  const questionCounterEl = document.getElementById("questionCounter");
+  const progressBarEl = document.getElementById("progressBar");
+  const questionSectionEl = document.getElementById("questionSection");
+  const loadingSectionEl = document.getElementById("loadingSection");
+
+  function renderQuestion() {
+    const qObj = questions[currentIndex];
+    const displayIndex = currentIndex + 1;
+
+    questionNumberEl.textContent = "Question " + displayIndex + " of " + TOTAL_QUESTIONS;
+    questionTextEl.textContent = qObj.q;
+    questionCounterEl.textContent = "Item " + displayIndex + " · Adaptive profile calibration";
+
+    const progress = (displayIndex - 1) / TOTAL_QUESTIONS * 100;
+    progressBarEl.style.width = progress + "%";
+
+    optionsGridEl.innerHTML = "";
+    qObj.a.forEach(text => {
+      const btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.textContent = text;
+      btn.onclick = handleAnswer;
+      optionsGridEl.appendChild(btn);
+    });
+  }
+
+  function handleAnswer() {
+    currentIndex++;
+    if (currentIndex < TOTAL_QUESTIONS) {
+      renderQuestion();
+    } else {
+      startLoadingSequence();
+    }
+  }
+
+  // ---------- Loading sequence ----------
+  const loadingStatusEl = document.getElementById("loadingStatus");
+  const loadingBarEl = document.getElementById("loadingBar");
+  const loadingSubEl = document.getElementById("loadingSub");
+  const errorBoxEl = document.getElementById("errorBox");
+
+  const loadingSteps = [
+    "Aggregating micro‑gestures from your answer patterns…",
+    "Normalizing paradox density across response clusters…",
+    "Calibrating metaphor‑to‑reality ratio…",
+    "Estimating average thought wobble amplitude…",
+    "Cross‑referencing with imaginary peer group benchmarks…",
+    "Resolving internal contradictions in your triangles…",
+    "Measuring emotional conductivity of your choices…",
+    "Aligning results with interdimensional rubric v3.7…",
+    "Defragmenting cognitive snack cache…",
+    "Finalizing report for human‑readable confusion layer…"
+  ];
+
+  function startLoadingSequence() {
+    questionSectionEl.style.display = "none";
+    loadingSectionEl.style.display = "block";
+
+    let step = 0;
+    let progress = 0;
+
+    function nextStep() {
+      if (step < loadingSteps.length) {
+        loadingStatusEl.textContent = loadingSteps[step];
+        const target = Math.min(95, progress + Math.random() * 8 + 5);
+        progress = target;
+        loadingBarEl.style.width = target + "%";
+        loadingSubEl.textContent = "Phase " + (step + 1) + " of " + loadingSteps.length + " · Please do not refresh.";
+        step++;
+        setTimeout(nextStep, 1400 + Math.random() * 800);
+      } else {
+        // Fake finalization pause
+        loadingStatusEl.textContent = "Finalizing IQ score and compressing paradoxes…";
+        loadingBarEl.style.width = "99%";
+        loadingSubEl.textContent = "Stabilizing result in accordance with the International Bureau of Abstract Metrics.";
+        setTimeout(showFinalError, 2600);
+      }
+    }
+
+    nextStep();
+  }
+
+  function showFinalError() {
+    loadingBarEl.style.width = "0%";
+    loadingStatusEl.textContent = "Unable to complete score generation.";
+    loadingSubEl.textContent = "An unexpected anomaly occurred while interpreting your responses.";
+    errorBoxEl.style.display = "block";
+  }
+
+  // ---------- Endless TOS ----------
+  const tosLinkEl = document.getElementById("tosLink");
+  const tosModalEl = document.getElementById("tosModal");
+  const closeTosEl = document.getElementById("closeTos");
+  const tosBodyEl = document.getElementById("tosBody");
+
+  const tosPhrases = [
+    "By continuing to exist in the general vicinity of this assessment, you acknowledge that time is a flat questionnaire.",
+    "You agree that any insights, half‑thoughts, or stray daydreams generated during this process may be gently recycled.",
+    "All cognitive artifacts produced herein are licensed under the Perpetual Uncertainty Agreement, section 42(b).",
+    "You understand that ‘accuracy’ is a decorative concept and not a contractual obligation.",
+    "The term ‘user’ refers to any entity capable of clicking, blinking, or vaguely intending to participate.",
+    "You consent to the hypothetical storage of your hypothetical data in hypothetical jurisdictions.",
+    "Any resemblance between this assessment and real science is purely coincidental and legally uninteresting.",
+    "You waive the right to be surprised by any surprising outcomes, including the absence of outcomes.",
+    "All disputes will be resolved via interpretive shrugging in a neutral metaphysical location.",
+    "By scrolling further, you affirm that you have read, understood, and immediately forgotten these terms."
+  ];
+
+  function appendTosBlock() {
+    const paraCount = 6 + Math.floor(Math.random() * 6);
+    let block = "";
+    for (let i = 0; i < paraCount; i++) {
+      const phrase = tosPhrases[Math.floor(Math.random() * tosPhrases.length)];
+      block += "<p>" + phrase + "</p>";
+    }
+    tosBodyEl.insertAdjacentHTML("beforeend", block);
+  }
+
+  tosBodyEl.addEventListener("scroll", () => {
+    const { scrollTop, scrollHeight, clientHeight } = tosBodyEl;
+    if (scrollTop + clientHeight >= scrollHeight - 40) {
+      appendTosBlock();
+    }
+  });
+
+  tosLinkEl.addEventListener("click", () => {
+    tosModalEl.style.display = "flex";
+    if (!tosBodyEl.innerHTML.trim()) {
+      appendTosBlock();
+      appendTosBlock();
+    }
+  });
+
+  closeTosEl.addEventListener("click", () => {
+    tosModalEl.style.display = "none";
+  });
+
+  tosModalEl.addEventListener("click", (e) => {
+    if (e.target === tosModalEl) {
+      tosModalEl.style.display = "none";
+    }
+  });
+
+  // ---------- Init ----------
+  renderQuestion();
+</script>
+</body>
+</html>
