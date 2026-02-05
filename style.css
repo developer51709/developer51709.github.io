@@ -1,6 +1,6 @@
-/* ----------------------------------------------------------
+/* ----------------------------------
    BASE + THEME
----------------------------------------------------------- */
+---------------------------------- */
 
 * {
   margin: 0;
@@ -52,9 +52,9 @@ body {
   color: var(--text);
 }
 
-/* ----------------------------------------------------------
-   REALISTIC LIQUID GLASS (APPLE STYLE)
----------------------------------------------------------- */
+/* ----------------------------------
+   REALISTIC LIQUID GLASS
+---------------------------------- */
 
 .glass {
   background: linear-gradient(
@@ -95,9 +95,9 @@ body {
   pointer-events: none;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    TOP PILL NAVBAR WITH BOWED GLASS EFFECT
----------------------------------------------------------- */
+---------------------------------- */
 
 .navbar {
   position: fixed;
@@ -186,20 +186,26 @@ body {
 
 /* Mobile hamburger */
 .hamburger {
-  display: none;
   background: none;
   border: none;
   font-size: 24px;
   color: var(--text);
+  cursor: pointer;
+  transition: 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 8px;
+  /* Make it clickable */
+  position: relative;
+  z-index: 1001;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    MOBILE DROPDOWN MENU (GLASS + ANIMATION + RIPPLE)
----------------------------------------------------------- */
+---------------------------------- */
 
 @media (max-width: 768px) {
   .navbar ul {
-    position: absolute;
+    position: fixed;
     top: 70px;
     right: 0;
     padding: 16px 20px;
@@ -229,6 +235,12 @@ body {
     pointer-events: none;
     flex-direction: column;
     gap: 12px;
+    /* Display on top */
+    z-index: 1005;
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
+    margin-right: 20px;
   }
 
   .navbar ul.show {
@@ -244,16 +256,16 @@ body {
   .navbar ul li a {
     padding: 10px 14px;
     border-radius: 12px;
-    display: block;
+    /*display: block;*/
   }
 
   .navbar ul li a:hover {
     background: rgba(255, 255, 255, 0.25);
   }
 
-  .hamburger {
+  /*.hamburger {
     display: block;
-  }
+  }*/
 }
 
 /* Ripple effect */
@@ -288,9 +300,9 @@ body.dark .ripple {
   }
 }
 
-/* ----------------------------------------------------------
-   BOTTOM NAV (iOS SAFARI STYLE)
----------------------------------------------------------- */
+/* ----------------------------------
+   BOTTOM NAV
+---------------------------------- */
 
 .bottom-nav {
   position: fixed;
@@ -319,9 +331,9 @@ body.dark .ripple {
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    HERO SECTION
----------------------------------------------------------- */
+---------------------------------- */
 
 .hero {
   min-height: 100vh;
@@ -355,9 +367,9 @@ body.dark .ripple {
   flex-wrap: wrap;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    ANIMATED GLASS BUTTONS
----------------------------------------------------------- */
+---------------------------------- */
 
 .glass-btn {
   position: relative;
@@ -377,6 +389,8 @@ body.dark .ripple {
   font-weight: 600;
   transition: 0.2s ease;
   backdrop-filter: blur(12px);
+  /* Add a small spacing at the top */
+  margin-top: 15px;
 }
 
 .glass-btn.secondary {
@@ -407,9 +421,9 @@ body.dark .ripple {
   transform: translateY(-2px);
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    SECTIONS
----------------------------------------------------------- */
+---------------------------------- */
 
 .section {
   padding: 90px 20px;
@@ -421,18 +435,18 @@ body.dark .ripple {
   margin-bottom: 40px;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    PARALLAX PANELS
----------------------------------------------------------- */
+---------------------------------- */
 
 .parallax-panel {
   transform: translateY(0);
   transition: transform 0.6s ease-out;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    SCROLL REACTIVE
----------------------------------------------------------- */
+---------------------------------- */
 
 .scroll-reactive {
   opacity: 0;
@@ -440,9 +454,9 @@ body.dark .ripple {
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    CARDS + GRID
----------------------------------------------------------- */
+---------------------------------- */
 
 .grid {
   display: grid;
@@ -459,9 +473,9 @@ body.dark .ripple {
   border-radius: 24px;
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    3D TILT
----------------------------------------------------------- */
+---------------------------------- */
 
 .tilt {
   transform-style: preserve-3d;
@@ -472,9 +486,9 @@ body.dark .ripple {
   transform: scale(1.02);
 }
 
-/* ----------------------------------------------------------
+/* ----------------------------------
    FOOTER
----------------------------------------------------------- */
+---------------------------------- */
 
 footer {
   text-align: center;
