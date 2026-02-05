@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord About Me</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #000;
+      color: #e5e5e5;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Matrix background */
+    #matrix {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: #000;
+    }
+
+    /* Overlay to slightly dim the background */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(0, 255, 0, 0.15), transparent 55%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Centered profile card */
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(10, 10, 10, 0.55);
+      border-radius: 18px;
+      border: 1px solid rgba(0, 255, 120, 0.25);
+      box-shadow: 0 0 40px rgba(0, 255, 120, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 1.5rem 1.75rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 255, 120, 0.7);
+      background: radial-gradient(circle at 30% 20%, #3cffb5, #008f3f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #02140a;
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .username {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .tag {
+      font-size: 0.9rem;
+      color: #9be6b9;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: #b7f7c9;
+      margin-top: 0.15rem;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #00ff7b;
+      box-shadow: 0 0 8px #00ff7b;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0, 255, 120, 0.6),
+        transparent
+      );
+      margin: 0.25rem 0;
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #7fdc9f;
+    }
+
+    .about-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #e2ffe9;
+    }
+
+    .about-text span {
+      color: #7fffb0;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.2rem;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 120, 0.5);
+      background: rgba(0, 0, 0, 0.4);
+      color: #bfffd6;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+
+    .link-pill {
+      font-size: 0.8rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(0, 255, 120, 0.12);
+      color: #d9ffe7;
+      border: 1px solid rgba(0, 255, 120, 0.4);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .link-pill:hover {
+      background: rgba(0, 255, 120, 0.22);
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(0, 255, 120, 0.35);
+    }
+
+    .link-pill span {
+      font-size: 0.9rem;
+    }
+
+    .footer-note {
+      font-size: 0.75rem;
+      color: #7fdc9f;
+      opacity: 0.8;
+      margin-top: 0.4rem;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      .card {
+        padding: 1.25rem 1.25rem 1.5rem;
+        border-radius: 16px;
+      }
+
+      .avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 1.7rem;
+      }
+
+      .username {
+        font-size: 1.1rem;
+      }
+
+      .about-text {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <div class="avatar">
+          <span>A</span>
+        </div>
+        <div class="user-info">
+          <div class="username">YourName</div>
+          <div class="tag">@yourdiscordtag</div>
+          <div class="status">
+            <span class="status-dot"></span>
+            <span>Online — typing in /about-me</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div class="section-title">About me</div>
+        <p class="about-text">
+          I like <span>building things</span>, breaking them, and then figuring out
+          why they broke. Night owl, keyboard clicker, and low-key obsessed with
+          green terminal aesthetics.
+        </p>
+      </div>
+
+      <div>
+        <div class="section-title">Interests</div>
+        <div class="badges">
+          <span class="badge">Coding</span>
+          <span class="badge">Cyberpunk</span>
+          <span class="badge">Gaming</span>
+          <span class="badge">Music</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Links</div>
+        <div class="links">
+          <a class="link-pill" href="#" target="_blank" rel="noreferrer">
+            <span>🌐</span><span>Website</span>
+          </a>
+          <a class="link-pill" href="#" target="_blank" rel="noreferrer">
+            <span>🐙</span><span>GitHub</span>
+          </a>
+          <a class="link-pill" href="#" target="_blank" rel="noreferrer">
+            <span>🎧</span><span>Spotify</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-note">
+        Rendered in green rain. Customize this text, colors, and links as you like.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const letters = "01#@$%&*+<>/\\|{}[]";
+    const fontSize = 16;
+    let columns = Math.floor(width / fontSize);
+    const drops = [];
+
+    for (let i = 0; i < columns; i++) {
+      drops[i] = Math.floor(Math.random() * -50);
+    }
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = "#00ff7b";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        const x = i * fontSize;
+        const y = drops[i] * fontSize;
+
+        ctx.fillText(text, x, y);
+
+        if (y > height && Math.random() > 0.96) {
+          drops[i] = Math.floor(Math.random() * -20);
+        } else {
+          drops[i] += 0.2;   // lower = slower
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      columns = Math.floor(width / fontSize);
+      drops.length = 0;
+      for (let i = 0; i < columns; i++) {
+        drops[i] = Math.floor(Math.random() * -50);
+      }
+    }
+
+    window.addEventListener("resize", resize);
+    draw();
+  </script>
+</body>
+</html>
