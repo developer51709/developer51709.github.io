@@ -515,9 +515,12 @@
 
   tosLinkEl.addEventListener("click", () => {
     tosModalEl.style.display = "flex";
-    if (!tosBodyEl.innerHTML.trim()) {
+
+    // Always load some initial text so it never appears blank
+    if (tosBodyEl.innerHTML.trim().length < 50) {
       appendTosBlock();
       appendTosBlock();
+      appendTosBlock(); // triple-load for a nice long start
     }
   });
 
