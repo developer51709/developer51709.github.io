@@ -145,6 +145,16 @@
   display: flex;
   align-items: center;
   border-top: 1px solid #1e1f22;
+  /* Align to the bottom of the screen*/
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  /* Prevent the input from being hidden behind the keyboard on mobile */
+  @media (max-width: 768px) {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
 }
 
 .chat-input input {
