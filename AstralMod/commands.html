@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AstralMod Commands</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">AstralMod ✦</div>
+  <button class="menu-btn" id="menuBtn">☰</button>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu">
+  <div class="menu-header">Navigation</div>
+  <a href="index.html">Home</a>
+  <a href="features.html">Features</a>
+  <a href="commands.html">Commands</a>
+  <a href="terms.html">Terms of Service</a>
+  <a href="privacy.html">Privacy Policy</a>
+</nav>
+
+<nav class="desktop-menu">
+  <a href="index.html">Home</a>
+  <a href="features.html">Features</a>
+  <a href="commands.html">Commands</a>
+  <a href="terms.html">Terms of Service</a>
+  <a href="privacy.html">Privacy Policy</a>
+</nav>
+
+<section class="page-header">
+  <h1>📘 Commands</h1>
+  <p>Search and explore AstralMod’s full command list.</p>
+</section>
+
+<div class="commands-controls">
+  <input type="text" id="searchInput" placeholder="Search commands...">
+  <select id="categoryFilter">
+    <option value="all">All Categories</option>
+    <option value="music">Music</option>
+    <option value="moderation">Moderation</option>
+    <option value="tickets">Tickets</option>
+    <option value="economy">Economy</option>
+    <option value="invites">Invites</option>
+    <option value="utility">Utility</option>
+    <option value="fun">Fun</option>
+  </select>
+</div>
+
+<div id="commandsContainer" class="commands-grid"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
