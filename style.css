@@ -152,11 +152,6 @@ body {
   transform: translateX(-50%) scale(1.02);
 }
 
-.navbar ul {
-  display: flex;
-  gap: 20px;
-}
-
 .navbar a {
   color: var(--text);
   text-decoration: none;
@@ -203,8 +198,21 @@ body {
    MOBILE DROPDOWN MENU (GLASS + ANIMATION + RIPPLE)
 ---------------------------------- */
 
+.mobile-menu {
+  display: none;
+  list-style: none;
+  position: fixed;
+  top: 70px;
+  right: 0;
+  z-index: 9999;
+  margin: 0;
+  padding: 0;
+}
+
 @media (max-width: 768px) {
-  .navbar ul {
+  .mobile-menu {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     top: 70px;
     right: 0;
@@ -217,14 +225,11 @@ body {
         var(--glass-grad-2)
       );
     backdrop-filter: blur(22px) saturate(180%) brightness(1.15);
-    -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(1.15);
-
     border: 1px solid var(--glass-border);
     box-shadow: 0 8px 32px var(--glass-shadow);
 
     overflow: hidden;
 
-    /* Dropdown animation */
     opacity: 0;
     transform: translateY(-10px) scale(0.98);
     transition:
@@ -235,15 +240,15 @@ body {
     pointer-events: none;
     flex-direction: column;
     gap: 12px;
-    /* Display on top */
-    z-index: 1005;
+
+    z-index: 9999;
     width: 220px;
     min-width: 220px;
     max-width: 220px;
     margin-right: 20px;
   }
 
-  .navbar ul.show {
+  .mobile-menu.show {
     opacity: 1;
     transform: translateY(0) scale(1);
     pointer-events: auto;
@@ -253,19 +258,14 @@ body {
       0 0 0 1px var(--glass-border) inset;
   }
 
-  .navbar ul li a {
+  .mobile-menu li a {
     padding: 10px 14px;
     border-radius: 12px;
-    /*display: block;*/
   }
 
-  .navbar ul li a:hover {
+  .mobile-menu li a:hover {
     background: rgba(255, 255, 255, 0.25);
   }
-
-  /*.hamburger {
-    display: block;
-  }*/
 }
 
 /* Ripple effect */
@@ -419,6 +419,22 @@ body.dark .ripple {
 
 .glass-btn:hover {
   transform: translateY(-2px);
+}
+
+/* ----------------------------------
+   GLOW EFFECTS
+---------------------------------- */
+
+.glass.glow-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgba(255,255,255,0.25),
+    transparent 60%
+  );
 }
 
 /* ----------------------------------
