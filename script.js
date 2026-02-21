@@ -1,10 +1,17 @@
 // ----------------------------------
-// Scroll listener
+// Scroll listener (throttled with rAF to prevent blur flashing)
 // ----------------------------------
+let scrollTicking = false;
 window.addEventListener("scroll", () => {
-  handleScroll();
-  updateGlowOnScroll();
-  updateGradientDirection();
+  if (!scrollTicking) {
+    requestAnimationFrame(() => {
+      handleScroll();
+      updateGlowOnScroll();
+      updateGradientDirection();
+      scrollTicking = false;
+    });
+    scrollTicking = true;
+  }
 });
 
 // ----------------------------------
