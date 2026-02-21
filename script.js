@@ -93,7 +93,8 @@ function handleScroll() {
 
   panels.forEach(panel => {
     const rect = panel.getBoundingClientRect();
-    panel.style.transform = `translateY(${rect.top * -0.05}px)`;
+    const y = Math.round(rect.top * -0.05 * 2) / 2;
+    panel.style.transform = `translateY(${y}px) translateZ(0)`;
   });
 
   reactive.forEach(el => {
