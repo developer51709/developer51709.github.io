@@ -1,0 +1,65 @@
+[
+  {
+    "name": "work",
+    "prefix": "!work",
+    "aliases": ["!job"],
+    "slash": false,
+    "category": "economy",
+    "description": "Work to earn money.",
+    "usage": ["!work"]
+  },
+  {
+    "name": "daily",
+    "prefix": "!daily",
+    "aliases": ["!d"],
+    "slash": false,
+    "category": "economy",
+    "description": "Claim your daily reward.",
+    "usage": ["!daily"]
+  },
+  {
+    "name": "weekly",
+    "prefix": "!weekly",
+    "aliases": ["!w"],
+    "slash": false,
+    "category": "economy",
+    "description": "Claim your weekly reward.",
+    "usage": ["!weekly"]
+  },
+  {
+    "name": "leaderboard",
+    "prefix": "!leaderboard",
+    "aliases": ["!lb", "!top"],
+    "slash": false,
+    "category": "economy",
+    "description": "View the leaderboard of the richest users.",
+    "usage": ["!leaderboard"]
+  },
+  {
+    "name": "balance",
+    "prefix": "!balance",
+    "aliases": ["!bal", "!money"],
+    "slash": false,
+    "category": "economy",
+    "description": "Check your balance.",
+    "usage": ["!balance"]
+  },
+  {
+    "name": "play",
+    "prefix": "!play",
+    "aliases": ["!p"],
+    "slash": true,
+    "category": "music",
+    "description": "Play music from YouTube, Spotify, or other platforms.",
+    "usage": ["play &lt;query&gt; [--src yt/am/sp/sc/dz]", "/play query:&lt;song&gt; source:&lt;yt/am/sp/sc/dz&gt;"]
+  },
+  {
+    "name": "ban",
+    "prefix": "!ban",
+    "aliases": ["!b"],
+    "slash": true,
+    "category": "moderation",
+    "description": "Ban a user from the server.",
+    "usage": ["!ban @user [reason]", "/ban user:@user reason:&lt;text&gt;"]
+  }
+]
