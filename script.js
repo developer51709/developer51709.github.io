@@ -1,4 +1,13 @@
 // ----------------------------------
+// Scroll listener
+// ----------------------------------
+window.addEventListener("scroll", () => {
+  handleScroll();
+  updateGlowOnScroll();
+  updateGradientDirection();
+});
+
+// ----------------------------------
 // Smooth scroll
 // ----------------------------------
 function scrollToSection(selector) {
@@ -39,6 +48,12 @@ hamburger.addEventListener("click", () => {
 document.querySelectorAll(".bottom-item").forEach(btn => {
   btn.addEventListener("click", () => {
     scrollToSection(btn.dataset.target);
+  });
+});
+
+navLinks.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    navLinks.classList.remove("show");
   });
 });
 
@@ -83,7 +98,6 @@ function handleScroll() {
   });
 }
 
-window.addEventListener("scroll", handleScroll);
 window.addEventListener("load", handleScroll);
 
 // ----------------------------------
@@ -132,7 +146,6 @@ function updateGlowOnScroll() {
   });
 }
 
-window.addEventListener("scroll", updateGlowOnScroll);
 window.addEventListener("load", updateGlowOnScroll);
 
 // ----------------------------------
@@ -150,7 +163,7 @@ function animateGradient() {
 
 animateGradient();
 
-window.addEventListener("scroll", () => {
+function updateGradientDirection() {
   const current = window.scrollY;
 
   if (current > lastScroll) {
@@ -160,4 +173,4 @@ window.addEventListener("scroll", () => {
   }
 
   lastScroll = current;
-});
+};
