@@ -1,5 +1,5 @@
 run = "python3 server.py"
-modules = ["python-3.11"]
+modules = ["web", "nodejs-20", "python-3.12"]
 
 [env]
 PORT = "8000"
@@ -11,6 +11,7 @@ command = ["bash", "-c"]
 language = "python3"
 
 [nix]
+channel = "stable-25_05"
 
 [[ports]]
 localPort = 5000
