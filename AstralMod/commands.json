@@ -1,65 +1,2858 @@
 [
   {
-    "name": "work",
-    "prefix": "!work",
-    "aliases": ["!job"],
+    "name": "blacklist",
+    "prefix": "!blacklist",
+    "aliases": [
+      "!bl"
+    ],
     "slash": false,
-    "category": "economy",
-    "description": "Work to earn money.",
-    "usage": ["!work"]
+    "category": "developer",
+    "description": "Manage blacklisted users and guilds (Owner Only)",
+    "usage": [
+      "!blacklist"
+    ]
   },
   {
-    "name": "daily",
-    "prefix": "!daily",
-    "aliases": ["!d"],
+    "name": "premium",
+    "prefix": "!premium",
+    "aliases": [
+      "!prem"
+    ],
     "slash": false,
-    "category": "economy",
-    "description": "Claim your daily reward.",
-    "usage": ["!daily"]
+    "category": "developer",
+    "description": "Manage premium subscriptions for users and guilds (Owner Only)",
+    "usage": [
+      "!premium"
+    ]
   },
   {
-    "name": "weekly",
-    "prefix": "!weekly",
-    "aliases": ["!w"],
+    "name": "rl",
+    "prefix": "!rl",
+    "aliases": [
+      "!reload"
+    ],
     "slash": false,
-    "category": "economy",
-    "description": "Claim your weekly reward.",
-    "usage": ["!weekly"]
+    "category": "developer",
+    "description": "Reloads all commands for development purposes",
+    "usage": [
+      "!rl"
+    ]
   },
   {
-    "name": "leaderboard",
-    "prefix": "!leaderboard",
-    "aliases": ["!lb", "!top"],
+    "name": "updateslash",
+    "prefix": "!updateslash",
+    "aliases": [
+      "!slashupdate"
+    ],
     "slash": false,
-    "category": "economy",
-    "description": "View the leaderboard of the richest users.",
-    "usage": ["!leaderboard"]
+    "category": "developer",
+    "description": "Registers or updates all slash commands with Discord globally (Owner Only)",
+    "usage": [
+      "!updateslash"
+    ]
   },
   {
     "name": "balance",
     "prefix": "!balance",
-    "aliases": ["!bal", "!money"],
+    "aliases": [
+      "!bal",
+      "!money"
+    ],
     "slash": false,
     "category": "economy",
-    "description": "Check your balance.",
-    "usage": ["!balance"]
+    "description": "Check your wallet balance",
+    "usage": [
+      "!balance"
+    ]
   },
   {
-    "name": "play",
-    "prefix": "!play",
-    "aliases": ["!p"],
-    "slash": true,
-    "category": "music",
-    "description": "Play music from YouTube, Spotify, or other platforms.",
-    "usage": ["play &lt;query&gt; [--src yt/am/sp/sc/dz]", "/play query:&lt;song&gt; source:&lt;yt/am/sp/sc/dz&gt;"]
+    "name": "daily",
+    "prefix": "!daily",
+    "aliases": [
+      "!d"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Claim your daily reward",
+    "usage": [
+      "!daily"
+    ]
+  },
+  {
+    "name": "deposit",
+    "prefix": "!deposit",
+    "aliases": [
+      "!dep"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Deposit money into your bank",
+    "usage": [
+      "!deposit"
+    ]
+  },
+  {
+    "name": "economyinfo",
+    "prefix": "!economyinfo",
+    "aliases": [
+      "!ecoinfo",
+      "!eco"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Preview the economy system and its features",
+    "usage": [
+      "!economyinfo"
+    ]
+  },
+  {
+    "name": "leaderboard",
+    "prefix": "!leaderboard",
+    "aliases": [
+      "!lb",
+      "!top"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "View the richest users",
+    "usage": [
+      "!leaderboard"
+    ]
+  },
+  {
+    "name": "pay",
+    "prefix": "!pay",
+    "aliases": [
+      "!give"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Send money to another user",
+    "usage": [
+      "!pay"
+    ]
+  },
+  {
+    "name": "weekly",
+    "prefix": "!weekly",
+    "aliases": [
+      "!w"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Claim your weekly reward",
+    "usage": [
+      "!weekly"
+    ]
+  },
+  {
+    "name": "withdraw",
+    "prefix": "!withdraw",
+    "aliases": [
+      "!with",
+      "!wd"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Withdraw money from your bank",
+    "usage": [
+      "!withdraw"
+    ]
+  },
+  {
+    "name": "work",
+    "prefix": "!work",
+    "aliases": [
+      "!job"
+    ],
+    "slash": false,
+    "category": "economy",
+    "description": "Work to earn some money",
+    "usage": [
+      "!work"
+    ]
+  },
+  {
+    "name": "corrupt",
+    "prefix": "!corrupt",
+    "aliases": [
+      "!cr"
+    ],
+    "slash": false,
+    "category": "experimental",
+    "description": "Encode or decode corrupted text",
+    "usage": [
+      "!corrupt"
+    ]
+  },
+  {
+    "name": "utf8",
+    "prefix": "!utf8",
+    "aliases": [
+      "!bytes",
+      "!utf"
+    ],
+    "slash": false,
+    "category": "experimental",
+    "description": "Convert text into UTF-8 bytes",
+    "usage": [
+      "!utf8"
+    ]
+  },
+  {
+    "name": "autoreact",
+    "prefix": "!autoreact",
+    "aliases": [
+      "!ar",
+      "!react"
+    ],
+    "slash": false,
+    "category": "extra",
+    "description": "Set up automatic reactions in a channel",
+    "usage": [
+      "!autoreact"
+    ]
+  },
+  {
+    "name": "autoresponder",
+    "prefix": "!autoresponder",
+    "aliases": [
+      "!autorespond",
+      "!trigger"
+    ],
+    "slash": false,
+    "category": "extra",
+    "description": "Set up automatic responses to specific triggers",
+    "usage": [
+      "!autoresponder"
+    ]
+  },
+  {
+    "name": "embed",
+    "prefix": "!embed",
+    "aliases": [
+      "!createembed",
+      "!sendembed"
+    ],
+    "slash": false,
+    "category": "extra",
+    "description": "Create and send a custom embed message",
+    "usage": [
+      "!embed"
+    ]
+  },
+  {
+    "name": "ltcprice",
+    "prefix": "!ltcprice",
+    "aliases": [
+      "!letterconvert",
+      "!textconvert",
+      "!fancy",
+      "!ltc"
+    ],
+    "slash": false,
+    "category": "extra",
+    "description": "Convert letters to different text styles",
+    "usage": [
+      "!ltcprice"
+    ]
+  },
+  {
+    "name": "dare",
+    "prefix": "!dare",
+    "aliases": [
+      "!daredevil"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Get a random dare challenge",
+    "usage": [
+      "!dare"
+    ]
+  },
+  {
+    "name": "hack",
+    "prefix": "!hack",
+    "aliases": [
+      "!wizz",
+      "!hax"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Pretend to hack a user (just for fun!)",
+    "usage": [
+      "!hack"
+    ]
+  },
+  {
+    "name": "howdumb",
+    "prefix": "!howdumb",
+    "aliases": [
+      "!dumb",
+      "!stupidrate",
+      "!iqtest"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Check how dumb someone is (just for fun!)",
+    "usage": [
+      "!howdumb"
+    ]
+  },
+  {
+    "name": "howgay",
+    "prefix": "!howgay",
+    "aliases": [
+      "!gayrate",
+      "!gaymeter"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Check the gay meter (just for fun!)",
+    "usage": [
+      "!howgay"
+    ]
+  },
+  {
+    "name": "kill",
+    "prefix": "!kill",
+    "aliases": [
+      "!eliminate",
+      "!destroy"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Virtually eliminate someone (just for fun!)",
+    "usage": [
+      "!kill"
+    ]
+  },
+  {
+    "name": "lick",
+    "prefix": "!lick",
+    "aliases": [
+      "!licku"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Lick someone (anime style!)",
+    "usage": [
+      "!lick"
+    ]
+  },
+  {
+    "name": "meme",
+    "prefix": "!meme",
+    "aliases": [
+      "!reddit",
+      "!randommeme"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Get a random meme",
+    "usage": [
+      "!meme"
+    ]
+  },
+  {
+    "name": "nitro",
+    "prefix": "!nitro",
+    "aliases": [
+      "!fakenitro",
+      "!nitrogift"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Generate a fake nitro gift (just for fun!)",
+    "usage": [
+      "!nitro"
+    ]
+  },
+  {
+    "name": "pickup",
+    "prefix": "!pickup",
+    "aliases": [
+      "!pickupline",
+      "!flirt",
+      "!rizz"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Get a random pickup line",
+    "usage": [
+      "!pickup"
+    ]
+  },
+  {
+    "name": "simprate",
+    "prefix": "!simprate",
+    "aliases": [
+      "!simp",
+      "!simpmeter",
+      "!howsimp"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Check the simp meter (just for fun!)",
+    "usage": [
+      "!simprate"
+    ]
+  },
+  {
+    "name": "texttoemoji",
+    "prefix": "!texttoemoji",
+    "aliases": [
+      "!tte",
+      "!emojify",
+      "!textmoji"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Convert text to emoji letters",
+    "usage": [
+      "!texttoemoji"
+    ]
+  },
+  {
+    "name": "truth",
+    "prefix": "!truth",
+    "aliases": [
+      "!truthful"
+    ],
+    "slash": false,
+    "category": "fun",
+    "description": "Get a random truth question",
+    "usage": [
+      "!truth"
+    ]
+  },
+  {
+    "name": "gban",
+    "prefix": "!gban",
+    "aliases": [
+      "!giveaway-ban",
+      "!giveawayban",
+      "!bangiveaway"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Ban a user from participating in giveaways",
+    "usage": [
+      "!gban"
+    ]
+  },
+  {
+    "name": "gedit",
+    "prefix": "!gedit",
+    "aliases": [
+      "!giveaway-edit",
+      "!giveawayedit",
+      "!editgiveaway"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Edit an existing giveaway",
+    "usage": [
+      "!gedit"
+    ]
+  },
+  {
+    "name": "gend",
+    "prefix": "!gend",
+    "aliases": [
+      "!giveaway-end",
+      "!giveawayend",
+      "!endgiveaway"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "End a giveaway immediately",
+    "usage": [
+      "!gend"
+    ]
+  },
+  {
+    "name": "gereroll",
+    "prefix": "!gereroll",
+    "aliases": [
+      "!greroll",
+      "!giveaway-reroll",
+      "!giveawayreroll"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Reroll a giveaway winner",
+    "usage": [
+      "!gereroll"
+    ]
+  },
+  {
+    "name": "gpause",
+    "prefix": "!gpause",
+    "aliases": [
+      "!giveaway-pause",
+      "!giveawaypause",
+      "!pausegiveaway"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Pause an active giveaway",
+    "usage": [
+      "!gpause"
+    ]
+  },
+  {
+    "name": "gresume",
+    "prefix": "!gresume",
+    "aliases": [
+      "!giveaway-resume",
+      "!giveawayresume",
+      "!resumegiveaway",
+      "!gunpause"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Resume a paused giveaway",
+    "usage": [
+      "!gresume"
+    ]
+  },
+  {
+    "name": "gstart",
+    "prefix": "!gstart",
+    "aliases": [
+      "!gcreate",
+      "!giveaway-start",
+      "!giveawaystart"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Start a new giveaway in the server",
+    "usage": [
+      "!gstart"
+    ]
+  },
+  {
+    "name": "gunban",
+    "prefix": "!gunban",
+    "aliases": [
+      "!giveaway-unban",
+      "!giveawayunban",
+      "!unbangiveaway"
+    ],
+    "slash": false,
+    "category": "giveaway",
+    "description": "Unban a user from giveaways",
+    "usage": [
+      "!gunban"
+    ]
+  },
+  {
+    "name": "about",
+    "prefix": "!about",
+    "aliases": [
+      "!aboutbot",
+      "!whoareyou"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Shows information about AstralMod and its purpose.",
+    "usage": [
+      "!about"
+    ]
+  },
+  {
+    "name": "botinfo",
+    "prefix": "!botinfo",
+    "aliases": [
+      "!bot",
+      "!info",
+      "!stats"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Shows detailed information about the bot.",
+    "usage": [
+      "!botinfo"
+    ]
+  },
+  {
+    "name": "feedback",
+    "prefix": "!feedback",
+    "aliases": [
+      "!fb"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Send feedback about the bot to the developers.",
+    "usage": [
+      "!feedback"
+    ]
+  },
+  {
+    "name": "help",
+    "prefix": "!help",
+    "aliases": [
+      "!h",
+      "!commands"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Shows all available commands and their information",
+    "usage": [
+      "!help"
+    ]
+  },
+  {
+    "name": "invite",
+    "prefix": "!invite",
+    "aliases": [
+      "!inv",
+      "!add",
+      "!addbot"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Get the bot",
+    "usage": [
+      "!invite"
+    ]
+  },
+  {
+    "name": "ping",
+    "prefix": "!ping",
+    "aliases": [
+      "!latency",
+      "!lag",
+      "!ms"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Shows bot latency and connection information",
+    "usage": [
+      "!ping"
+    ]
+  },
+  {
+    "name": "privacy-policy",
+    "prefix": "!privacy-policy",
+    "aliases": [
+      "!privacy",
+      "!privacypolicy",
+      "!data",
+      "!pp"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "View the bot",
+    "usage": [
+      "!privacy-policy"
+    ]
+  },
+  {
+    "name": "report",
+    "prefix": "!report",
+    "aliases": [
+      "!bug",
+      "!issue"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Report bugs or issues with the bot to the developers.",
+    "usage": [
+      "!report"
+    ]
+  },
+  {
+    "name": "suggest",
+    "prefix": "!suggest",
+    "aliases": [
+      "!suggestion",
+      "!feature",
+      "!request"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Suggest new features or improvements for the bot.",
+    "usage": [
+      "!suggest"
+    ]
+  },
+  {
+    "name": "support",
+    "prefix": "!support",
+    "aliases": [
+      "!help-server",
+      "!discord",
+      "!server"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Get support and help with the bot.",
+    "usage": [
+      "!support"
+    ]
+  },
+  {
+    "name": "teaminfo",
+    "prefix": "!teaminfo",
+    "aliases": [
+      "!dev",
+      "!devteam",
+      "!team"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "Shows information about the development team.",
+    "usage": [
+      "!teaminfo"
+    ]
+  },
+  {
+    "name": "tos",
+    "prefix": "!tos",
+    "aliases": [
+      "!terms",
+      "!termsofservice",
+      "!rules"
+    ],
+    "slash": false,
+    "category": "info",
+    "description": "View the bot",
+    "usage": [
+      "!tos"
+    ]
+  },
+  {
+    "name": "addinvites",
+    "prefix": "!addinvites",
+    "aliases": [
+      "!addinv",
+      "!bonus-invites"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Add invites to a member",
+    "usage": [
+      "!addinvites"
+    ]
+  },
+  {
+    "name": "invitecodes",
+    "prefix": "!invitecodes",
+    "aliases": [
+      "!codes",
+      "!mycodes"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "List all your invite codes in this guild",
+    "usage": [
+      "!invitecodes"
+    ]
+  },
+  {
+    "name": "inviter",
+    "prefix": "!inviter",
+    "aliases": [
+      "!whoinvited",
+      "!invitedby"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Shows who invited a user",
+    "usage": [
+      "!inviter"
+    ]
+  },
+  {
+    "name": "inviterank",
+    "prefix": "!inviterank",
+    "aliases": [
+      "!invrank",
+      "!setinviterank"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Configure invite ranks",
+    "usage": [
+      "!inviterank"
+    ]
+  },
+  {
+    "name": "inviteranks",
+    "prefix": "!inviteranks",
+    "aliases": [
+      "!invranks",
+      "!listinviteranks"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Shows all configured invite ranks",
+    "usage": [
+      "!inviteranks"
+    ]
+  },
+  {
+    "name": "invites",
+    "prefix": "!invites",
+    "aliases": [
+      "!inv",
+      "!myinvites"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Shows number of invites in this server",
+    "usage": [
+      "!invites"
+    ]
+  },
+  {
+    "name": "invitesimport",
+    "prefix": "!invitesimport",
+    "aliases": [
+      "!importinvites",
+      "!importinv"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Import existing guild invites to users",
+    "usage": [
+      "!invitesimport"
+    ]
+  },
+  {
+    "name": "invitetracker",
+    "prefix": "!invitetracker",
+    "aliases": [
+      "!invitetracking",
+      "!trackinvites"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Shows invite tracking status (always enabled)",
+    "usage": [
+      "!invitetracker"
+    ]
+  },
+  {
+    "name": "resetinvites",
+    "prefix": "!resetinvites",
+    "aliases": [
+      "!clearinvites",
+      "!removeinvites"
+    ],
+    "slash": false,
+    "category": "invites",
+    "description": "Reset a user",
+    "usage": [
+      "!resetinvites"
+    ]
   },
   {
     "name": "ban",
     "prefix": "!ban",
-    "aliases": ["!b"],
-    "slash": true,
+    "aliases": [
+      "!b"
+    ],
+    "slash": false,
     "category": "moderation",
-    "description": "Ban a user from the server.",
-    "usage": ["!ban @user [reason]", "/ban user:@user reason:&lt;text&gt;"]
+    "description": "Ban a user from the server",
+    "usage": [
+      "!ban"
+    ]
+  },
+  {
+    "name": "hackban",
+    "prefix": "!hackban",
+    "aliases": [
+      "!hb",
+      "!forceban"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Ban a user by ID even if they are not in the server",
+    "usage": [
+      "!hackban"
+    ]
+  },
+  {
+    "name": "hide",
+    "prefix": "!hide",
+    "aliases": [],
+    "slash": false,
+    "category": "moderation",
+    "description": "Hide a channel from everyone",
+    "usage": [
+      "!hide"
+    ]
+  },
+  {
+    "name": "kick",
+    "prefix": "!kick",
+    "aliases": [
+      "!k"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Kick a user from the server",
+    "usage": [
+      "!kick"
+    ]
+  },
+  {
+    "name": "list",
+    "prefix": "!list",
+    "aliases": [
+      "!l"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "List admins, bots, users in a role, or bans",
+    "usage": [
+      "!list"
+    ]
+  },
+  {
+    "name": "lock",
+    "prefix": "!lock",
+    "aliases": [
+      "!lockdown"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Lock a channel to prevent messages",
+    "usage": [
+      "!lock"
+    ]
+  },
+  {
+    "name": "mute",
+    "prefix": "!mute",
+    "aliases": [
+      "!m",
+      "!timeout"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Mute a user in the server",
+    "usage": [
+      "!mute"
+    ]
+  },
+  {
+    "name": "muteinfo",
+    "prefix": "!muteinfo",
+    "aliases": [
+      "!minfo",
+      "!mutes"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "View mute history for a user",
+    "usage": [
+      "!muteinfo"
+    ]
+  },
+  {
+    "name": "mutereset",
+    "prefix": "!mutereset",
+    "aliases": [
+      "!mreset",
+      "!clearmutes"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Reset mute history for a user",
+    "usage": [
+      "!mutereset"
+    ]
+  },
+  {
+    "name": "nuke",
+    "prefix": "!nuke",
+    "aliases": [],
+    "slash": false,
+    "category": "moderation",
+    "description": "Delete and recreate a channel to clear all messages",
+    "usage": [
+      "!nuke"
+    ]
+  },
+  {
+    "name": "purge",
+    "prefix": "!purge",
+    "aliases": [
+      "!clear",
+      "!prune"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Delete multiple messages at once",
+    "usage": [
+      "!purge"
+    ]
+  },
+  {
+    "name": "purgebots",
+    "prefix": "!purgebots",
+    "aliases": [
+      "!clearbots",
+      "!prunebots"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Delete messages from bots",
+    "usage": [
+      "!purgebots"
+    ]
+  },
+  {
+    "name": "remind",
+    "prefix": "!remind",
+    "aliases": [
+      "!reminder",
+      "!remindme"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Remind a user",
+    "usage": [
+      "!remind"
+    ]
+  },
+  {
+    "name": "remindinfo",
+    "prefix": "!remindinfo",
+    "aliases": [
+      "!rinfo",
+      "!reminders",
+      "!myreminders"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "View your active reminders",
+    "usage": [
+      "!remindinfo"
+    ]
+  },
+  {
+    "name": "remindreset",
+    "prefix": "!remindreset",
+    "aliases": [
+      "!rreset",
+      "!clearreminders"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Clear all your active reminders",
+    "usage": [
+      "!remindreset"
+    ]
+  },
+  {
+    "name": "steal",
+    "prefix": "!steal",
+    "aliases": [
+      "!addemoji",
+      "!stealemoji"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Steal an emoji from another server or URL",
+    "usage": [
+      "!steal"
+    ]
+  },
+  {
+    "name": "stealsticker",
+    "prefix": "!stealsticker",
+    "aliases": [
+      "!addsticker",
+      "!ss"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Add a sticker from a replied message to the server",
+    "usage": [
+      "!stealsticker"
+    ]
+  },
+  {
+    "name": "unban",
+    "prefix": "!unban",
+    "aliases": [
+      "!ub"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unban a user from the server",
+    "usage": [
+      "!unban"
+    ]
+  },
+  {
+    "name": "unbanall",
+    "prefix": "!unbanall",
+    "aliases": [
+      "!massunban"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unban all banned users from the server",
+    "usage": [
+      "!unbanall"
+    ]
+  },
+  {
+    "name": "unhide",
+    "prefix": "!unhide",
+    "aliases": [],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unhide a channel for everyone",
+    "usage": [
+      "!unhide"
+    ]
+  },
+  {
+    "name": "unhideall",
+    "prefix": "!unhideall",
+    "aliases": [
+      "!unhidechannels",
+      "!showall"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unhide all channels in the server",
+    "usage": [
+      "!unhideall"
+    ]
+  },
+  {
+    "name": "unlock",
+    "prefix": "!unlock",
+    "aliases": [],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unlock a channel to allow messages",
+    "usage": [
+      "!unlock"
+    ]
+  },
+  {
+    "name": "unlockall",
+    "prefix": "!unlockall",
+    "aliases": [
+      "!massunlock"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unlock all channels in the server",
+    "usage": [
+      "!unlockall"
+    ]
+  },
+  {
+    "name": "unmute",
+    "prefix": "!unmute",
+    "aliases": [
+      "!um",
+      "!untimeout"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Unmute a user in the server",
+    "usage": [
+      "!unmute"
+    ]
+  },
+  {
+    "name": "warn",
+    "prefix": "!warn",
+    "aliases": [
+      "!w"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Warn a user",
+    "usage": [
+      "!warn"
+    ]
+  },
+  {
+    "name": "warninfo",
+    "prefix": "!warninfo",
+    "aliases": [
+      "!winfo",
+      "!warnings",
+      "!warns"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "View warning history for a user",
+    "usage": [
+      "!warninfo"
+    ]
+  },
+  {
+    "name": "warnreset",
+    "prefix": "!warnreset",
+    "aliases": [
+      "!wreset",
+      "!clearwarns"
+    ],
+    "slash": false,
+    "category": "moderation",
+    "description": "Reset warning history for a user",
+    "usage": [
+      "!warnreset"
+    ]
+  },
+  {
+    "name": "add2pl",
+    "prefix": "!add2pl",
+    "aliases": [
+      "!add-to-playlist",
+      "!a2pl"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Add current track or entire queue to a playlist",
+    "usage": [
+      "!add2pl"
+    ]
+  },
+  {
+    "name": "autoplay",
+    "prefix": "!autoplay",
+    "aliases": [
+      "!ap",
+      "!auto"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Toggle autoplay feature that adds similar songs when queue ends",
+    "usage": [
+      "!autoplay"
+    ]
+  },
+  {
+    "name": "bassboost",
+    "prefix": "!bassboost",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply bassboost equalizer preset to the music",
+    "usage": [
+      "!bassboost"
+    ]
+  },
+  {
+    "name": "boost",
+    "prefix": "!boost",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply boost equalizer preset to the music",
+    "usage": [
+      "!boost"
+    ]
+  },
+  {
+    "name": "bright",
+    "prefix": "!bright",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply bright equalizer preset to the music",
+    "usage": [
+      "!bright"
+    ]
+  },
+  {
+    "name": "bump",
+    "prefix": "!bump",
+    "aliases": [
+      "!top",
+      "!priority"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Move track(s) to the top of the queue",
+    "usage": [
+      "!bump"
+    ]
+  },
+  {
+    "name": "classical",
+    "prefix": "!classical",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply classical equalizer preset to the music",
+    "usage": [
+      "!classical"
+    ]
+  },
+  {
+    "name": "clear",
+    "prefix": "!clear",
+    "aliases": [
+      "!cq"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "clear the q",
+    "usage": [
+      "!clear"
+    ]
+  },
+  {
+    "name": "create-playlist",
+    "prefix": "!create-playlist",
+    "aliases": [
+      "!create-pl",
+      "!new-playlist",
+      "!make-playlist"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Create a new custom playlist",
+    "usage": [
+      "!create-playlist"
+    ]
+  },
+  {
+    "name": "deepbass",
+    "prefix": "!deepbass",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply deepbass equalizer preset to the music",
+    "usage": [
+      "!deepbass"
+    ]
+  },
+  {
+    "name": "delete-playlist",
+    "prefix": "!delete-playlist",
+    "aliases": [
+      "!delete-pl",
+      "!remove-playlist",
+      "!del-playlist"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Delete one of your custom playlists",
+    "usage": [
+      "!delete-playlist"
+    ]
+  },
+  {
+    "name": "edit-playlist",
+    "prefix": "!edit-playlist",
+    "aliases": [
+      "!edit-pl",
+      "!pl-edit"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Edit the name or description of a custom playlist",
+    "usage": [
+      "!edit-playlist"
+    ]
+  },
+  {
+    "name": "electronic",
+    "prefix": "!electronic",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply electronic equalizer preset to the music",
+    "usage": [
+      "!electronic"
+    ]
+  },
+  {
+    "name": "flat",
+    "prefix": "!flat",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply flat equalizer preset to the music",
+    "usage": [
+      "!flat"
+    ]
+  },
+  {
+    "name": "forward",
+    "prefix": "!forward",
+    "aliases": [
+      "!fw"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Forward the current track by specified seconds (default: 10 seconds, not available for live streams)",
+    "usage": [
+      "!forward"
+    ]
+  },
+  {
+    "name": "gaming",
+    "prefix": "!gaming",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply gaming equalizer preset to the music",
+    "usage": [
+      "!gaming"
+    ]
+  },
+  {
+    "name": "hiphop",
+    "prefix": "!hiphop",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply hiphop equalizer preset to the music",
+    "usage": [
+      "!hiphop"
+    ]
+  },
+  {
+    "name": "history",
+    "prefix": "!history",
+    "aliases": [
+      "!hist"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "View your personal listening history and re-play songs with interactive controls",
+    "usage": [
+      "!history"
+    ]
+  },
+  {
+    "name": "jazz",
+    "prefix": "!jazz",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply jazz equalizer preset to the music",
+    "usage": [
+      "!jazz"
+    ]
+  },
+  {
+    "name": "load-playlist",
+    "prefix": "!load-playlist",
+    "aliases": [
+      "!load-pl",
+      "!lpl"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Load a playlist, or specific tracks/ranges from it",
+    "usage": [
+      "!load-playlist"
+    ]
+  },
+  {
+    "name": "loop",
+    "prefix": "!loop",
+    "aliases": [
+      "!repeat"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Toggle the loop mode between off, track, and queue with interactive controls",
+    "usage": [
+      "!loop"
+    ]
+  },
+  {
+    "name": "lyrics",
+    "prefix": "!lyrics",
+    "aliases": [
+      "!ly",
+      "!lyric"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Get synchronized lyrics for the currently playing song with live timing",
+    "usage": [
+      "!lyrics"
+    ]
+  },
+  {
+    "name": "metal",
+    "prefix": "!metal",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply metal equalizer preset to the music",
+    "usage": [
+      "!metal"
+    ]
+  },
+  {
+    "name": "move",
+    "prefix": "!move",
+    "aliases": [
+      "!mv"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Move a track to a different position in the queue",
+    "usage": [
+      "!move"
+    ]
+  },
+  {
+    "name": "my-playlists",
+    "prefix": "!my-playlists",
+    "aliases": [
+      "!my-pl",
+      "!playlists"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "View all of your custom playlists",
+    "usage": [
+      "!my-playlists"
+    ]
+  },
+  {
+    "name": "nightcore",
+    "prefix": "!nightcore",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply nightcore equalizer preset to the music",
+    "usage": [
+      "!nightcore"
+    ]
+  },
+  {
+    "name": "nowplaying",
+    "prefix": "!nowplaying",
+    "aliases": [
+      "!np"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Displays the currently playing song with a beautiful custom-designed visual card",
+    "usage": [
+      "!nowplaying"
+    ]
+  },
+  {
+    "name": "oldschool",
+    "prefix": "!oldschool",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply oldschool equalizer preset to the music",
+    "usage": [
+      "!oldschool"
+    ]
+  },
+  {
+    "name": "pause",
+    "prefix": "!pause",
+    "aliases": [
+      "!pa"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Pause the currently playing track",
+    "usage": [
+      "!pause"
+    ]
+  },
+  {
+    "name": "play",
+    "prefix": "!play",
+    "aliases": [
+      "!p"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Play music from YouTube, Spotify, or other platforms",
+    "usage": [
+      "!play"
+    ]
+  },
+  {
+    "name": "playlist-info",
+    "prefix": "!playlist-info",
+    "aliases": [
+      "!pl-info",
+      "!p-info"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "View detailed information and manage a custom playlist",
+    "usage": [
+      "!playlist-info"
+    ]
+  },
+  {
+    "name": "playnow",
+    "prefix": "!playnow",
+    "aliases": [
+      "!pn",
+      "!playskip"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Play music immediately (skips current song)",
+    "usage": [
+      "!playnow"
+    ]
+  },
+  {
+    "name": "pop",
+    "prefix": "!pop",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply pop equalizer preset to the music",
+    "usage": [
+      "!pop"
+    ]
+  },
+  {
+    "name": "previous",
+    "prefix": "!previous",
+    "aliases": [
+      "!prev",
+      "!back"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Play the previous track from the queue history",
+    "usage": [
+      "!previous"
+    ]
+  },
+  {
+    "name": "queue",
+    "prefix": "!queue",
+    "aliases": [
+      "!q"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "View and manage the song queue with pagination and interactive controls",
+    "usage": [
+      "!queue"
+    ]
+  },
+  {
+    "name": "recommendations",
+    "prefix": "!recommendations",
+    "aliases": [
+      "!rec",
+      "!recommend",
+      "!similar"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Get song recommendations based on what",
+    "usage": [
+      "!recommendations"
+    ]
+  },
+  {
+    "name": "reggae",
+    "prefix": "!reggae",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply reggae equalizer preset to the music",
+    "usage": [
+      "!reggae"
+    ]
+  },
+  {
+    "name": "remove",
+    "prefix": "!remove",
+    "aliases": [
+      "!rm",
+      "!del"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Remove a track from the queue",
+    "usage": [
+      "!remove"
+    ]
+  },
+  {
+    "name": "remove-track",
+    "prefix": "!remove-track",
+    "aliases": [
+      "!rm-track",
+      "!pl-remove"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Remove tracks from a playlist by position or range",
+    "usage": [
+      "!remove-track"
+    ]
+  },
+  {
+    "name": "replay",
+    "prefix": "!replay",
+    "aliases": [
+      "!restart"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Replay the current track from the beginning (not available for live streams)",
+    "usage": [
+      "!replay"
+    ]
+  },
+  {
+    "name": "reset",
+    "prefix": "!reset",
+    "aliases": [
+      "!clear-filter",
+      "!resetfilter"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Reset all audio filters to default",
+    "usage": [
+      "!reset"
+    ]
+  },
+  {
+    "name": "resume",
+    "prefix": "!resume",
+    "aliases": [
+      "!unpause"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Resume the paused track and continue playback",
+    "usage": [
+      "!resume"
+    ]
+  },
+  {
+    "name": "rewind",
+    "prefix": "!rewind",
+    "aliases": [
+      "!rw",
+      "!back10"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Rewind the current track by specified seconds (default: 10 seconds, not available for live streams)",
+    "usage": [
+      "!rewind"
+    ]
+  },
+  {
+    "name": "rock",
+    "prefix": "!rock",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply rock equalizer preset to the music",
+    "usage": [
+      "!rock"
+    ]
+  },
+  {
+    "name": "search",
+    "prefix": "!search",
+    "aliases": [
+      "!find",
+      "!lookup",
+      "!s"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Search for music across multiple platforms",
+    "usage": [
+      "!search"
+    ]
+  },
+  {
+    "name": "seek",
+    "prefix": "!seek",
+    "aliases": [
+      "!sk"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Seek to a specific time in the current track using various time formats",
+    "usage": [
+      "!seek"
+    ]
+  },
+  {
+    "name": "shuffle",
+    "prefix": "!shuffle",
+    "aliases": [
+      "!shu",
+      "!sh",
+      "!shuf",
+      "!mix"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Shuffle the entire queue to randomize track order",
+    "usage": [
+      "!shuffle"
+    ]
+  },
+  {
+    "name": "skip",
+    "prefix": "!skip",
+    "aliases": [
+      "!s",
+      "!next"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Skip the current track or jump to a specific track in the queue",
+    "usage": [
+      "!skip"
+    ]
+  },
+  {
+    "name": "soft",
+    "prefix": "!soft",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply soft equalizer preset to the music",
+    "usage": [
+      "!soft"
+    ]
+  },
+  {
+    "name": "stop",
+    "prefix": "!stop",
+    "aliases": [
+      "!disconnect",
+      "!leave"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Stop music playback, clear the queue, and disconnect from the voice channel",
+    "usage": [
+      "!stop"
+    ]
+  },
+  {
+    "name": "superbass",
+    "prefix": "!superbass",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply superbass equalizer preset to the music",
+    "usage": [
+      "!superbass"
+    ]
+  },
+  {
+    "name": "treble",
+    "prefix": "!treble",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply treble equalizer preset to the music",
+    "usage": [
+      "!treble"
+    ]
+  },
+  {
+    "name": "vaporwave",
+    "prefix": "!vaporwave",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply vaporwave equalizer preset to the music",
+    "usage": [
+      "!vaporwave"
+    ]
+  },
+  {
+    "name": "vocals",
+    "prefix": "!vocals",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply vocals equalizer preset to the music",
+    "usage": [
+      "!vocals"
+    ]
+  },
+  {
+    "name": "volume",
+    "prefix": "!volume",
+    "aliases": [
+      "!v",
+      "!vol"
+    ],
+    "slash": false,
+    "category": "music",
+    "description": "Adjust or view the music playback volume with an interactive control panel",
+    "usage": [
+      "!volume"
+    ]
+  },
+  {
+    "name": "warm",
+    "prefix": "!warm",
+    "aliases": [],
+    "slash": false,
+    "category": "music",
+    "description": "Apply warm equalizer preset to the music",
+    "usage": [
+      "!warm"
+    ]
+  },
+  {
+    "name": "addpremium",
+    "prefix": "!addpremium",
+    "aliases": [
+      "!addpr",
+      "!grantpremium",
+      "!premium"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Grant premium status to a user",
+    "usage": [
+      "!addpremium"
+    ]
+  },
+  {
+    "name": "announceeconomy",
+    "prefix": "!announceeconomy",
+    "aliases": [
+      "!ecoannounce",
+      "!economyannounce"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Send the public announcement for the new economy update",
+    "usage": [
+      "!announceeconomy"
+    ]
+  },
+  {
+    "name": "announcereporting",
+    "prefix": "!announcereporting",
+    "aliases": [
+      "!reportingannounce"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Send the public announcement for the reporting",
+    "usage": [
+      "!announcereporting"
+    ]
+  },
+  {
+    "name": "backup",
+    "prefix": "!backup",
+    "aliases": [
+      "!bkp"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Create or manage bot data backups",
+    "usage": [
+      "!backup"
+    ]
+  },
+  {
+    "name": "blacklistserver",
+    "prefix": "!blacklistserver",
+    "aliases": [
+      "!bserver",
+      "!serverbl",
+      "!blacklist-server"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Blacklist a server from using the bot",
+    "usage": [
+      "!blacklistserver"
+    ]
+  },
+  {
+    "name": "blacklistuser",
+    "prefix": "!blacklistuser",
+    "aliases": [
+      "!buser",
+      "!userbl",
+      "!blacklist-user"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Blacklist a user from using the bot",
+    "usage": [
+      "!blacklistuser"
+    ]
+  },
+  {
+    "name": "cloneemojis",
+    "prefix": "!cloneemojis",
+    "aliases": [
+      "!copyemojis",
+      "!stealemojis"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Clone all emojis from another server into this one.",
+    "usage": [
+      "!cloneemojis"
+    ]
+  },
+  {
+    "name": "getuprestart",
+    "prefix": "!getuprestart",
+    "aliases": [
+      "!backupmusic",
+      "!savestate",
+      "!musicbackup"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Backup all music player states before restart",
+    "usage": [
+      "!getuprestart"
+    ]
+  },
+  {
+    "name": "leaveserver",
+    "prefix": "!leaveserver",
+    "aliases": [
+      "!leave",
+      "!leaveguild"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Make the bot leave a specific server",
+    "usage": [
+      "!leaveserver"
+    ]
+  },
+  {
+    "name": "node",
+    "prefix": "!node",
+    "aliases": [
+      "!system",
+      "!sysinfo",
+      "!nodeinfo"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Display bot node/system information",
+    "usage": [
+      "!node"
+    ]
+  },
+  {
+    "name": "noprefix",
+    "prefix": "!noprefix",
+    "aliases": [
+      "!np",
+      "!nopre"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Toggle no-prefix mode for a user",
+    "usage": [
+      "!noprefix"
+    ]
+  },
+  {
+    "name": "qotd",
+    "prefix": "!qotd",
+    "aliases": [
+      "!question",
+      "!ask"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Send a Question of the Day in CV2 formatting",
+    "usage": [
+      "!qotd"
+    ]
+  },
+  {
+    "name": "releasedball",
+    "prefix": "!releasedball",
+    "aliases": [
+      "!restoremusic",
+      "!loadstate",
+      "!musicrestore"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Restore all music player states after restart",
+    "usage": [
+      "!releasedball"
+    ]
+  },
+  {
+    "name": "reload",
+    "prefix": "!reload",
+    "aliases": [
+      "!rl"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Reload a specific command",
+    "usage": [
+      "!reload"
+    ]
+  },
+  {
+    "name": "reloadall",
+    "prefix": "!reloadall",
+    "aliases": [
+      "!rla",
+      "!reloadallcmds"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Reload all commands",
+    "usage": [
+      "!reloadall"
+    ]
+  },
+  {
+    "name": "restart",
+    "prefix": "!restart",
+    "aliases": [
+      "!reboot"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Restart the bot",
+    "usage": [
+      "!restart"
+    ]
+  },
+  {
+    "name": "say",
+    "prefix": "!say",
+    "aliases": [
+      "!echo",
+      "!repeat"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Make the bot say something",
+    "usage": [
+      "!say"
+    ]
+  },
+  {
+    "name": "serverinvite",
+    "prefix": "!serverinvite",
+    "aliases": [
+      "!sinv",
+      "!getinvite",
+      "!guildinvite"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Generate an invite link for a server",
+    "usage": [
+      "!serverinvite"
+    ]
+  },
+  {
+    "name": "serverlist",
+    "prefix": "!serverlist",
+    "aliases": [
+      "!servers",
+      "!guildlist",
+      "!guilds"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "List all servers the bot is in",
+    "usage": [
+      "!serverlist"
+    ]
+  },
+  {
+    "name": "shard",
+    "prefix": "!shard",
+    "aliases": [
+      "!shardinfo",
+      "!shardstatus"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "View servers running on a specific shard",
+    "usage": [
+      "!shard"
+    ]
+  },
+  {
+    "name": "unblacklistserver",
+    "prefix": "!unblacklistserver",
+    "aliases": [
+      "!unbserver",
+      "!serverunbl",
+      "!unblacklist-server"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Remove a server from the blacklist",
+    "usage": [
+      "!unblacklistserver"
+    ]
+  },
+  {
+    "name": "unblacklistuser",
+    "prefix": "!unblacklistuser",
+    "aliases": [
+      "!unbuser",
+      "!userunbl",
+      "!unblacklist-user"
+    ],
+    "slash": false,
+    "category": "owner",
+    "description": "Remove a user from the blacklist",
+    "usage": [
+      "!unblacklistuser"
+    ]
+  },
+  {
+    "name": "animes",
+    "prefix": "!animes",
+    "aliases": [
+      "!animepfp",
+      "!animeavatar",
+      "!anime"
+    ],
+    "slash": false,
+    "category": "pfps",
+    "description": "Get random anime profile pictures",
+    "usage": [
+      "!animes"
+    ]
+  },
+  {
+    "name": "banners",
+    "prefix": "!banners",
+    "aliases": [
+      "!banner",
+      "!profilebanner"
+    ],
+    "slash": false,
+    "category": "pfps",
+    "description": "Get random aesthetic banners for your profile",
+    "usage": [
+      "!banners"
+    ]
+  },
+  {
+    "name": "boys",
+    "prefix": "!boys",
+    "aliases": [
+      "!boypfp",
+      "!boyavatar",
+      "!husbando"
+    ],
+    "slash": false,
+    "category": "pfps",
+    "description": "Get random anime boy profile pictures",
+    "usage": [
+      "!boys"
+    ]
+  },
+  {
+    "name": "couples",
+    "prefix": "!couples",
+    "aliases": [
+      "!couplepfp",
+      "!coupleavatar",
+      "!pair"
+    ],
+    "slash": false,
+    "category": "pfps",
+    "description": "Get random anime couple profile pictures",
+    "usage": [
+      "!couples"
+    ]
+  },
+  {
+    "name": "girls",
+    "prefix": "!girls",
+    "aliases": [
+      "!girlpfp",
+      "!girlavatar",
+      "!waifu"
+    ],
+    "slash": false,
+    "category": "pfps",
+    "description": "Get random anime girl profile pictures",
+    "usage": [
+      "!girls"
+    ]
+  },
+  {
+    "name": "247",
+    "prefix": "!247",
+    "aliases": [
+      "!stay247",
+      "!alwayson",
+      "!keepalive",
+      "!24/7"
+    ],
+    "slash": false,
+    "category": "settings",
+    "description": "Toggle 24/7 mode to keep the bot connected to a voice channel",
+    "usage": [
+      "!247"
+    ]
+  },
+  {
+    "name": "noptoggle",
+    "prefix": "!noptoggle",
+    "aliases": [
+      "!npt",
+      "!noprefixtoggle",
+      "!noprefix",
+      "!nop"
+    ],
+    "slash": false,
+    "category": "settings",
+    "description": "Toggle your personal no-prefix mode (Premium Only).",
+    "usage": [
+      "!noptoggle"
+    ]
+  },
+  {
+    "name": "prefix",
+    "prefix": "!prefix",
+    "aliases": [
+      "!setprefix"
+    ],
+    "slash": false,
+    "category": "settings",
+    "description": "View or change the bot prefix for this server.",
+    "usage": [
+      "!prefix"
+    ]
+  },
+  {
+    "name": "setdefaultvolume",
+    "prefix": "!setdefaultvolume",
+    "aliases": [
+      "!defaultvolume",
+      "!setdefvol"
+    ],
+    "slash": false,
+    "category": "settings",
+    "description": "Set the default volume for new music players in this server",
+    "usage": [
+      "!setdefaultvolume"
+    ]
+  },
+  {
+    "name": "userprefix",
+    "prefix": "!userprefix",
+    "aliases": [
+      "!up",
+      "!myprefix"
+    ],
+    "slash": false,
+    "category": "settings",
+    "description": "Manage your personal command prefixes (Premium Only).",
+    "usage": [
+      "!userprefix"
+    ]
+  },
+  {
+    "name": "add",
+    "prefix": "!add",
+    "aliases": [
+      "!adduser",
+      "!ticketadd"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Add a user to the current ticket",
+    "usage": [
+      "!add"
+    ]
+  },
+  {
+    "name": "claim",
+    "prefix": "!claim",
+    "aliases": [
+      "!claimticket"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Claim the current ticket",
+    "usage": [
+      "!claim"
+    ]
+  },
+  {
+    "name": "close",
+    "prefix": "!close",
+    "aliases": [
+      "!closeticket"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Close the current ticket (generates transcript, does not delete channel)",
+    "usage": [
+      "!close"
+    ]
+  },
+  {
+    "name": "delete",
+    "prefix": "!delete",
+    "aliases": [
+      "!deleteticket",
+      "!delticket"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Permanently delete a closed ticket channel",
+    "usage": [
+      "!delete"
+    ]
+  },
+  {
+    "name": "fuckticket",
+    "prefix": "!fuckticket",
+    "aliases": [
+      "!forceclose",
+      "!fticket"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Force close ticket, mute user for 1 day, and send transcript to owner/admin/creator",
+    "usage": [
+      "!fuckticket"
+    ]
+  },
+  {
+    "name": "panelsend",
+    "prefix": "!panelsend",
+    "aliases": [
+      "!sendpanel",
+      "!resendpanel"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Send an existing ticket panel to a channel",
+    "usage": [
+      "!panelsend"
+    ]
+  },
+  {
+    "name": "panelsetup",
+    "prefix": "!panelsetup",
+    "aliases": [
+      "!ticketpanel",
+      "!createpanel"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Create a new ticket panel with step-by-step setup",
+    "usage": [
+      "!panelsetup"
+    ]
+  },
+  {
+    "name": "rename",
+    "prefix": "!rename",
+    "aliases": [
+      "!renameticket",
+      "!ticketrename"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Rename the current ticket",
+    "usage": [
+      "!rename"
+    ]
+  },
+  {
+    "name": "retick",
+    "prefix": "!retick",
+    "aliases": [
+      "!removeuser",
+      "!ticketremove",
+      "!tremove"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Remove a user from the current ticket",
+    "usage": [
+      "!retick"
+    ]
+  },
+  {
+    "name": "reviewsetup",
+    "prefix": "!reviewsetup",
+    "aliases": [
+      "!setreview",
+      "!reviewchannel"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Setup the review channel for ticket reviews",
+    "usage": [
+      "!reviewsetup"
+    ]
+  },
+  {
+    "name": "ticket",
+    "prefix": "!ticket",
+    "aliases": [
+      "!tickets",
+      "!ticketinfo"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "View ticket system information and commands",
+    "usage": [
+      "!ticket"
+    ]
+  },
+  {
+    "name": "transcript",
+    "prefix": "!transcript",
+    "aliases": [
+      "!transcriptticket",
+      "!save"
+    ],
+    "slash": false,
+    "category": "ticket",
+    "description": "Generate a transcript for the current ticket",
+    "usage": [
+      "!transcript"
+    ]
+  },
+  {
+    "name": "afk",
+    "prefix": "!afk",
+    "aliases": [
+      "!away",
+      "!brb"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Set your AFK status with an optional reason",
+    "usage": [
+      "!afk"
+    ]
+  },
+  {
+    "name": "avatar",
+    "prefix": "!avatar",
+    "aliases": [
+      "!av",
+      "!pfp",
+      "!dp",
+      "!icon"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "View a user",
+    "usage": [
+      "!avatar"
+    ]
+  },
+  {
+    "name": "nick",
+    "prefix": "!nick",
+    "aliases": [
+      "!nickname",
+      "!setnick"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Change your or someone else",
+    "usage": [
+      "!nick"
+    ]
+  },
+  {
+    "name": "roleinfo",
+    "prefix": "!roleinfo",
+    "aliases": [
+      "!ri",
+      "!role"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Display detailed information about a role",
+    "usage": [
+      "!roleinfo"
+    ]
+  },
+  {
+    "name": "serverbanner",
+    "prefix": "!serverbanner",
+    "aliases": [
+      "!sbanner",
+      "!guildbanner"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Display the server",
+    "usage": [
+      "!serverbanner"
+    ]
+  },
+  {
+    "name": "servericon",
+    "prefix": "!servericon",
+    "aliases": [
+      "!sicon",
+      "!guildicon",
+      "!serverav"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Display the server",
+    "usage": [
+      "!servericon"
+    ]
+  },
+  {
+    "name": "serverinfo",
+    "prefix": "!serverinfo",
+    "aliases": [
+      "!si",
+      "!guildinfo",
+      "!server"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Display detailed information about the server",
+    "usage": [
+      "!serverinfo"
+    ]
+  },
+  {
+    "name": "snipe",
+    "prefix": "!snipe",
+    "aliases": [
+      "!s"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "View the last deleted message in this channel",
+    "usage": [
+      "!snipe"
+    ]
+  },
+  {
+    "name": "timer",
+    "prefix": "!timer",
+    "aliases": [
+      "!remind",
+      "!reminder",
+      "!settimer"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Set a timer for a specified number of days",
+    "usage": [
+      "!timer"
+    ]
+  },
+  {
+    "name": "usercard",
+    "prefix": "!usercard",
+    "aliases": [
+      "!ucard",
+      "!profilecard"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Generate a custom user profile card",
+    "usage": [
+      "!usercard"
+    ]
+  },
+  {
+    "name": "userinfo",
+    "prefix": "!userinfo",
+    "aliases": [
+      "!ui",
+      "!whois",
+      "!user",
+      "!memberinfo"
+    ],
+    "slash": false,
+    "category": "utility",
+    "description": "Display detailed information about a user",
+    "usage": [
+      "!userinfo"
+    ]
+  },
+  {
+    "name": "vcdeafen",
+    "prefix": "!vcdeafen",
+    "aliases": [
+      "!voicedeafen",
+      "!vcdef",
+      "!vd"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Server deafen a user in voice channel",
+    "usage": [
+      "!vcdeafen"
+    ]
+  },
+  {
+    "name": "vckick",
+    "prefix": "!vckick",
+    "aliases": [
+      "!voicekick",
+      "!vk",
+      "!vcdisconnect"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Disconnect a user from voice channel",
+    "usage": [
+      "!vckick"
+    ]
+  },
+  {
+    "name": "vckickall",
+    "prefix": "!vckickall",
+    "aliases": [
+      "!voicekickall",
+      "!vka",
+      "!vcdisconnectall"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Disconnect all users from your voice channel",
+    "usage": [
+      "!vckickall"
+    ]
+  },
+  {
+    "name": "vclist",
+    "prefix": "!vclist",
+    "aliases": [
+      "!voicelist",
+      "!vl",
+      "!vcmembers"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "List all users in your voice channel",
+    "usage": [
+      "!vclist"
+    ]
+  },
+  {
+    "name": "vcmoveall",
+    "prefix": "!vcmoveall",
+    "aliases": [
+      "!voicemoveall",
+      "!vmall",
+      "!vcmove"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Move all users from your voice channel to another channel",
+    "usage": [
+      "!vcmoveall"
+    ]
+  },
+  {
+    "name": "vcmute",
+    "prefix": "!vcmute",
+    "aliases": [
+      "!voicemute",
+      "!vm"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Server mute a user in voice channel",
+    "usage": [
+      "!vcmute"
+    ]
+  },
+  {
+    "name": "vcmuteall",
+    "prefix": "!vcmuteall",
+    "aliases": [
+      "!voicemuteall",
+      "!vma"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Server mute all users in your voice channel",
+    "usage": [
+      "!vcmuteall"
+    ]
+  },
+  {
+    "name": "vcundeafen",
+    "prefix": "!vcundeafen",
+    "aliases": [
+      "!voiceundeafen",
+      "!vcundef",
+      "!vud"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Remove server deafen from a user in voice channel",
+    "usage": [
+      "!vcundeafen"
+    ]
+  },
+  {
+    "name": "vcunmute",
+    "prefix": "!vcunmute",
+    "aliases": [
+      "!voiceunmute",
+      "!vum"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Remove server mute from a user in voice channel",
+    "usage": [
+      "!vcunmute"
+    ]
+  },
+  {
+    "name": "vcunmuteall",
+    "prefix": "!vcunmuteall",
+    "aliases": [
+      "!voiceunmuteall",
+      "!vuma"
+    ],
+    "slash": false,
+    "category": "voice",
+    "description": "Remove server mute from all users in your voice channel",
+    "usage": [
+      "!vcunmuteall"
+    ]
   }
 ]
