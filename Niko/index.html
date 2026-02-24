@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Niko — Cozy Café Discord Bot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="page page--fade-in">
+  <header class="header">
+    <div class="header__left">
+      <span class="logo">niko ☕</span>
+    </div>
+    <div class="header__right">
+      <button class="lang-toggle" data-lang="en">EN</button>
+      <button class="lang-toggle" data-lang="de">DE</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="hero__content">
+        <h1 id="hero-title" class="lang-fade"></h1>
+        <p id="hero-sub" class="lang-fade"></p>
+        <div class="hero__buttons">
+          <a id="btn-invite" href="https://discord.com/oauth2/authorize?client_id=1462548836705898506&permissions=8&scope=bot%20applications.commands" class="btn btn--primary lang-fade"></a>
+          <a id="btn-commands" href="#features" class="btn btn--ghost lang-fade"></a>
+          <a id="btn-github" href="https://github.com/developer51709/Niko" class="btn btn--ghost lang-fade" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+      <div class="hero__art">
+        <img src="coffee.svg" alt="Coffee cup" class="coffee-svg" />
+      </div>
+    </section>
+
+    <section id="features" class="section section--cards">
+      <h2 id="features-title" class="lang-fade"></h2>
+      <div class="cards">
+        <article class="card">
+          <h3 id="feat-personality-title" class="lang-fade"></h3>
+          <p id="feat-personality-text" class="lang-fade"></p>
+        </article>
+        <article class="card">
+          <h3 id="feat-music-title" class="lang-fade"></h3>
+          <p id="feat-music-text" class="lang-fade"></p>
+        </article>
+        <article class="card">
+          <h3 id="feat-level-title" class="lang-fade"></h3>
+          <p id="feat-level-text" class="lang-fade"></p>
+        </article>
+        <article class="card">
+          <h3 id="feat-fun-title" class="lang-fade"></h3>
+          <p id="feat-fun-text" class="lang-fade"></p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section--split">
+      <div class="split__block">
+        <h2 id="personality-title" class="lang-fade"></h2>
+        <p id="personality-text" class="lang-fade"></p>
+        <ul class="pill-list">
+          <li>normal 🫗</li>
+          <li>café ☕</li>
+        </ul>
+      </div>
+      <div class="split__block">
+        <h2 id="bilingual-title" class="lang-fade"></h2>
+        <div class="example-card">
+          <div>
+            <h4>EN</h4>
+            <p>“brewing your track bestie ☕🎶”</p>
+          </div>
+          <div>
+            <h4>DE</h4>
+            <p>„brühe deinen track auf liebchen ☕🎶“</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <span id="footer-text"></span>
+    </div>
+    <nav class="footer__nav">
+      <a href="tos.html" class="link--transition">ToS</a>
+      <a href="privacy.html" class="link--transition">Privacy</a>
+    </nav>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
