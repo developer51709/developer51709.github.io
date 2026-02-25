@@ -12,7 +12,14 @@
 <body>
     <header class="navbar">
         <div class="logo">VOTOX</div>
-        <nav>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <nav id="nav-menu">
             <a href="#features">Features</a>
             <a href="#premium">Premium</a>
             <a href="#contact">Contact</a>
@@ -68,5 +75,11 @@
     <footer id="contact" class="footer">
         <p>© 2026 VOTOX Security Bot — All Rights Reserved</p>
     </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("nav-menu").classList.toggle("open");
+        }
+    </script>
 </body>
 </html>
