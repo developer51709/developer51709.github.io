@@ -185,10 +185,11 @@ html, body {
   margin-bottom: 0.8rem;
 }
 
-.section--cards .cards {
+.cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 1rem;
+  transition: all 0.4s ease-in-out;
 }
 
 .card {
@@ -196,7 +197,7 @@ html, body {
   border-radius: var(--radius-md);
   padding: 1rem;
   box-shadow: var(--shadow-soft);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), all 0.4s ease-in-out;
 }
 
 .card:hover {
@@ -220,6 +221,7 @@ html, body {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 1.2rem;
+  transition: all 0.4s ease-in-out;
 }
 
 .split__block {
@@ -227,6 +229,7 @@ html, body {
   border-radius: var(--radius-md);
   padding: 1rem;
   box-shadow: var(--shadow-soft);
+  transition: all 0.4s ease-in-out;
 }
 
 .pill-list {
