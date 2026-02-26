@@ -355,12 +355,14 @@ html, body {
 }
 
 .lang-fade {
-  transition: opacity 0.35s ease, filter 0.35s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform, filter;
 }
 
 .lang-fade.hidden {
   opacity: 0;
-  filter: blur(2px);
+  transform: translateY(4px);
+  filter: blur(4px);
 }
 
 /* responsive */

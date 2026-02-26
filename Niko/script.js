@@ -75,8 +75,11 @@ function applyLang(lang) {
 
     safeSet("footer-text", t.footer_text);
 
-    fadeEls.forEach(el => el.classList.remove("hidden"));
-  }, 350);
+    // Small delay before fading back in to ensure text has rendered
+    requestAnimationFrame(() => {
+      fadeEls.forEach(el => el.classList.remove("hidden"));
+    });
+  }, 400);
 
   document.querySelectorAll(".lang-toggle").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.lang === lang);
