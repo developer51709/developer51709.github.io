@@ -12,6 +12,7 @@ language = "python3"
 
 [nix]
 channel = "stable-25_05"
+packages = ["wget"]
 
 [[ports]]
 localPort = 5000

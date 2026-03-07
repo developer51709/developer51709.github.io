@@ -1,0 +1,14 @@
+{
+  "donation_wallets": {
+    "btc": "bc1qgnuve4dphlteumlyz0t6hrseps8708dh8wfs2u",
+    "eth": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "eth_linea": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "eth_arb": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "eth_base": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "eth_op": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "sol": "5vH2TxtroZddGaiaMW2pTadwXiEW11KBHLdqWK5EUGr7",
+    "trx": "TL34bRtehGwCUpoKtz2d67USW7ks73t17E",
+    "bnb": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+    "pol": "0x5517CBa34cAf0C756e95bC9D1a748Bd8e0B97306",
+  }
+}

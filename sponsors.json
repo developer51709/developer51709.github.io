@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Sponsor 1",
+    "amount": "$100",
+    "link": "https://example.com"
+  },
+  {
+    "name": "Sponsor 2",
+    "amount": "$50",
+    "link": "https://example.com"
+  }
+]

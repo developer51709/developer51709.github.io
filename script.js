@@ -28,15 +28,74 @@ function scrollToSection(selector) {
 const toggle = document.getElementById("themeToggle");
 const body = document.body;
 
-if (localStorage.getItem("theme") === "dark") {
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+  body.classList.remove("dark");
+  toggle.textContent = "🌙";
+} else {
   body.classList.add("dark");
   toggle.textContent = "☀️";
 }
 
 toggle.addEventListener("click", () => {
   body.classList.toggle("dark");
-  toggle.textContent = body.classList.contains("dark") ? "☀️" : "🌙";
-  localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
+  const isDark = body.classList.contains("dark");
+  toggle.textContent = isDark ? "☀️" : "🌙";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+
+// ----------------------------------
+// Donations and Sponsors
+// ----------------------------------
+async function loadDonations() {
+  try {
+    const response = await fetch('donation_wallets.json');
+    const data = await response.json();
+    const grid = document.getElementById('donationGrid');
+    
+    if (grid && data.donation_wallets) {
+      Object.entries(data.donation_wallets).forEach(([coin, address]) => {
+        const card = document.createElement('div');
+        card.className = 'card glass tilt scroll-reactive';
+        card.innerHTML = `
+          <h3>${coin.toUpperCase()}</h3>
+          <p style="word-break: break-all; font-size: 0.8rem;">${address}</p>
+          <button class="glass-btn" onclick="navigator.clipboard.writeText('${address}').then(() => alert('Address copied!'))">Copy Address</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+  } catch (err) {
+    console.error('Error loading donations:', err);
+  }
+}
+
+async function loadSponsors() {
+  try {
+    const response = await fetch('sponsors.json');
+    const data = await response.json();
+    const grid = document.getElementById('sponsorsGrid');
+    
+    if (grid && Array.isArray(data)) {
+      data.forEach(sponsor => {
+        const card = document.createElement('div');
+        card.className = 'card glass tilt scroll-reactive';
+        card.innerHTML = `
+          <h3>${sponsor.name}</h3>
+          <p>Contribution: ${sponsor.amount}</p>
+          ${sponsor.link ? `<button class="glass-btn" onclick="window.location.href='${sponsor.link}'">Visit</button>` : ''}
+        `;
+        grid.appendChild(card);
+      });
+    }
+  } catch (err) {
+    console.error('Error loading sponsors:', err);
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadDonations();
+  loadSponsors();
 });
 
 // ----------------------------------
