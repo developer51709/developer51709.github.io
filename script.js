@@ -64,6 +64,9 @@ async function loadDonations() {
         `;
         grid.appendChild(card);
       });
+      // Refresh scroll and glow after injection
+      handleScroll();
+      updateGlowOnScroll();
     }
   } catch (err) {
     console.error('Error loading donations:', err);
@@ -87,6 +90,9 @@ async function loadSponsors() {
         `;
         grid.appendChild(card);
       });
+      // Refresh scroll and glow after injection
+      handleScroll();
+      updateGlowOnScroll();
     }
   } catch (err) {
     console.error('Error loading sponsors:', err);
@@ -149,6 +155,8 @@ const reactive = document.querySelectorAll(".scroll-reactive");
 
 function handleScroll() {
   const height = window.innerHeight;
+  const panels = document.querySelectorAll(".parallax-panel");
+  const reactive = document.querySelectorAll(".scroll-reactive");
 
   panels.forEach(panel => {
     const rect = panel.getBoundingClientRect();
@@ -158,7 +166,7 @@ function handleScroll() {
 
   reactive.forEach(el => {
     const rect = el.getBoundingClientRect();
-    if (rect.top < height * 0.85) {
+    if (rect.top < height * 0.9) {
       el.style.opacity = 1;
       el.style.transform = "translateY(0)";
     }
