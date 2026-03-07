@@ -249,3 +249,14 @@ function updateGradientDirection() {
 
   lastScroll = current;
 };
+
+// ----------------------------------
+// Inject the background image
+// ----------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  const bgImgPath = "/assets/images/purple-cherry-blossom.gif";
+  document.body.style.backgroundImage = `url('${bgImgPath}')`;
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundAttachment = "fixed";
+})
