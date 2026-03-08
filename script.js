@@ -100,8 +100,11 @@ async function loadSponsors() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  loadDonations();
-  loadSponsors();
+  // only load donations and sponsors if they exist on the page
+  if (document.getElementById('donationGrid')) {
+    loadDonations();
+    loadSponsors();
+  }
 });
 
 // ----------------------------------
@@ -253,10 +256,14 @@ function updateGradientDirection() {
 // ----------------------------------
 // Inject the background image
 // ----------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const bgImgPath = "/assets/images/purple-cherry-blossom.gif";
-  document.body.style.backgroundImage = `url('${bgImgPath}')`;
+document.addEventListener("DOMContentLoaded", injectBackgroundImage);
+
+function injectBackgroundImage() {
+  const bgImgURL = "https://developer51709.github.io/assets/images/purple-cherry-blossom.gif";
+  document.body.style.backgroundImage = `url(${bgImgURL})`;
   document.body.style.backgroundSize = "cover";
   document.body.style.backgroundPosition = "center";
   document.body.style.backgroundAttachment = "fixed";
-})
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.minHeight = "100vh";
+}
