@@ -1,6 +1,62 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- open graph tags -->
+  <meta property="og:title" content="404 Page Not Found">
+  <meta property="og:description" content="This page either does not exist or could not be found on the server.">
   
+  <title>404 Page Not Found</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
+<body>
+
+  <!-- Top Pill Glass Navbar -->
+  <nav class="navbar glass">
+    <div class="logo">Developer51709</div>
+
+    <button id="hamburgerBtn" class="hamburger">☰</button>
+
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </nav>
+
+  <!-- Mobile Dropdown Menu -->
+  <ul id="navLinks" class="mobile-menu">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#donations">Donations</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <section id="home" class="hero parallax-panel">
+    <div class="hero-inner tilt glass">
+      <h1>Donate</h1>
+      <p>Thank you for considering donating to support my work. Your contribution helps me continue to develop and maintain my projects.</p>
+    </div>
+  </section>
+
+  <section id="donation-info" class="section parallax-panel">
+    <h2 class="section-title">Donation Information</h2>
+    <div class="card glass tilt scroll-reactive">
+      <p>All donations will be used to support the development and maintenance of my projects as well as to cover server costs for bots and other services.</p>
+    </div>
+  </section>
+
+  <section id="donation-wallets" class="section parallax-panel">
+    <h2 class="section-title">Donation Wallets</h2>
+    <div class="grid" id="donationGrid">
+      <!-- Wallets will be injected here by script.js -->
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Developer51709 — All rights reserved.
+  </footer>
+    
+  <script src="script.js"></script>
+</body>
 </html>
