@@ -120,7 +120,7 @@ The vision is to build the most advanced, developer-friendly Discord bot platfor
 
 ## Contact & Community
 
-- **Email**: support@linavo.dev
+- **Email**: developer51709@proton.me
 - **Discord Community**: Join our Discord server for support and community interaction
 - **Feedback**: Submit feature requests and suggestions to help shape the platform
 
@@ -141,4 +141,4 @@ The vision is to build the most advanced, developer-friendly Discord bot platfor
 
 ---
 
-© 2026 Linavo — All rights reserved.
+© 2026 Developer51709 — All rights reserved.
