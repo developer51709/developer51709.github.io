@@ -243,7 +243,7 @@ body {
     gap: 12px;
     width: 220px;
 
-    background: rgba(240, 242, 248, 0.92);
+    /* background: rgba(240, 242, 248, 0.92); */
     border: 1px solid var(--glass-border);
     box-shadow: 0 8px 32px var(--glass-shadow);
 
@@ -260,7 +260,9 @@ body {
   }
 
   body.dark .mobile-menu {
-    background: rgba(15, 17, 30, 0.95);
+    /* background: rgba(15, 17, 30, 0.95); */
+    /* transparent tinted background */
+    background: linear-gradient(145deg, rgba(254, 255, 254, 0.12))
   }
 
   .mobile-menu.show {
