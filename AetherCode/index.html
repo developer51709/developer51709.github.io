@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AetherCode Mobile</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --aether-blue: #4FC3F7;
+      --aether-purple: #9575CD;
+      --aether-black: #121212;
+      --surface: #1E1E1E;
+      --surface2: #2A2A2A;
+      --text: #E0E0E0;
+      --text-dim: #9E9E9E;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--aether-black);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      background: var(--surface);
+      border-bottom: 1px solid #2a2a2a;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--aether-blue), var(--aether-purple));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .logo span { color: var(--aether-blue); }
+
+    nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      margin-left: 28px;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--aether-blue); }
+
+    .badge {
+      background: rgba(79, 195, 247, 0.15);
+      color: var(--aether-blue);
+      border: 1px solid rgba(79, 195, 247, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(79,195,247,0.08) 0%, transparent 70%);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #fff 40%, var(--aether-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.1s;
+      display: inline-block;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--aether-blue), var(--aether-purple));
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--aether-blue);
+      border: 1px solid var(--aether-blue);
+    }
+
+    .btn:hover { opacity: 0.85; }
+
+    /* ── Phone mockup ── */
+    .mockup-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 60px 0 40px;
+    }
+
+    .phone {
+      width: 260px;
+      background: #0d0d0d;
+      border-radius: 36px;
+      border: 2px solid #333;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px #111;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 80px;
+      height: 22px;
+      background: #0d0d0d;
+      border-radius: 0 0 16px 16px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .phone-screen {
+      background: var(--aether-black);
+      padding: 0;
+      min-height: 460px;
+    }
+
+    .app-bar {
+      background: var(--surface);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .app-bar-title { font-size: 0.85rem; font-weight: 600; }
+
+    .terminal-line {
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      padding: 2px 14px;
+      line-height: 1.6;
+    }
+
+    .terminal-prompt { color: var(--aether-blue); }
+    .terminal-cmd { color: #fff; }
+    .terminal-out { color: #aaa; }
+    .terminal-ok { color: #66BB6A; }
+    .terminal-err { color: #EF5350; }
+
+    .bottom-nav {
+      display: flex;
+      background: var(--surface);
+      border-top: 1px solid #2a2a2a;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.55rem;
+      color: var(--text-dim);
+      gap: 3px;
+    }
+
+    .nav-item.active { color: var(--aether-blue); }
+    .nav-item .icon { font-size: 1rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .tab-btn {
+      padding: 7px 12px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--aether-blue);
+      border-bottom-color: var(--aether-blue);
+    }
+
+    /* ── Features ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--text-dim);
+      margin-bottom: 50px;
+      font-size: 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(79,195,247,0.4);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 14px;
+    }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--text-dim);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .feature-tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 2px 8px;
+      background: rgba(79,195,247,0.1);
+      color: var(--aether-blue);
+      border-radius: 4px;
+      font-size: 0.7rem;
+    }
+
+    /* ── Status ── */
+    .status-section {
+      background: var(--surface);
+      border-top: 1px solid #2a2a2a;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .status-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .module-item {
+      background: var(--surface2);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-planned { background: #555; }
+    .dot-progress { background: #FFA726; }
+    .dot-done { background: #66BB6A; }
+
+    .legend {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* ── Tech stack ── */
+    .stack-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .stack-pill {
+      background: var(--surface2);
+      border: 1px solid #333;
+      border-radius: 20px;
+      padding: 6px 16px;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-dim);
+      font-size: 0.82rem;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    footer a { color: var(--aether-blue); text-decoration: none; }
+
+    /* ── Animations ── */
+    .cursor {
+      display: inline-block;
+      width: 6px;
+      height: 11px;
+      background: var(--aether-blue);
+      margin-left: 2px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 14px 20px; }
+      nav { display: none; }
+      .hero { padding: 60px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <span>Aether</span>Code
+  </div>
+  <nav>
+    <a href="#features">Features</a>
+    <a href="#status">Status</a>
+    <a href="#stack">Stack</a>
+    <a href="https://github.com/developer51709/AetherCode-Mobile" target="_blank">GitHub</a>
+  </nav>
+  <div class="badge">In Development</div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <h1>A Full Dev Environment<br/>On Your Android Device</h1>
+  <p>AetherCode brings a powerful terminal, file manager, AI tools, GitHub integration, and project previewing — all into a single streamlined Android app.</p>
+  <div class="cta-group">
+    <a href="https://github.com/developer51709/AetherCode-Mobile" class="btn btn-primary" target="_blank">View on GitHub</a>
+    <a href="#features" class="btn btn-outline">Explore Features</a>
+  </div>
+</section>
+
+<!-- Phone mockup -->
+<div class="mockup-wrapper">
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen">
+      <div class="app-bar">
+        <span style="color: var(--aether-blue); font-size:1rem;">⚡</span>
+        <span class="app-bar-title">AetherCode — Terminal</span>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('terminal', this)">Terminal</button>
+        <button class="tab-btn" onclick="showTab('files', this)">Files</button>
+        <button class="tab-btn" onclick="showTab('settings', this)">Settings</button>
+      </div>
+
+      <div id="tab-terminal" style="padding: 10px 0; min-height: 350px;">
+        <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">python --version</span></div>
+        <div class="terminal-line terminal-out">Python 3.12.0</div>
+        <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">git status</span></div>
+        <div class="terminal-line terminal-ok">On branch main — nothing to commit</div>
+        <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd">npm run dev</span></div>
+        <div class="terminal-line terminal-ok">Server running on :3000</div>
+        <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-cmd id="typing"></span><span class="cursor"></span></div>
+      </div>
+
+      <div id="tab-files" style="display:none; padding: 8px 0; min-height: 350px;">
+        <div style="padding: 6px 14px 4px; font-size: 0.65rem; color: var(--text-dim);">/ root / projects</div>
+        <div class="terminal-line" style="color: var(--aether-blue);">📁 my-app/</div>
+        <div class="terminal-line" style="color: var(--aether-blue);">📁 scripts/</div>
+        <div class="terminal-line">📄 README.md</div>
+        <div class="terminal-line">📄 package.json</div>
+        <div class="terminal-line">📄 index.html</div>
+        <div class="terminal-line" style="color: #888;">📄 .gitignore</div>
+        <div class="terminal-line" style="color: #888;">📄 .env</div>
+      </div>
+
+      <div id="tab-settings" style="display:none; padding: 8px 0; min-height: 350px;">
+        <div style="padding: 6px 14px 4px; font-size: 0.65rem; color: var(--text-dim);">Appearance</div>
+        <div class="terminal-line" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Dark Mode</span>
+          <span style="color: var(--aether-blue);">●</span>
+        </div>
+        <div class="terminal-line" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Aether Theme</span>
+          <span style="color: var(--aether-blue);">●</span>
+        </div>
+        <div style="padding: 6px 14px 4px; margin-top: 6px; font-size: 0.65rem; color: var(--text-dim);">AI Tools</div>
+        <div class="terminal-line" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>AI Assistant</span>
+          <span style="color: #555;">○</span>
+        </div>
+        <div style="padding: 6px 14px 4px; margin-top: 6px; font-size: 0.65rem; color: var(--text-dim);">Experimental</div>
+        <div class="terminal-line" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Experimental Mode</span>
+          <span style="color: #555;">○</span>
+        </div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <span class="icon">⌨</span>
+          Terminal
+        </div>
+        <div class="nav-item">
+          <span class="icon">📁</span>
+          Files
+        </div>
+        <div class="nav-item">
+          <span class="icon">🐙</span>
+          GitHub
+        </div>
+        <div class="nav-item">
+          <span class="icon">⚙</span>
+          Settings
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="section" id="features">
+  <h2 class="section-title">Everything You Need</h2>
+  <p class="section-sub">A complete development toolkit built for Android devices.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⌨️</div>
+      <h3>Built-In Terminal</h3>
+      <p>A Termux-style terminal embedded directly into the app. Run scripts, package managers, local servers, and common developer workflows without leaving.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📁</div>
+      <h3>Visual File Manager & Editor</h3>
+      <p>Browse, manage, and edit files with ease. Supports a wide range of file types including SQLite databases, JSON, Markdown, and source code.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Tools</h3>
+      <p>Fully optional AI assistant. Supports local models, exposes a local API for other apps, and provides AI-powered crash report summaries.</p>
+      <span class="feature-tag">Optional</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📖</div>
+      <h3>Documentation Viewer</h3>
+      <p>In-app viewer for Python and Node.js package documentation. Quick reference without switching apps — works fully offline.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🐙</div>
+      <h3>GitHub Integration</h3>
+      <p>Visual GitHub interface for committing, pushing, and managing repositories. OAuth authentication and full API integration.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👁️</div>
+      <h3>Project Previews</h3>
+      <p>Preview web or app projects directly inside the environment. Useful for rapid prototyping and testing without an external browser.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📶</div>
+      <h3>Offline Mode</h3>
+      <p>Work fully offline with cached runtimes, packages, and documentation. No internet required for your day-to-day workflow.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧪</div>
+      <h3>Experimental Mode</h3>
+      <p>Toggle experimental features in advanced settings. Access early, unstable, or in-development tools without affecting your main workflow.</p>
+      <span class="feature-tag">Experimental</span>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🪲</div>
+      <h3>Crash Reporting</h3>
+      <p>Detailed crash logs with optional AI-generated summaries. Quickly understand what went wrong and how to fix it.</p>
+      <span class="feature-tag">Core</span>
+    </div>
+  </div>
+</section>
+
+<!-- Status -->
+<section class="status-section" id="status">
+  <div class="status-inner">
+    <h2 class="section-title">Development Status</h2>
+    <p class="section-sub">AetherCode is actively being built. Here's where each module stands.</p>
+    <div class="modules-grid">
+      <div class="module-item"><div class="status-dot dot-progress"></div>App scaffolding</div>
+      <div class="module-item"><div class="status-dot dot-progress"></div>UI / Navigation</div>
+      <div class="module-item"><div class="status-dot dot-progress"></div>Theme system</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Terminal engine</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>File manager</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Code editor</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>GitHub integration</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>AI tools</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Documentation viewer</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Project previewer</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Offline mode</div>
+      <div class="module-item"><div class="status-dot dot-planned"></div>Crash reporting</div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="status-dot dot-done"></div> Complete</div>
+      <div class="legend-item"><div class="status-dot dot-progress"></div> In Progress</div>
+      <div class="legend-item"><div class="status-dot dot-planned"></div> Planned</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stack -->
+<section class="section" id="stack">
+  <h2 class="section-title">Tech Stack</h2>
+  <p class="section-sub">Built with modern Android technologies for performance and maintainability.</p>
+  <div class="stack-pills">
+    <span class="stack-pill">Kotlin</span>
+    <span class="stack-pill">Jetpack Compose</span>
+    <span class="stack-pill">Material Design 3</span>
+    <span class="stack-pill">Dagger Hilt</span>
+    <span class="stack-pill">Compose Navigation</span>
+    <span class="stack-pill">Termux (terminal)</span>
+    <span class="stack-pill">GitHub API</span>
+    <span class="stack-pill">GGUF / ONNX (AI)</span>
+    <span class="stack-pill">Android SDK</span>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>AetherCode Mobile &mdash; An open-source Android IDE</p>
+  <p style="margin-top: 8px;">
+    <a href="https://github.com/developer51709/AetherCode-Mobile" target="_blank">GitHub</a>
+    &nbsp;·&nbsp; MIT License (coming soon)
+  </p>
+</footer>
+
+<script>
+  function showTab(tab, btn) {
+    document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+    document.getElementById('tab-' + tab).style.display = 'block';
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Typing animation
+  const commands = ['ls -la', 'git log --oneline', 'node server.js', 'pip install flask'];
+  let ci = 0, ci2 = 0;
+  const typingEl = document.getElementById('typing');
+
+  function typeNext() {
+    const cmd = commands[ci % commands.length];
+    if (ci2 < cmd.length) {
+      typingEl.textContent += cmd[ci2++];
+      setTimeout(typeNext, 80);
+    } else {
+      setTimeout(() => { ci++; ci2 = 0; typingEl.textContent = ''; typeNext(); }, 2000);
+    }
+  }
+
+  typeNext();
+</script>
+</body>
+</html>
