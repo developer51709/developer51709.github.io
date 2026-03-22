@@ -13,10 +13,6 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
-  transition: background 0.4s ease, color 0.4s ease;
-}
-
 /* Light Mode */
 :root {
   --bg: radial-gradient(circle at top, #f9fbff, #e5e8f0);
@@ -48,8 +44,11 @@ body.dark {
 }
 
 body {
+  transition: background 0.4s ease, color 0.4s ease;
   background: var(--bg);
   color: var(--text);
+  /* Background Image */
+  background-image: url('https://nyxen.is-a.dev/assets/images/purple-cherry-blossom.gif');
 }
 
 /* ----------------------------------
