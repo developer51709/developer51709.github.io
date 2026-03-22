@@ -11,6 +11,12 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
+  background-image: url('https://nyxen.is-a.dev/assets/images/purple-cherry-blossom.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 /* Light Mode */
@@ -45,10 +51,9 @@ body.dark {
 
 body {
   transition: background 0.4s ease, color 0.4s ease;
-  background: var(--bg);
+  /* background: var(--bg); */
+  /* background-clip: content-box; */
   color: var(--text);
-  /* Background Image */
-  background-image: url('https://nyxen.is-a.dev/assets/images/purple-cherry-blossom.gif');
 }
 
 /* ----------------------------------
