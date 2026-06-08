@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bumpify — Grow Your Discord Server</title>
+  <meta name="description" content="Bumpify is the ultimate Discord bump bot to grow your server. Automated bumping, reminders, leaderboards, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <span class="logo-icon">🚀</span>
+        <span class="logo-text">Bumpify</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#stats">Stats</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="https://discord.com/oauth2/authorize" target="_blank" class="btn btn-nav">Add to Discord</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="container hero-content">
+      <div class="badge">✨ The #1 Discord Bump Bot</div>
+      <h1 class="hero-title">Grow Your Server <br /><span class="gradient-text">Effortlessly</span></h1>
+      <p class="hero-desc">Bumpify automates server bumping, sends smart reminders, tracks leaderboards, and drives real growth — all with one simple bot.</p>
+      <div class="hero-actions">
+        <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.003.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Add to Discord — It's Free
+        </a>
+        <a href="#features" class="btn btn-ghost">See Features ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-num" data-target="12400">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Servers</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-num" data-target="980000">0</span><span class="stat-suffix">+</span>
+          <span class="stat-label">Bumps Sent</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="hero-stat">
+          <span class="stat-num" data-target="99">0</span><span class="stat-suffix">%</span>
+          <span class="stat-label">Uptime</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-indicator"></div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Why Bumpify?</span>
+        <h2 class="section-title">Everything you need to <span class="gradient-text">grow faster</span></h2>
+        <p class="section-desc">Packed with powerful features, yet dead simple to set up. Just add the bot and watch your server grow.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⏰</div>
+          <h3>Smart Reminders</h3>
+          <p>Never miss a bump again. Bumpify pings your team at the perfect moment so your server stays at the top of the list.</p>
+        </div>
+        <div class="feature-card featured">
+          <div class="feature-badge">Most Popular</div>
+          <div class="feature-icon">📊</div>
+          <h3>Leaderboards</h3>
+          <p>Gamify your bumping with real-time leaderboards. Reward top bumpers with custom roles and recognition.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>Auto Bump</h3>
+          <p>Set it and forget it. Bumpify automatically bumps at the optimal time using the configured accounts.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Custom Messages</h3>
+          <p>Fully personalize bump messages, embed colors, and reminder texts to match your server's brand and vibe.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>Growth Analytics</h3>
+          <p>Track joins, bump frequency, and member trends over time with detailed analytics dashboards.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Role Rewards</h3>
+          <p>Automatically assign and remove roles based on bump milestones. Motivate your community to keep bumping.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section section-alt" id="how">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Simple Setup</span>
+        <h2 class="section-title">Up and running in <span class="gradient-text">60 seconds</span></h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Add Bumpify</h3>
+            <p>Click "Add to Discord" and authorize Bumpify to your server. No complicated setup required.</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Configure It</h3>
+            <p>Run <code>/setup</code> to set your bump channel, reminder channel, and optional role rewards.</p>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Watch It Grow</h3>
+            <p>Bumpify handles the rest. Get reminders, track bumps, and watch new members pour in.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMANDS -->
+  <section class="section" id="commands">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Commands</span>
+        <h2 class="section-title">Simple <span class="gradient-text">slash commands</span></h2>
+        <p class="section-desc">All commands are slash-based for a clean, modern Discord experience.</p>
+      </div>
+      <div class="commands-table">
+        <div class="commands-search">
+          <input type="text" id="cmdSearch" placeholder="Search commands…" autocomplete="off" />
+        </div>
+        <div class="cmd-list" id="cmdList">
+          <div class="cmd-item">
+            <div class="cmd-name">/bump</div>
+            <div class="cmd-desc">Manually bump your server to the top of the list right now.</div>
+            <div class="cmd-tag">General</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/setup</div>
+            <div class="cmd-desc">Run the interactive setup wizard to configure Bumpify for your server.</div>
+            <div class="cmd-tag">Setup</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/leaderboard</div>
+            <div class="cmd-desc">Show the top bumpers in your server with a beautiful ranked embed.</div>
+            <div class="cmd-tag">Stats</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/stats</div>
+            <div class="cmd-desc">View detailed bumping statistics for yourself or another member.</div>
+            <div class="cmd-tag">Stats</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/config</div>
+            <div class="cmd-desc">Edit your server's Bumpify settings — channels, messages, roles, and more.</div>
+            <div class="cmd-tag">Setup</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/remind</div>
+            <div class="cmd-desc">Manually trigger a bump reminder in your configured channel.</div>
+            <div class="cmd-tag">General</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/reset</div>
+            <div class="cmd-desc">Reset leaderboard data or all Bumpify settings for your server.</div>
+            <div class="cmd-tag">Admin</div>
+          </div>
+          <div class="cmd-item">
+            <div class="cmd-name">/help</div>
+            <div class="cmd-desc">Display an overview of all Bumpify commands and their usage.</div>
+            <div class="cmd-tag">General</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BANNER -->
+  <section class="stats-banner" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">🌐</div>
+          <div class="stat-value" data-target="12400">0</div>
+          <div class="stat-label">Servers Using Bumpify</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚀</div>
+          <div class="stat-value" data-target="980000">0</div>
+          <div class="stat-label">Total Bumps Delivered</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value" data-target="2100000">0</div>
+          <div class="stat-label">Users Reached</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚡</div>
+          <div class="stat-value" data-target="99">0</div>
+          <div class="stat-label">% Uptime Guaranteed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">FAQ</span>
+        <h2 class="section-title">Common <span class="gradient-text">questions</span></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question">Is Bumpify free to use? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Yes! Bumpify is completely free for all core features including bumping, reminders, and leaderboards. Premium plans may be introduced for advanced analytics and custom branding in the future.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What permissions does Bumpify need? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Bumpify needs permission to send messages, embed links, manage roles (for role rewards), and read message history in the configured channels. It never requires administrator permissions.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How often can I bump? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Bumping cooldowns depend on the platform being bumped (e.g. Disboard has a 2-hour cooldown). Bumpify tracks these cooldowns for you and sends reminders the moment you're able to bump again.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I customize the bump messages? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Absolutely. Use <code>/config</code> to set custom embed colors, reminder text, bump messages, and more to match your server's personality.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Is my server's data safe? <span class="faq-icon">+</span></button>
+          <div class="faq-answer"><p>Yes. Bumpify only stores the minimal data needed — server ID, channel IDs, and bump counts. We never read your messages or store member information. See our <a href="privacy.html">Privacy Policy</a> for details.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <div class="orb orb-cta-1"></div>
+        <div class="orb orb-cta-2"></div>
+        <h2>Ready to grow your server?</h2>
+        <p>Join 12,400+ Discord servers already using Bumpify to drive real growth.</p>
+        <a href="https://discord.com/oauth2/authorize" target="_blank" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.003.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Add Bumpify to Discord
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="#" class="nav-logo">
+            <span class="logo-icon">🚀</span>
+            <span class="logo-text">Bumpify</span>
+          </a>
+          <p>The smartest way to grow your Discord server through automated bumping and community engagement.</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#commands">Commands</a></li>
+            <li><a href="#stats">Stats</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="privacy.html">Privacy Policy</a></li>
+            <li><a href="terms.html">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-group">
+          <h4>Add the Bot</h4>
+          <ul>
+            <li><a href="https://discord.com/oauth2/authorize" target="_blank">Invite Bumpify</a></li>
+            <li><a href="https://discord.gg/" target="_blank">Support Server</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Bumpify. All rights reserved. Not affiliated with Discord Inc.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
