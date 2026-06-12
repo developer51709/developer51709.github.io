@@ -1,4 +1,11 @@
 // ============================================================
+// DEVICE DETECTION
+// ============================================================
+
+const isTouch = window.matchMedia('(pointer: coarse)').matches;
+const isMobile = window.innerWidth < 768;
+
+// ============================================================
 // CANVAS BACKGROUND — Aurora / Particle mesh
 // ============================================================
 
@@ -15,7 +22,7 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-const PARTICLE_COUNT = 80;
+const PARTICLE_COUNT = isMobile ? 35 : 80;
 const COLORS = [
   'rgba(167,139,250,',
   'rgba(96,165,250,',
@@ -138,10 +145,12 @@ function animateTrail() {
 }
 animateTrail();
 
-document.querySelectorAll('a, button, .project-card, .contact-card, .skill-card').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-});
+if (!isTouch) {
+  document.querySelectorAll('a, button, .project-card, .contact-card, .skill-card').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+}
 
 // ============================================================
 // NAVBAR SCROLL
@@ -212,45 +221,47 @@ document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right').forEach(el 
 });
 
 // ============================================================
-// PROFILE CARD 3D TILT
+// PROFILE CARD 3D TILT (desktop only)
 // ============================================================
 
-const profileCard = document.getElementById('profileCard');
-if (profileCard) {
-  let tiltAnimId;
+if (!isTouch) {
+  const profileCard = document.getElementById('profileCard');
+  if (profileCard) {
+    profileCard.addEventListener('mousemove', e => {
+      const rect = profileCard.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const rx = ((e.clientY - cy) / (rect.height / 2)) * -8;
+      const ry = ((e.clientX - cx) / (rect.width / 2)) * 8;
+      profileCard.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+    });
 
-  profileCard.addEventListener('mousemove', e => {
-    const rect = profileCard.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const rx = ((e.clientY - cy) / (rect.height / 2)) * -8;
-    const ry = ((e.clientX - cx) / (rect.width / 2)) * 8;
-    profileCard.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
-  });
-
-  profileCard.addEventListener('mouseleave', () => {
-    profileCard.style.transform = 'rotateX(0) rotateY(0) scale(1)';
-  });
+    profileCard.addEventListener('mouseleave', () => {
+      profileCard.style.transform = 'rotateX(0) rotateY(0) scale(1)';
+    });
+  }
 }
 
 // ============================================================
-// MAGNETIC BUTTONS
+// MAGNETIC BUTTONS (desktop only)
 // ============================================================
 
-document.querySelectorAll('.magnetic').forEach(btn => {
-  btn.addEventListener('mousemove', e => {
-    const rect = btn.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) * 0.3;
-    const dy = (e.clientY - cy) * 0.3;
-    btn.style.transform = `translate(${dx}px, ${dy}px)`;
-  });
+if (!isTouch) {
+  document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) * 0.3;
+      const dy = (e.clientY - cy) * 0.3;
+      btn.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
 
-  btn.addEventListener('mouseleave', () => {
-    btn.style.transform = '';
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
   });
-});
+}
 
 // ============================================================
 // COUNT-UP ANIMATION
