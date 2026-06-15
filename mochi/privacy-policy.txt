@@ -1,0 +1,11 @@
+MochiMe Privacy Policy (Temporary)
+
+Last updated: June 15, 2026
+
+MochiMe respects your privacy. The bot does not collect, share, or sell personal information. All data processed by MochiMe is limited to Discord-provided identifiers (user IDs, server IDs, message content for command handling) and is stored only as needed for functionality.
+
+No external APIs are used except for static image assets. MochiMe does not log IP addresses, emails, or any sensitive information.
+
+Data stored locally (such as moderation logs or emoji IDs) is used solely to improve bot performance and is never shared outside Discord.
+
+If you have concerns or wish to request data removal, please contact the developer through Discord.
