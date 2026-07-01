@@ -175,7 +175,7 @@
       if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
       return n.toLocaleString();
     }
-    fetch('/api/botstats').then(r => r.json()).then(s => {
+    fetch('https://github.com/developer51709/Niko/blob/c08e486b8cf7b1f3f8df524df58f691f20d82bd9/data/bot_stats.json').then(r => r.json()).then(s => {
       const el = id => document.getElementById(id);
       if (el('stat-servers')) el('stat-servers').textContent = fmtNum(s.guild_count);
       if (el('stat-users'))   el('stat-users').textContent   = fmtNum(s.user_count);
