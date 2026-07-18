@@ -51,7 +51,7 @@ const CONFIG = {
       ],
     },
   },
-  seo: { title: 'Sorens Portfolio <3', description: '', imageURL: '' },
+  seo: { title: 'Sorens Portfolio :3', description: '', imageURL: '' },
   social: {
     linkedin: '',
     x: '',
