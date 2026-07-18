@@ -56,7 +56,7 @@ const CONFIG = {
   seo: {
     title: 'Soren — Building Modern Web & Bot Experiences',
     description: 'Exploring clean design, smooth interactions, and creative development across web and bot projects.',
-    imageURL: 'https://github.com/developer51709/developer51709/blob/ccce9bcc4d3fb70d57a3f23c5451ac1c984895d8/assets/og_banner.png',
+    imageURL: '/og_banner.png',
   },
   social: {
     linkedin: '',
