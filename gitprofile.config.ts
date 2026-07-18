@@ -208,7 +208,7 @@ const CONFIG = {
   },
 
   // Optional Footer. Supports plain text or HTML.
-  footer: `Soren <3`,
+  footer: `Soren &lt;3`,
 
   enablePWA: true,
 };
