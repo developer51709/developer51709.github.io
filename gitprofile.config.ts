@@ -79,6 +79,14 @@ const CONFIG = {
     website: 'https://nyxen.is-a.dev',
     phone: '',
     email: 'developer51709@proton.me',
+    tiktok: '', // example: 'myusername'
+    twitch: '', // example: 'myusername'
+    snapchat: '', // example: 'myusername'
+    pinterest: '', // example: 'myusername'
+    bluesky: '', // example: 'user.bsky.social'
+    patreon: '', // example: 'myusername'
+    spotify: '', // example: 'myuserid'
+    soundcloud: '', // example: 'myusername'
   },
   resume: {
     fileUrl:

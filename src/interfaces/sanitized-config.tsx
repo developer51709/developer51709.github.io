@@ -63,6 +63,14 @@ export interface SanitizedSocial {
   phone?: string;
   email?: string;
   discord?: string;
+  tiktok?: string;
+  twitch?: string;
+  snapchat?: string;
+  pinterest?: string;
+  bluesky?: string;
+  patreon?: string;
+  spotify?: string;
+  soundcloud?: string;
 }
 
 export interface SanitizedResume {

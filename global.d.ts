@@ -206,6 +206,46 @@ interface Social {
    * Discord username
    */
   discord?: string;
+
+  /**
+   * TikTok username
+   */
+  tiktok?: string;
+
+  /**
+   * Twitch username
+   */
+  twitch?: string;
+
+  /**
+   * Snapchat username
+   */
+  snapchat?: string;
+
+  /**
+   * Pinterest username
+   */
+  pinterest?: string;
+
+  /**
+   * Bluesky handle (e.g. 'user.bsky.social')
+   */
+  bluesky?: string;
+
+  /**
+   * Patreon username
+   */
+  patreon?: string;
+
+  /**
+   * Spotify artist/user ID or profile URL slug
+   */
+  spotify?: string;
+
+  /**
+   * SoundCloud username
+   */
+  soundcloud?: string;
 }
 
 interface Resume {

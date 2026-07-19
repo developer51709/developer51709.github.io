@@ -13,12 +13,18 @@ import {
   FaGlobe,
   FaLinkedin,
   FaMastodon,
+  FaPatreon,
+  FaPinterest,
   FaReddit,
+  FaSnapchat,
+  FaSoundcloud,
+  FaSpotify,
   FaStackOverflow,
   FaTelegram,
+  FaTwitch,
   FaYoutube,
 } from 'react-icons/fa';
-import { FaSquareThreads } from 'react-icons/fa6';
+import { FaBluesky, FaSquareThreads, FaTiktok } from 'react-icons/fa6';
 import { MdLocationOn } from 'react-icons/md';
 import { RiDiscordFill, RiMailFill, RiPhoneFill } from 'react-icons/ri';
 import { SiResearchgate, SiX, SiUdemy } from 'react-icons/si';
@@ -365,6 +371,70 @@ const DetailsCard = ({ profile, loading, social, github }: Props) => {
                   title="Discord:"
                   value={social.discord}
                   link={`https://discord.com/app`}
+                />
+              )}
+              {social?.tiktok && (
+                <ListItem
+                  icon={<FaTiktok />}
+                  title="TikTok:"
+                  value={`@${social.tiktok}`}
+                  link={`https://www.tiktok.com/@${social.tiktok}`}
+                />
+              )}
+              {social?.twitch && (
+                <ListItem
+                  icon={<FaTwitch />}
+                  title="Twitch:"
+                  value={social.twitch}
+                  link={`https://www.twitch.tv/${social.twitch}`}
+                />
+              )}
+              {social?.snapchat && (
+                <ListItem
+                  icon={<FaSnapchat />}
+                  title="Snapchat:"
+                  value={social.snapchat}
+                  link={`https://www.snapchat.com/add/${social.snapchat}`}
+                />
+              )}
+              {social?.pinterest && (
+                <ListItem
+                  icon={<FaPinterest />}
+                  title="Pinterest:"
+                  value={social.pinterest}
+                  link={`https://www.pinterest.com/${social.pinterest}`}
+                />
+              )}
+              {social?.bluesky && (
+                <ListItem
+                  icon={<FaBluesky />}
+                  title="Bluesky:"
+                  value={social.bluesky}
+                  link={`https://bsky.app/profile/${social.bluesky}`}
+                />
+              )}
+              {social?.patreon && (
+                <ListItem
+                  icon={<FaPatreon />}
+                  title="Patreon:"
+                  value={social.patreon}
+                  link={`https://www.patreon.com/${social.patreon}`}
+                />
+              )}
+              {social?.spotify && (
+                <ListItem
+                  icon={<FaSpotify />}
+                  title="Spotify:"
+                  value={social.spotify}
+                  link={`https://open.spotify.com/user/${social.spotify}`}
+                />
+              )}
+              {social?.soundcloud && (
+                <ListItem
+                  icon={<FaSoundcloud />}
+                  title="SoundCloud:"
+                  value={social.soundcloud}
+                  link={`https://soundcloud.com/${social.soundcloud}`}
                 />
               )}
             </Fragment>
