@@ -132,6 +132,11 @@ export interface SanitizedThemeConfig {
   themes: Array<string>;
 }
 
+export interface SanitizedLanyard {
+  display: boolean;
+  userId: string;
+}
+
 export interface SanitizedConfig {
   github: SanitizedGithub;
   projects: SanitizedProjects;
@@ -149,4 +154,5 @@ export interface SanitizedConfig {
   themeConfig: SanitizedThemeConfig;
   footer?: string;
   enablePWA: boolean;
+  lanyard: SanitizedLanyard;
 }

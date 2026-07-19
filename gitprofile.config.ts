@@ -228,6 +228,20 @@ const CONFIG = {
     ],
   },
 
+  /**
+   * Lanyard Discord Presence integration.
+   *
+   * ⚠️ You must join discord.gg/lanyard for this integration to work.
+   *    Simply join the server with the Discord account you want to track.
+   *
+   * To find your Discord User ID: open Discord, enable Developer Mode
+   * (Settings → Advanced), then right-click your avatar and click "Copy User ID".
+   */
+  lanyard: {
+    display: true,
+    userId: '1052690741874401360',
+  },
+
   // Optional Footer. Supports plain text or HTML.
   footer: `Soren &lt;3`,
 

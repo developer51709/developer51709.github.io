@@ -136,6 +136,10 @@ export const getSanitizedConfig = (
       },
       footer: config?.footer,
       enablePWA: config?.enablePWA ?? true,
+      lanyard: {
+        display: config?.lanyard?.display ?? false,
+        userId: config?.lanyard?.userId ?? '',
+      },
     };
   } catch (error) {
     return {};

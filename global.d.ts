@@ -351,6 +351,21 @@ interface ThemeConfig {
   themes?: Array<string>;
 }
 
+interface Lanyard {
+  /**
+   * Enable the Discord Presence card powered by Lanyard.
+   *
+   * ⚠️ The Discord user must join discord.gg/lanyard for this integration to work.
+   */
+  display?: boolean;
+
+  /**
+   * Your Discord user ID (right-click your avatar in Discord → Copy User ID).
+   * The user must be a member of discord.gg/lanyard for their presence to be tracked.
+   */
+  userId?: string;
+}
+
 interface Config {
   /**
    * GitHub config
@@ -436,6 +451,12 @@ interface Config {
    * Enable PWA
    */
   enablePWA?: boolean;
+
+  /**
+   * Lanyard Discord Presence integration.
+   * ⚠️ The Discord user must join discord.gg/lanyard for this to work.
+   */
+  lanyard?: Lanyard;
 }
 
 declare const CONFIG: Config;

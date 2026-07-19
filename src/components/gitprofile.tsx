@@ -28,6 +28,7 @@ import ExternalProjectCard from './external-project-card';
 import BlogCard from './blog-card';
 import Footer from './footer';
 import PublicationCard from './publication-card';
+import DiscordPresenceCard from './discord-presence-card';
 
 /**
  * Renders the GitProfile component.
@@ -204,6 +205,10 @@ const GitProfile = ({ config }: { config: Config }) => {
                     loading={loading}
                     avatarRing={sanitizedConfig.themeConfig.displayAvatarRing}
                     resumeFileUrl={sanitizedConfig.resume.fileUrl}
+                  />
+                  <DiscordPresenceCard
+                    lanyard={sanitizedConfig.lanyard}
+                    loading={loading}
                   />
                   <DetailsCard
                     profile={profile}
