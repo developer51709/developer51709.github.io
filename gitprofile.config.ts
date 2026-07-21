@@ -67,25 +67,25 @@ const CONFIG = {
     instagram: '',
     reddit: '',
     threads: '',
-    youtube: 'nyxenwastaken', // example: 'pewdiepie'
+    youtube: 'sorenthedev', // example: 'pewdiepie'
     udemy: '',
     dribbble: '',
     behance: '',
     medium: '',
     dev: 'developer51709',
-    stackoverflow: '', // example: '1/jeff-atwood'
+    stackoverflow: '32959452/soren', // example: '1/jeff-atwood'
     discord: 'sorenthedev',
     telegram: '',
-    website: 'https://nyxen.is-a.dev',
+    website: 'https://soren.is-a.dev',
     phone: '',
     email: 'developer51709@proton.me',
     tiktok: '', // example: 'myusername'
     twitch: '', // example: 'myusername'
     snapchat: '', // example: 'myusername'
-    pinterest: '', // example: 'myusername'
+    pinterest: 'sorenthedev', // example: 'myusername'
     bluesky: '', // example: 'user.bsky.social'
     patreon: '', // example: 'myusername'
-    spotify: '', // example: 'myuserid'
+    spotify: '31kc6tv66sgkold3ojvlnyejkbn4', // example: 'myuserid'
     soundcloud: '', // example: 'myusername'
   },
   resume: {
@@ -243,7 +243,7 @@ const CONFIG = {
   },
 
   // Optional Footer. Supports plain text or HTML.
-  footer: `Soren &lt;3`,
+  footer: `Soren 2026 &lt;3`,
 
   enablePWA: true,
 };
