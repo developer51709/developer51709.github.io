@@ -77,7 +77,7 @@ const CONFIG = {
     discord: 'sorenthedev',
     telegram: '',
     website: 'https://soren.is-a.dev',
-    phone: '',
+    phone: '+1 ‪(762) 435-4135‬',
     email: 'developer51709@proton.me',
     tiktok: '', // example: 'myusername'
     twitch: '', // example: 'myusername'
