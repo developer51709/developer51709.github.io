@@ -1,0 +1,45 @@
+Kiri Ban Sync — Privacy Policy
+Last Updated: July 31, 2026
+
+1. Overview
+This Privacy Policy explains what information Kiri Ban Sync (“the Bot”) can access and how it is used. The Bot is designed with privacy first and collects no external data.
+
+2. Data the Bot Can Access
+The Bot only accesses data provided by Discord’s API, including:
+- User IDs involved in ban actions
+- Server IDs
+- Moderator command inputs
+- Basic guild information required for functionality
+
+This information is not stored, not logged externally, and not shared.
+
+3. Data Storage
+The Bot does not store:
+- IP addresses
+- Emails
+- Messages
+- Personal identifiers
+- Ban history outside Discord
+- Any data on external servers
+
+All processing happens in real time and remains inside Discord.
+
+4. How Data Is Used
+Data is used only to:
+- Execute ban synchronization
+- Verify moderator permissions
+- Perform requested moderation actions
+
+No data is used for analytics, advertising, profiling, or tracking.
+
+5. Third Parties
+The Bot does not share data with any third parties. No external databases, logging systems, or analytics platforms are used.
+
+6. Data Removal
+Because the Bot does not store data, there is nothing to delete. Removing the Bot from your server immediately ends all access.
+
+7. Changes to This Policy
+Updates may occur to remain compliant with Discord’s policies. Continued use of the Bot means you accept the updated policy.
+
+8. Contact
+For privacy questions, contact the developer through Discord: Kiri Ban Sync Support.
