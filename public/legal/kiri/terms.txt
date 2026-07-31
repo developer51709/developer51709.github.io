@@ -1,0 +1,35 @@
+Kiri Ban Sync — Terms of Service
+Last Updated: July 31, 2026
+
+1. Overview
+Kiri Ban Sync (“the Bot”) is a Discord moderation tool that synchronizes bans across servers where it is installed. By using the Bot, you agree to these Terms of Service.
+
+2. Eligibility
+You must comply with Discord’s Terms of Service and Community Guidelines. Use of the Bot is only permitted for users aged 13 or older.
+
+3. Intended Use
+The Bot provides automated moderation functionality, including:
+- Synchronizing bans between connected servers
+- Executing moderation commands issued by authorized staff
+- Logging ban actions inside Discord only
+
+The Bot must not be used for harassment, targeted punishment, or malicious activity.
+
+4. User Responsibilities
+You agree to:
+- Use the Bot in accordance with Discord’s rules
+- Only authorize trusted staff to use moderation commands
+- Not attempt to exploit, reverse engineer, or damage the Bot or its infrastructure
+
+5. Data Handling
+The Bot does not store any personal data outside of Discord. All actions occur within Discord’s platform using data already visible to server moderators.
+
+6. Service Availability
+The Bot is provided “as is” with no guarantee of uptime, performance, or continued availability. Features may change at any time.
+
+7. Termination
+You may remove the Bot from your server at any time. The Bot may also restrict access or leave a server if it detects abuse or violations of Discord’s policies.
+
+8. Contact
+For questions or issues, contact the developer through Discord: sorenthedev
+
