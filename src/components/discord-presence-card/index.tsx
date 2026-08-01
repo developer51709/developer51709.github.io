@@ -50,6 +50,7 @@ function getStatusIcon(
   mobile: boolean,
   streaming: boolean,
 ): string {
+  if (streaming) return `/discord-status/status_streaming.png`;
   if (mobile) return `/discord-status/status_${status}_mobile.png`;
   return `/discord-status/status_${status}.png`;
 }
