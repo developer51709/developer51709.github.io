@@ -22,15 +22,12 @@ function resolveActivityImage(
   applicationId: string | undefined,
 ): string | undefined {
   if (!image) return undefined;
-  // External media proxied by Discord (mp:external/... or mp:attachments/...)
   if (image.startsWith('mp:')) {
     return `https://media.discordapp.net/${image.slice(3)}`;
   }
-  // Already a full URL
   if (image.startsWith('https://') || image.startsWith('http://')) {
     return image;
   }
-  // Plain asset ID — requires application_id
   if (applicationId) {
     return `https://cdn.discordapp.com/app-assets/${applicationId}/${image}.png`;
   }
@@ -44,7 +41,7 @@ const STATUS_LABELS: Record<DiscordStatus, string> = {
   offline: 'Offline',
 };
 
-/** Returns the path to the appropriate status icon based on status and platform. */
+/** Returns the path to the appropriate status icon. */
 function getStatusIcon(
   status: DiscordStatus,
   mobile: boolean,
@@ -63,13 +60,14 @@ function formatMs(ms: number): string {
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-/** Returns the first visible non-custom, non-spotify activity. */
-function getMainActivity(activities: LanyardActivity[]): LanyardActivity | null {
-  return (
-    activities.find(
-      (a) => a.type !== 4 && a.name !== 'Spotify',
-    ) ?? null
-  );
+/** Returns all non-custom, non-Spotify activities. */
+function getActivities(activities: LanyardActivity[]): LanyardActivity[] {
+  return activities.filter((a) => a.type !== 4 && a.name !== 'Spotify');
+}
+
+/** Returns the custom status activity (type 4), if any. */
+function getCustomStatus(activities: LanyardActivity[]): LanyardActivity | null {
+  return activities.find((a) => a.type === 4) ?? null;
 }
 
 const ACTIVITY_TYPE_LABELS: Record<number, string> = {
@@ -82,10 +80,10 @@ const ACTIVITY_TYPE_LABELS: Record<number, string> = {
 
 // --- Spotify Progress Bar ---
 
-const SpotifyProgress: React.FC<{
-  start: number;
-  end: number;
-}> = ({ start, end }) => {
+const SpotifyProgress: React.FC<{ start: number; end: number }> = ({
+  start,
+  end,
+}) => {
   const duration = end - start;
   const [elapsed, setElapsed] = useState(() => Date.now() - start);
   const rafRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -110,10 +108,7 @@ const SpotifyProgress: React.FC<{
       <div className="flex-1 h-1 rounded-full bg-base-300 overflow-hidden">
         <div
           className="h-full rounded-full bg-primary"
-          style={{
-            width: `${progress * 100}%`,
-            transition: 'width 1s linear',
-          }}
+          style={{ width: `${progress * 100}%`, transition: 'width 1s linear' }}
         />
       </div>
       <span className="text-xs opacity-50 tabular-nums w-8">
@@ -123,6 +118,95 @@ const SpotifyProgress: React.FC<{
   );
 };
 
+// --- Activity Card ---
+
+const ActivityCard: React.FC<{ activity: LanyardActivity }> = ({
+  activity,
+}) => {
+  const largeImg = resolveActivityImage(
+    activity.assets?.large_image,
+    activity.application_id,
+  );
+  const smallImg = resolveActivityImage(
+    activity.assets?.small_image,
+    activity.application_id,
+  );
+  const hasImage = !!(largeImg || smallImg);
+
+  return (
+    <div className="mt-1 p-2 rounded-lg bg-base-200 flex items-start gap-2">
+      {hasImage && (
+        <div className="relative flex-shrink-0 w-12 h-12">
+          {largeImg ? (
+            <img
+              src={largeImg}
+              alt={activity.assets?.large_text ?? activity.name}
+              title={activity.assets?.large_text}
+              className="w-12 h-12 rounded-lg object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          ) : (
+            <img
+              src={smallImg}
+              alt={activity.assets?.small_text ?? activity.name}
+              title={activity.assets?.small_text}
+              className="w-12 h-12 rounded-lg object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          )}
+          {largeImg && smallImg && (
+            <img
+              src={smallImg}
+              alt={activity.assets?.small_text ?? ''}
+              title={activity.assets?.small_text}
+              className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full ring-2 ring-base-200 object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          )}
+        </div>
+      )}
+
+      <div className="min-w-0 flex-1">
+        <div className="text-xs font-semibold text-base-content opacity-80 truncate">
+          {ACTIVITY_TYPE_LABELS[activity.type] ?? 'Playing'} {activity.name}
+        </div>
+        {activity.details && (
+          <div className="text-xs opacity-50 truncate">{activity.details}</div>
+        )}
+        {activity.state && (
+          <div className="text-xs opacity-40 truncate">{activity.state}</div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// --- Clan Tag ---
+
+const ClanTag: React.FC<{
+  tag: string;
+  badge: string;
+  guildId: string;
+}> = ({ tag, badge, guildId }) => (
+  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-base-200 text-base-content text-xs font-semibold opacity-80 leading-none flex-shrink-0">
+    <img
+      src={`https://cdn.discordapp.com/clan-badges/${guildId}/${badge}.png?size=16`}
+      alt={tag}
+      className="w-3 h-3 object-contain"
+      onError={(e) => {
+        (e.target as HTMLImageElement).style.display = 'none';
+      }}
+    />
+    {tag}
+  </span>
+);
+
 // --- Main Component ---
 
 const DiscordPresenceCard: React.FC<Props> = ({ lanyard, loading }) => {
@@ -130,7 +214,7 @@ const DiscordPresenceCard: React.FC<Props> = ({ lanyard, loading }) => {
 
   if (!lanyard.display) return null;
 
-  // Skeleton while GitHub profile is still loading (first render)
+  // Skeleton while GitHub profile is loading
   if (loading && !presence) {
     return (
       <div className="card shadow-lg card-sm bg-base-100">
@@ -140,7 +224,11 @@ const DiscordPresenceCard: React.FC<Props> = ({ lanyard, loading }) => {
             {skeleton({ widthCls: 'w-28', heightCls: 'h-4' })}
           </div>
           <div className="flex items-center gap-3">
-            {skeleton({ widthCls: 'w-9', heightCls: 'h-9', shape: 'rounded-full' })}
+            {skeleton({
+              widthCls: 'w-9',
+              heightCls: 'h-9',
+              shape: 'rounded-full',
+            })}
             <div className="flex flex-col gap-1 flex-1">
               {skeleton({ widthCls: 'w-32', heightCls: 'h-4' })}
               {skeleton({ widthCls: 'w-20', heightCls: 'h-3' })}
@@ -163,126 +251,144 @@ const DiscordPresenceCard: React.FC<Props> = ({ lanyard, loading }) => {
   } = presence;
 
   const isStreaming = activities.some((a) => a.type === 1);
-  const statusIcon = getStatusIcon(discord_status, active_on_discord_mobile, isStreaming);
+  const statusIcon = getStatusIcon(
+    discord_status,
+    active_on_discord_mobile,
+    isStreaming,
+  );
   const statusLabel = STATUS_LABELS[discord_status] ?? discord_status;
-  const mainActivity = getMainActivity(activities);
+  const mainActivities = getActivities(activities);
+  const customStatus = getCustomStatus(activities);
+
+  const avatarUrl = discord_user.avatar
+    ? `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.png?size=128`
+    : `https://cdn.discordapp.com/embed/avatars/${parseInt(discord_user.discriminator || '0') % 5}.png`;
+
+  const decorationUrl = discord_user.avatar_decoration_data?.asset
+    ? `https://cdn.discordapp.com/avatar-decoration-presets/${discord_user.avatar_decoration_data.asset}.png?size=128`
+    : null;
+
+  const clan = discord_user.primary_guild;
+  const hasClan = clan && clan.tag && clan.badge && clan.identity_guild_id;
+
+  // Nameplate: banner color from user's Discord profile (Nitro theme), falling back to a
+  // subtle base-200 gradient when no color is available.
+  const bannerColor = discord_user.banner_color;
+  const showNameplate = lanyard.showNameplate;
 
   return (
-    <div className="card shadow-lg card-sm bg-base-100">
-      <div className="card-body">
+    <div className="card shadow-lg card-sm bg-base-100 overflow-hidden">
+      {/* Nameplate strip — sits at top of the card above the body */}
+      {showNameplate && (
+        <div
+          className="h-10 w-full flex-shrink-0"
+          style={
+            bannerColor
+              ? {
+                  background: `linear-gradient(135deg, ${bannerColor}cc 0%, ${bannerColor}66 100%)`,
+                }
+              : {
+                  background:
+                    'linear-gradient(135deg, color-mix(in srgb, var(--color-primary) 20%, var(--color-base-200)) 0%, var(--color-base-200) 100%)',
+                }
+          }
+        />
+      )}
+
+      <div className={`card-body ${showNameplate ? 'pt-2' : ''}`}>
         {/* Header */}
         <div className="flex items-center gap-2 mb-1 text-base-content opacity-60 text-xs font-semibold uppercase tracking-wider">
           <RiDiscordFill className="text-sm" />
           Discord Presence
         </div>
 
-        {/* Status Row — avatar with status indicator badge */}
+        {/* Status Row — avatar with decoration overlay, status badge, name, clan tag */}
         <div className="flex items-center gap-3 py-1">
-          {/* Avatar + status badge */}
-          <div className="relative flex-shrink-0 w-11 h-11">
+          {/* Avatar container — pulls up into nameplate when enabled */}
+          <div
+            className={`relative flex-shrink-0 w-11 h-11 ${showNameplate ? '-mt-8' : ''}`}
+          >
+            {/* Base avatar */}
             <img
-              src={
-                discord_user.avatar
-                  ? `https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.png?size=64`
-                  : `https://cdn.discordapp.com/embed/avatars/${parseInt(discord_user.discriminator || '0') % 5}.png`
-              }
+              src={avatarUrl}
               alt={discord_user.username}
-              className="w-11 h-11 rounded-full object-cover"
+              className="w-11 h-11 rounded-full object-cover ring-2 ring-base-100"
             />
-            {/* Status icon pinned to bottom-right of avatar */}
+
+            {/* Avatar decoration overlay */}
+            {decorationUrl && (
+              <img
+                src={decorationUrl}
+                alt="avatar decoration"
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                style={{ transform: 'scale(1.2)' }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            )}
+
+            {/* Status icon — slightly smaller with ring cutout */}
             <img
               src={statusIcon}
               alt={discord_status}
-              className="absolute -bottom-1 -right-1 w-5 h-5"
+              className="absolute -bottom-0.5 -right-0.5 w-4 h-4 ring-2 ring-base-100 rounded-full"
             />
           </div>
 
           <div className="min-w-0 flex-1">
-            <div className="font-semibold text-sm text-base-content truncate">
-              {discord_user.global_name || discord_user.username}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-semibold text-sm text-base-content truncate">
+                {discord_user.global_name || discord_user.username}
+              </span>
+              {hasClan && (
+                <ClanTag
+                  tag={clan.tag}
+                  badge={clan.badge}
+                  guildId={clan.identity_guild_id}
+                />
+              )}
             </div>
-            <div className="text-xs opacity-50">
+
+            <div className="text-xs opacity-50 truncate">
               {isStreaming ? 'Streaming' : statusLabel}
               {active_on_discord_mobile && !isStreaming && ' · Mobile'}
             </div>
           </div>
-          {isStreaming && (
-            <span className="ml-auto badge badge-error badge-sm text-white font-bold tracking-wide">
-              LIVE
-            </span>
-          )}
         </div>
 
-        {/* Non-Spotify Activity */}
-        {mainActivity && !listening_to_spotify && (() => {
-          const largeImg = resolveActivityImage(
-            mainActivity.assets?.large_image,
-            mainActivity.application_id,
-          );
-          const smallImg = resolveActivityImage(
-            mainActivity.assets?.small_image,
-            mainActivity.application_id,
-          );
-          const hasImage = !!(largeImg || smallImg);
-
-          return (
-            <div className="mt-1 p-2 rounded-lg bg-base-200 flex items-start gap-2">
-              {/* Activity artwork: large image with small image badge in corner */}
-              {hasImage && (
-                <div className="relative flex-shrink-0 w-12 h-12">
-                  {largeImg ? (
-                    <img
-                      src={largeImg}
-                      alt={mainActivity.assets?.large_text ?? mainActivity.name}
-                      title={mainActivity.assets?.large_text}
-                      className="w-12 h-12 rounded-lg object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    /* No large image — promote small image to fill the slot */
-                    <img
-                      src={smallImg}
-                      alt={mainActivity.assets?.small_text ?? mainActivity.name}
-                      title={mainActivity.assets?.small_text}
-                      className="w-12 h-12 rounded-lg object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  )}
-                  {/* Small badge overlaid on the large image */}
-                  {largeImg && smallImg && (
-                    <img
-                      src={smallImg}
-                      alt={mainActivity.assets?.small_text ?? ''}
-                      title={mainActivity.assets?.small_text}
-                      className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-base-200 object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  )}
-                </div>
-              )}
-
-              {/* Activity text */}
-              <div className="min-w-0 flex-1">
-                <div className="text-xs font-semibold text-base-content opacity-80 truncate">
-                  {ACTIVITY_TYPE_LABELS[mainActivity.type] ?? 'Playing'}{' '}
-                  {mainActivity.name}
-                </div>
-                {mainActivity.details && (
-                  <div className="text-xs opacity-50 truncate">{mainActivity.details}</div>
+        {/* Custom status (type 4) */}
+        {customStatus && (customStatus.state || customStatus.emoji) && (
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-base-200 text-xs text-base-content opacity-70">
+            {customStatus.emoji && (
+              <span className="flex-shrink-0 text-sm leading-none">
+                {customStatus.emoji.id ? (
+                  <img
+                    src={`https://cdn.discordapp.com/emojis/${customStatus.emoji.id}.${customStatus.emoji.animated ? 'gif' : 'png'}?size=20`}
+                    alt={customStatus.emoji.name}
+                    className="w-4 h-4 object-contain inline"
+                    onError={(e) => {
+                      // fallback to unicode name
+                      (e.target as HTMLImageElement).replaceWith(
+                        document.createTextNode(customStatus.emoji!.name),
+                      );
+                    }}
+                  />
+                ) : (
+                  <span>{customStatus.emoji.name}</span>
                 )}
-                {mainActivity.state && (
-                  <div className="text-xs opacity-40 truncate">{mainActivity.state}</div>
-                )}
-              </div>
-            </div>
-          );
-        })()}
+              </span>
+            )}
+            {customStatus.state && (
+              <span className="truncate">{customStatus.state}</span>
+            )}
+          </div>
+        )}
+
+        {/* Non-Spotify Activities — all of them, in order */}
+        {mainActivities.map((activity) => (
+          <ActivityCard key={activity.id} activity={activity} />
+        ))}
 
         {/* Spotify Section */}
         {listening_to_spotify && spotify && (
