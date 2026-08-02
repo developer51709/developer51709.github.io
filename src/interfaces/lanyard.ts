@@ -73,7 +73,7 @@ export interface LanyardDiscordUser {
   /** Avatar decoration data, present when user has an active decoration */
   avatar_decoration_data?: LanyardAvatarDecoration | null;
   /** Clan / guild tag data */
-  clan?: LanyardClan | null;
+  primary_guild?: LanyardClan | null;
 }
 
 export interface LanyardData {
