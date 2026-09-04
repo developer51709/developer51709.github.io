@@ -48,21 +48,17 @@ interface GithubStats {
   totalForks: number;
 }
 
-interface GithubStatsResponse {
-  techStack: TechStackEntry[];
-  stats: GithubStats;
-}
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS
   const origin = req.headers.origin as string | undefined;
   const allowed = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map((o: string) => o.trim())
     : '*';
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    allowed === '*' ? '*' : (origin as string),
-  );
+  // Same-origin requests may omit the Origin header entirely — fall back to '*'
+  // so setHeader never receives undefined (throws ERR_HTTP_INVALID_HEADER_VALUE).
+  const corsOrigin =
+    allowed === '*' ? '*' : origin && allowed.includes(origin) ? origin : '*';
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();

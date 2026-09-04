@@ -22,15 +22,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS — the frontend may be served from a different domain than the API.
   const origin = req.headers.origin as string | undefined;
   const allowed = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+    ? process.env.ALLOWED_ORIGINS.split(',').map((o: string) => o.trim())
     : '*';
   if (allowed !== '*' && origin && !allowed.includes(origin)) {
     return res.status(403).json({ error: 'Origin not allowed' });
   }
-  res.setHeader(
-    'Access-Control-Allow-Origin',
-    allowed === '*' ? '*' : (origin as string),
-  );
+  // Never pass undefined to setHeader — same-origin requests may omit Origin.
+  const corsOrigin =
+    allowed === '*' ? '*' : origin && allowed.includes(origin) ? origin : '*';
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
