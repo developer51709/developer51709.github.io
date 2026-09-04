@@ -184,7 +184,7 @@ const GitProfile = ({ config }: { config: Config }) => {
   };
 
   return (
-    <div className="fade-in h-screen">
+    <div className="fade-in min-h-screen">
       <ThreeBackground />
       {error ? (
         <ErrorPage
@@ -194,21 +194,25 @@ const GitProfile = ({ config }: { config: Config }) => {
         />
       ) : (
         <>
-          <SponsorButton onClick={() => navigate('sponsor')} />
+          {route !== 'sponsor' && (
+            <SponsorButton onClick={() => navigate('sponsor')} />
+          )}
           {route === 'sponsor' ? (
             <SponsorPage onBack={() => navigate('')} />
           ) : (
-          <div className={`p-4 lg:p-10 min-h-full ${BG_COLOR}/80 backdrop-blur-sm`}>
+          <div className={`relative z-10 p-4 lg:p-10 min-h-full ${BG_COLOR}/80`}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
               <div className="col-span-1">
                 <div className="grid grid-cols-1 gap-6">
                   {!sanitizedConfig.themeConfig.disableSwitch && (
-                    <ThemeChanger
-                      theme={theme}
-                      setTheme={setTheme}
-                      loading={loading}
-                      themeConfig={sanitizedConfig.themeConfig}
-                    />
+                    <div className="relative z-30">
+                      <ThemeChanger
+                        theme={theme}
+                        setTheme={setTheme}
+                        loading={loading}
+                        themeConfig={sanitizedConfig.themeConfig}
+                      />
+                    </div>
                   )}
                   <AvatarCard
                     profile={profile}
@@ -293,7 +297,7 @@ const GitProfile = ({ config }: { config: Config }) => {
           )}
           {sanitizedConfig.footer && (
             <footer
-              className={`p-4 footer ${BG_COLOR} text-base-content footer-center`}
+              className={`relative z-10 p-4 footer ${BG_COLOR}/80 text-base-content footer-center`}
             >
               <div className="card card-sm bg-base-100 shadow-sm">
                 <Footer content={sanitizedConfig.footer} loading={loading} />
@@ -310,7 +314,7 @@ const GitProfile = ({ config }: { config: Config }) => {
 const SponsorButton = ({ onClick }: { onClick: () => void }) => (
   <button
     onClick={onClick}
-    className="btn btn-primary fixed bottom-6 right-6 z-50 shadow-lg gap-2 rounded-full px-5"
+    className="btn btn-primary glass-btn fixed bottom-6 right-6 z-50 shadow-lg gap-2 rounded-full px-5 text-base-content hover:text-base-content"
     aria-label="Sponsor this project"
   >
     <FaHeart className="w-4 h-4" />

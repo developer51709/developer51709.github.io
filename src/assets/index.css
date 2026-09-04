@@ -93,6 +93,25 @@ svg {
   vertical-align: unset;
 }
 
+/* Glassmorphism: cards and floating elements pick up the animated background */
+.card {
+  background-color: color-mix(in srgb, var(--color-base-100) 55%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 10%, transparent);
+}
+
+.glass-btn {
+  background-color: color-mix(in srgb, var(--color-base-100) 35%, transparent);
+  backdrop-filter: blur(12px) saturate(1.5);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+  border: 1px solid color-mix(in srgb, var(--color-base-content) 15%, transparent);
+}
+
+.glass-btn:hover {
+  background-color: color-mix(in srgb, var(--color-base-100) 55%, transparent);
+}
+
 .z-hover {
   transition: all ease-in-out 0.3s !important;
 }

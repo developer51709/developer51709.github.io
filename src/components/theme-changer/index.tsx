@@ -79,7 +79,7 @@ const ThemeChanger = ({
               </div>
               <div
                 tabIndex={0}
-                className="mt-16 overflow-y-auto shadow-2xl top-px dropdown-content max-h-96 min-w-max rounded-lg bg-base-200 text-base-content z-10"
+                className="mt-16 overflow-y-auto shadow-2xl top-px dropdown-content max-h-96 min-w-max rounded-lg bg-base-200 text-base-content z-50"
               >
                 <ul className="p-4 menu menu-sm">
                   {[
