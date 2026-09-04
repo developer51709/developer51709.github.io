@@ -1,6 +1,7 @@
 {
   "name": "api",
   "private": true,
+  "type": "module",
   "dependencies": {
     "@vercel/node": "^5.1.1"
   }
