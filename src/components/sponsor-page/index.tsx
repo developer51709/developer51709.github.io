@@ -30,9 +30,21 @@ const SponsorPage = ({ onBack }: { onBack: () => void }) => {
           description: 'Portfolio sponsorship',
         }),
       });
-      const data = await res.json();
+
+      // The function (or Vercel itself) may return plain text on crashes —
+      // e.g. "A server error has occurred". Never assume JSON.
+      const raw = await res.text();
+      let data: { paymentUrl?: string; error?: string } = {};
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        data = { error: raw || 'Payment service is unavailable' };
+      }
+
       if (!res.ok || !data.paymentUrl) {
-        throw new Error(data.error || 'Failed to start payment');
+        throw new Error(
+          data.error || `Failed to start payment (HTTP ${res.status})`,
+        );
       }
       window.location.href = data.paymentUrl as string;
     } catch (err) {

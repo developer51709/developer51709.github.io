@@ -60,6 +60,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'A positive `amount` is required' });
   }
 
+  if (typeof fetch !== 'function') {
+    return res.status(500).json({
+      error:
+        'Server runtime is too old (needs Node 18+ for fetch). Set the Node.js version in Vercel project settings.',
+    });
+  }
+
   try {
     const response = await fetch(OXAPAY_INVOICE_URL, {
       method: 'POST',
@@ -78,19 +85,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }),
     });
 
-    const data = (await response.json()) as {
+    // OxaPay may return plain text on gateway errors — never assume JSON.
+    const raw = await response.text();
+    let data: {
       status?: number;
       message?: string;
       data?: { payment_url?: string; track_id?: string };
       error?: { message?: string };
-    };
+    } | null = null;
+    try {
+      data = JSON.parse(raw);
+    } catch {
+      console.error('OxaPay returned non-JSON response:', raw.slice(0, 300));
+    }
 
     if (!response.ok || !data?.data?.payment_url) {
-      return res.status(response.status === 200 ? 502 : response.status).json({
+      return res.status(response.ok ? 502 : response.status).json({
         error:
           data?.error?.message ||
           data?.message ||
-          'Failed to create OxaPay invoice',
+          `Failed to create OxaPay invoice (HTTP ${response.status})`,
       });
     }
 
