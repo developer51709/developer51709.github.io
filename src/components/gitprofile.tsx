@@ -12,7 +12,6 @@ import '../assets/index.css';
 import { getSanitizedConfig, setupHotjar } from '../utils';
 import { SanitizedConfig } from '../interfaces/sanitized-config';
 import ErrorPage from './error-page';
-import { DEFAULT_THEMES } from '../constants/default-themes';
 import AvatarCard from './avatar-card';
 import { Profile } from '../interfaces/profile';
 import DetailsCard from './details-card';
@@ -39,7 +38,6 @@ const GitProfile = ({ config }: { config: Config }) => {
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
   );
-  const [theme] = useState<string>(DEFAULT_THEMES[0]);
   const [error, setError] = useState<CustomError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -141,10 +139,6 @@ const GitProfile = ({ config }: { config: Config }) => {
       loadData();
     }
   }, [sanitizedConfig, loadData]);
-
-  useEffect(() => {
-    theme && document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
 
   const handleError = (error: AxiosError | Error): void => {
     console.error('Error:', error);

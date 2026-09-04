@@ -5,7 +5,6 @@ import {
   AiOutlineBook,
 } from 'react-icons/ai';
 import { FaHeart } from 'react-icons/fa';
-import { BG_COLOR } from '../../constants';
 
 export type PageRoute = '' | 'projects' | 'articles' | 'sponsor';
 
@@ -32,9 +31,7 @@ interface PageLayoutProps {
 
 const PageLayout = ({ route, onNavigate, children }: PageLayoutProps) => (
   <>
-    <nav
-      className={`sticky top-0 z-40 flex justify-center px-4 pt-4 ${BG_COLOR ? '' : ''}`}
-    >
+    <nav className="sticky top-0 z-40 flex justify-center px-4 pt-4">
       <div className="glass-btn rounded-full shadow-lg flex items-center gap-1 p-1.5">
         {NAV_ITEMS.map((item) => (
           <button
@@ -52,7 +49,7 @@ const PageLayout = ({ route, onNavigate, children }: PageLayoutProps) => (
         ))}
       </div>
     </nav>
-    <div className={`relative z-10 min-h-[calc(100vh-72px)] p-4 lg:p-10 ${BG_COLOR}/80`}>
+    <div className="relative z-10 min-h-[calc(100vh-72px)] p-4 lg:p-10">
       {children}
     </div>
     <footer className="relative z-10 text-center pb-10 text-base-content/40 text-xs">

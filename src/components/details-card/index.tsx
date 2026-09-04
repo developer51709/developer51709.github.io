@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   AiFillGithub,
   AiFillInstagram,
@@ -61,6 +61,34 @@ const getFormattedMastodonValue = (
   } else {
     return `${username}@${server}`;
   }
+};
+
+const SpotifyItem: React.FC<{ userId: string }> = ({ userId }) => {
+  const [displayName, setDisplayName] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/spotify-user?id=${encodeURIComponent(userId)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then(
+        (data: { displayName?: string | null } | null) => {
+          if (!cancelled) setDisplayName(data?.displayName || null);
+        },
+        () => {},
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  return (
+    <ListItem
+      icon={<FaSpotify />}
+      title="Spotify:"
+      value={displayName || userId}
+      link={`https://open.spotify.com/user/${userId}`}
+    />
+  );
 };
 
 const ListItem: React.FC<{
@@ -421,14 +449,7 @@ const DetailsCard = ({ profile, loading, social, github }: Props) => {
                   link={`https://www.patreon.com/${social.patreon}`}
                 />
               )}
-              {social?.spotify && (
-                <ListItem
-                  icon={<FaSpotify />}
-                  title="Spotify:"
-                  value={social.spotify}
-                  link={`https://open.spotify.com/user/${social.spotify}`}
-                />
-              )}
+              {social?.spotify && <SpotifyItem userId={social.spotify} />}
               {social?.soundcloud && (
                 <ListItem
                   icon={<FaSoundcloud />}

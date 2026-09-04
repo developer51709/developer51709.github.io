@@ -1,24 +1,16 @@
 @import 'tailwindcss';
-@plugin "daisyui" {
-  themes:
-    'light', 'dark', 'cupcake', 'bumblebee', 'emerald', 'corporate',
-    'synthwave', 'retro', 'cyberpunk', 'valentine', 'halloween', 'garden',
-    'forest', 'aqua', 'lofi', 'pastel', 'fantasy', 'wireframe', 'black',
-    'luxury', 'dracula', 'cmyk', 'autumn', 'business', 'acid', 'lemonade',
-    'night', 'coffee', 'winter', 'dim', 'nord', 'sunset', 'caramellatte',
-    'abyss', 'silk', 'procyon';
-}
 
-@plugin "daisyui/theme" {
-  name: 'abyssdark';
-  color-scheme: dark;
-  default: true;
-  prefersdark: true;
-
+/*
+ * Design tokens (previously provided by daisyUI, now native Tailwind v4
+ * theme colors). Utilities like bg-base-100, text-base-content,
+ * bg-primary/10, border-base-300 all work from this block.
+ */
+@theme {
   --color-base-100: #101014;
   --color-base-200: #0a0a0e;
   --color-base-300: #060609;
   --color-base-content: #e7e7ec;
+
   --color-primary: #4f7cff;
   --color-primary-content: #ffffff;
   --color-secondary: #22c55e;
@@ -36,57 +28,225 @@
   --color-error: #f87171;
   --color-error-content: #450a0a;
 
-  --radius-selector: 1rem;
-  --radius-field: 0.75rem;
   --radius-box: 1.25rem;
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-  --border: 1px;
-  --depth: 0;
-  --noise: 0;
+  --radius-field: 0.75rem;
 }
 
-@plugin "daisyui/theme" {
-  name: 'procyon';
-  color-scheme: light;
+/* ---------------------------------------------------------------------------
+ * Component classes (formerly daisyUI)
+ * ------------------------------------------------------------------------- */
 
-  --color-base-100: #e3e3ed;
-  --color-base-200: #d1d1db;
-  --color-base-300: #bfbfc9;
-  --color-base-content: #2a2730;
-  --color-primary: #fc055b;
-  --color-primary-content: #ffffff;
-  --color-secondary: #219aaf;
-  --color-secondary-content: #ffffff;
-  --color-accent: #e8d03a;
-  --color-accent-content: #2a2730;
-  --color-neutral: #2a2730;
-  --color-neutral-content: #ffffff;
-  --color-info: #219aaf;
-  --color-info-content: #ffffff;
-  --color-success: #16a34a;
-  --color-success-content: #ffffff;
-  --color-warning: #e8d03a;
-  --color-warning-content: #2a2730;
-  --color-error: #dc2626;
-  --color-error-content: #ffffff;
-
-  /* border radius */
-  --radius-selector: 3rem;
-  --radius-field: 3rem;
-  --radius-box: 3rem;
-
-  /* base sizes */
-  --size-selector: 0.25rem;
-  --size-field: 0.25rem;
-
-  /* border size */
-  --border: 1px;
-
-  /* effects */
-  --depth: 1;
-  --noise: 0;
+/* Glassmorphic card. backdrop-filter blurs the animated background behind it;
+   the layered rgba() fallback keeps the frosted look in browsers/backdrop
+   roots where backdrop-filter is unavailable or won't capture the WebGL
+   canvas (e.g. certain compositing situations). */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-box);
+  background-color: rgba(16, 16, 20, 0.35);
+  border: 1px solid rgba(231, 231, 236, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
 }
+
+.card-body {
+  padding: 1.5rem;
+  flex: 1 1 auto;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: calc(var(--radius-field) * 2);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  padding: 0.5rem 1rem;
+  min-height: 2.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  user-select: none;
+}
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-base-content);
+}
+.btn-ghost:hover {
+  background-color: rgba(231, 231, 236, 0.08);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: rgba(231, 231, 236, 0.2);
+  color: var(--color-base-content);
+}
+.btn-outline:hover {
+  background-color: rgba(231, 231, 236, 0.08);
+}
+.btn-outline.btn-primary {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+}
+
+.btn-sm {
+  min-height: 2rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8125rem;
+}
+.btn-xs {
+  min-height: 1.5rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+/* Glass pill button (floating sponsor button, nav pill) */
+.glass-btn {
+  background-color: rgba(16, 16, 20, 0.25);
+  border: 1px solid rgba(231, 231, 236, 0.15);
+  backdrop-filter: blur(12px) saturate(1.5);
+  -webkit-backdrop-filter: blur(12px) saturate(1.5);
+}
+.glass-btn:hover {
+  background-color: rgba(16, 16, 20, 0.45);
+}
+
+/* Progress bar */
+.progress {
+  appearance: none;
+  height: 0.5rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background-color: rgba(231, 231, 236, 0.12);
+}
+.progress::-webkit-progress-bar {
+  background-color: rgba(231, 231, 236, 0.12);
+  border-radius: 9999px;
+}
+.progress::-webkit-progress-value {
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+}
+.progress::-moz-progress-bar {
+  background-color: var(--color-primary);
+  border-radius: 9999px;
+}
+.progress-primary {
+  color: var(--color-primary);
+}
+
+/* Loading spinners */
+.loading {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  border: 2px solid rgba(231, 231, 236, 0.25);
+  border-top-color: currentColor;
+  animation: loading-spin 0.8s linear infinite;
+}
+.loading-sm {
+  width: 1rem;
+  height: 1rem;
+}
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Alert */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-field);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+.alert-error {
+  background-color: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #fecaca;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  border-radius: var(--radius-field);
+  background-color: rgba(6, 6, 9, 0.6);
+  border: 1px solid rgba(231, 231, 236, 0.12);
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.input:focus {
+  border-color: var(--color-primary);
+}
+.input::placeholder {
+  color: rgba(231, 231, 236, 0.35);
+}
+
+.link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.link-hover:hover {
+  filter: brightness(1.2);
+}
+
+/* Squircle image mask (used by article thumbnails) */
+.mask-squircle {
+  border-radius: 30%;
+}
+
+/* Avatar shells: the inner <img> must fill the circular wrapper and inherit
+   its radius (daisyUI used to provide this; now we do it ourselves). */
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
+}
+
+/* ---------------------------------------------------------------------------
+ * Base & legacy helpers
+ * ------------------------------------------------------------------------- */
 
 * {
   scrollbar-width: thin;
@@ -94,8 +254,6 @@
 
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (min-width: 966px) {
@@ -103,17 +261,19 @@
   .scroller {
     width: 8px;
     height: 8px;
-    background-color: #f1f1f1;
+    background-color: #1a1a20;
   }
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #3a3a44;
   border-radius: 10px;
 }
 
 body {
   margin: 0;
+  background-color: var(--color-base-300);
+  color: var(--color-base-content);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -122,43 +282,19 @@ body {
 }
 
 code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 svg {
   vertical-align: unset;
 }
 
-/* Glassmorphism: cards and floating elements pick up the animated background */
-.card {
-  background-color: color-mix(in srgb, var(--color-base-100) 55%, transparent);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
-  border: 1px solid color-mix(in srgb, var(--color-base-content) 10%, transparent);
-}
-
-.glass-btn {
-  background-color: color-mix(in srgb, var(--color-base-100) 35%, transparent);
-  backdrop-filter: blur(12px) saturate(1.5);
-  -webkit-backdrop-filter: blur(12px) saturate(1.5);
-  border: 1px solid color-mix(in srgb, var(--color-base-content) 15%, transparent);
-}
-
-.glass-btn:hover {
-  background-color: color-mix(in srgb, var(--color-base-100) 55%, transparent);
-}
-
 .z-hover {
   transition: all ease-in-out 0.3s !important;
 }
-
 .z-hover:hover,
 .z-hover:focus,
 .z-hover:active {
-  transition: transform 0.3s !important;
-  -ms-transform: scale(1.01) !important;
-  -webkit-transform: scale(1.01) !important;
   transform: scale(1.01) !important;
 }
 
@@ -179,15 +315,6 @@ svg {
     opacity: 0;
   }
   100% {
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
     opacity: 1;
   }
 }
