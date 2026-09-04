@@ -85,5 +85,9 @@
     "vite-portfolio",
     "academic-portfolio",
     "github-api"
-  ]
+  ],
+  "allowScripts": {
+    "@tailwindcss/oxide": true,
+    "esbuild": true
+  }
 }
