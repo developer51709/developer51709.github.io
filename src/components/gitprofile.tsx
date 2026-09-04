@@ -9,47 +9,45 @@ import {
   setTooManyRequestError,
 } from '../constants/errors';
 import '../assets/index.css';
-import { getInitialTheme, getSanitizedConfig, setupHotjar } from '../utils';
+import { getSanitizedConfig, setupHotjar } from '../utils';
 import { SanitizedConfig } from '../interfaces/sanitized-config';
 import ErrorPage from './error-page';
 import { DEFAULT_THEMES } from '../constants/default-themes';
-import ThemeChanger from './theme-changer';
-import { BG_COLOR } from '../constants';
 import AvatarCard from './avatar-card';
 import { Profile } from '../interfaces/profile';
 import DetailsCard from './details-card';
-import SkillCard from './skill-card';
-import ExperienceCard from './experience-card';
-import EducationCard from './education-card';
-import CertificationCard from './certification-card';
 import { GithubProject } from '../interfaces/github-project';
 import GithubProjectCard from './github-project-card';
-import ExternalProjectCard from './external-project-card';
 import BlogCard from './blog-card';
-import Footer from './footer';
-import PublicationCard from './publication-card';
 import DiscordPresenceCard from './discord-presence-card';
-import { FaHeart } from 'react-icons/fa';
 import SponsorPage from './sponsor-page';
 import ThreeBackground from './three-background';
+import PageLayout, { PageRoute, SponsorButton } from './page-layout';
 import { useHashRoute } from '../hooks/useHashRoute';
+import { useGithubStats } from '../hooks/useGithubStats';
+import GithubStatsCard from './github-stats-card';
+import TechStack from './tech-stack';
 
 /**
- * Renders the GitProfile component.
- *
- * @param {Object} config - the configuration object
- * @return {JSX.Element} the rendered GitProfile component
+ * Multi-page GitProfile shell. Routes:
+ *   ''        -> Home (profile, Discord presence, GitHub stats, tech stack)
+ *   projects  -> GitHub projects grid
+ *   articles  -> dev.to articles
+ *   sponsor   -> OxaPay donation page
  */
 const GitProfile = ({ config }: { config: Config }) => {
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
     getSanitizedConfig(config),
   );
-  const [theme, setTheme] = useState<string>(DEFAULT_THEMES[0]);
+  const [theme] = useState<string>(DEFAULT_THEMES[0]);
   const [error, setError] = useState<CustomError | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [githubProjects, setGithubProjects] = useState<GithubProject[]>([]);
   const [route, navigate] = useHashRoute();
+  const { data: statsData, loading: statsLoading } = useGithubStats(
+    sanitizedConfig.github.username,
+  );
 
   const getGithubProjects = useCallback(
     async (publicRepoCount: number): Promise<GithubProject[]> => {
@@ -139,7 +137,6 @@ const GitProfile = ({ config }: { config: Config }) => {
       setError(INVALID_CONFIG_ERROR);
     } else {
       setError(null);
-      setTheme(getInitialTheme(sanitizedConfig.themeConfig));
       setupHotjar(sanitizedConfig.hotjar);
       loadData();
     }
@@ -183,6 +180,8 @@ const GitProfile = ({ config }: { config: Config }) => {
     }
   };
 
+  const pageRoute = route as PageRoute;
+
   return (
     <div className="fade-in min-h-screen">
       <ThreeBackground />
@@ -194,69 +193,55 @@ const GitProfile = ({ config }: { config: Config }) => {
         />
       ) : (
         <>
-          {route !== 'sponsor' && (
+          {pageRoute !== 'sponsor' && (
             <SponsorButton onClick={() => navigate('sponsor')} />
           )}
-          {route === 'sponsor' ? (
+
+          {pageRoute === 'sponsor' ? (
             <SponsorPage onBack={() => navigate('')} />
           ) : (
-          <div className={`relative z-10 p-4 lg:p-10 min-h-full ${BG_COLOR}/80`}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
-              <div className="col-span-1">
-                <div className="grid grid-cols-1 gap-6">
-                  {!sanitizedConfig.themeConfig.disableSwitch && (
-                    <div className="relative z-30">
-                      <ThemeChanger
-                        theme={theme}
-                        setTheme={setTheme}
-                        loading={loading}
-                        themeConfig={sanitizedConfig.themeConfig}
-                      />
-                    </div>
-                  )}
-                  <AvatarCard
-                    profile={profile}
-                    loading={loading}
-                    avatarRing={sanitizedConfig.themeConfig.displayAvatarRing}
-                    resumeFileUrl={sanitizedConfig.resume.fileUrl}
-                  />
-                  <DiscordPresenceCard
-                    lanyard={sanitizedConfig.lanyard}
-                    loading={loading}
-                  />
-                  <DetailsCard
-                    profile={profile}
-                    loading={loading}
-                    github={sanitizedConfig.github}
-                    social={sanitizedConfig.social}
-                  />
-                  {sanitizedConfig.skills.length !== 0 && (
-                    <SkillCard
+            <PageLayout
+              route={pageRoute}
+              onNavigate={(r) => navigate(r)}
+            >
+              {pageRoute === '' && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  <div className="col-span-1 grid grid-cols-1 gap-6 content-start">
+                    <AvatarCard
+                      profile={profile}
                       loading={loading}
-                      skills={sanitizedConfig.skills}
+                      avatarRing={
+                        sanitizedConfig.themeConfig.displayAvatarRing
+                      }
+                      resumeFileUrl={sanitizedConfig.resume.fileUrl}
                     />
-                  )}
-                  {sanitizedConfig.experiences.length !== 0 && (
-                    <ExperienceCard
+                    <DiscordPresenceCard
+                      lanyard={sanitizedConfig.lanyard}
                       loading={loading}
-                      experiences={sanitizedConfig.experiences}
                     />
-                  )}
-                  {sanitizedConfig.certifications.length !== 0 && (
-                    <CertificationCard
+                    <DetailsCard
+                      profile={profile}
                       loading={loading}
-                      certifications={sanitizedConfig.certifications}
+                      github={sanitizedConfig.github}
+                      social={sanitizedConfig.social}
                     />
-                  )}
-                  {sanitizedConfig.educations.length !== 0 && (
-                    <EducationCard
-                      loading={loading}
-                      educations={sanitizedConfig.educations}
+                  </div>
+                  <div className="lg:col-span-2 grid grid-cols-1 gap-6 content-start">
+                    <GithubStatsCard
+                      stats={statsData?.stats ?? null}
+                      techStack={statsData?.techStack ?? null}
+                      loading={statsLoading}
+                      username={sanitizedConfig.github.username}
                     />
-                  )}
+                    <TechStack
+                      techStack={statsData?.techStack ?? null}
+                      loading={statsLoading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="lg:col-span-2 col-span-1">
+              )}
+
+              {pageRoute === 'projects' && (
                 <div className="grid grid-cols-1 gap-6">
                   {sanitizedConfig.projects.github.display && (
                     <GithubProjectCard
@@ -267,22 +252,11 @@ const GitProfile = ({ config }: { config: Config }) => {
                       googleAnalyticsId={sanitizedConfig.googleAnalytics.id}
                     />
                   )}
-                  {sanitizedConfig.publications.length !== 0 && (
-                    <PublicationCard
-                      loading={loading}
-                      publications={sanitizedConfig.publications}
-                    />
-                  )}
-                  {sanitizedConfig.projects.external.projects.length !== 0 && (
-                    <ExternalProjectCard
-                      loading={loading}
-                      header={sanitizedConfig.projects.external.header}
-                      externalProjects={
-                        sanitizedConfig.projects.external.projects
-                      }
-                      googleAnalyticId={sanitizedConfig.googleAnalytics.id}
-                    />
-                  )}
+                </div>
+              )}
+
+              {pageRoute === 'articles' && (
+                <div className="grid grid-cols-1 gap-6">
                   {sanitizedConfig.blog.display && (
                     <BlogCard
                       loading={loading}
@@ -291,35 +265,13 @@ const GitProfile = ({ config }: { config: Config }) => {
                     />
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-          )}
-          {sanitizedConfig.footer && (
-            <footer
-              className={`relative z-10 p-4 footer ${BG_COLOR}/80 text-base-content footer-center`}
-            >
-              <div className="card card-sm bg-base-100 shadow-sm">
-                <Footer content={sanitizedConfig.footer} loading={loading} />
-              </div>
-            </footer>
+              )}
+            </PageLayout>
           )}
         </>
       )}
     </div>
   );
 };
-
-/** Public sponsor CTA — visible on every page. */
-const SponsorButton = ({ onClick }: { onClick: () => void }) => (
-  <button
-    onClick={onClick}
-    className="btn btn-primary glass-btn fixed bottom-6 right-6 z-50 shadow-lg gap-2 rounded-full px-5 text-base-content hover:text-base-content"
-    aria-label="Sponsor this project"
-  >
-    <FaHeart className="w-4 h-4" />
-    Sponsor
-  </button>
-);
 
 export default GitProfile;

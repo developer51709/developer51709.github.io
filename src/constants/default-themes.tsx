@@ -1,4 +1,5 @@
 export const DEFAULT_THEMES = [
+  'abyssdark',
   'light',
   'dark',
   'cupcake',
