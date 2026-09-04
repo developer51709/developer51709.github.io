@@ -3,13 +3,16 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const API_BASE = 'https://api.spotify.com/v1';
 
-// In-memory caches: access tokens and display names are stable for hours.
+// In-memory caches: access tokens and profiles are stable for hours.
 const tokenCache: { token: string | null; expiresAt: number } = {
   token: null,
   expiresAt: 0,
 };
-const nameCache = new Map<string, { name: string | null; expires: number }>();
-const NAME_TTL_MS = 60 * 60 * 1000; // 1 hour
+const profileCache = new Map<
+  string,
+  { profile: Record<string, unknown> | null; expires: number }
+>();
+const PROFILE_TTL_MS = 60 * 60 * 1000; // 1 hour
 
 async function getAccessToken(
   clientId: string,
@@ -32,7 +35,10 @@ async function getAccessToken(
     console.error('Spotify token request failed:', res.status);
     return null;
   }
-  const data = (await res.json()) as { access_token?: string; expires_in?: number };
+  const data = (await res.json()) as {
+    access_token?: string;
+    expires_in?: number;
+  };
   if (!data.access_token) return null;
   tokenCache.token = data.access_token;
   tokenCache.expiresAt = Date.now() + (data.expires_in || 3600) * 1000;
@@ -40,14 +46,8 @@ async function getAccessToken(
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS (same hardened pattern as the other endpoints)
-  const origin = req.headers.origin as string | undefined;
-  const allowed = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',').map((o: string) => o.trim())
-    : '*';
-  const corsOrigin =
-    allowed === '*' ? '*' : origin && allowed.includes(origin) ? origin : '*';
-  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
+  // Open CORS — this endpoint only exposes public Spotify profile data.
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(204).end();
@@ -58,9 +58,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
-    return res
-      .status(500)
-      .json({ error: 'SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not configured' });
+    return res.status(500).json({
+      error: 'SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET are not configured',
+    });
   }
 
   const userId = String(req.query.id || '').trim();
@@ -69,9 +69,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   // Cached?
-  const cached = nameCache.get(userId);
+  const cached = profileCache.get(userId);
   if (cached && cached.expires > Date.now()) {
-    return res.status(200).json({ displayName: cached.name });
+    return res.status(200).json({ profile: cached.profile });
   }
 
   if (typeof fetch !== 'function') {
@@ -83,27 +83,37 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const token = await getAccessToken(clientId, clientSecret);
     if (!token) {
-      return res.status(502).json({ error: 'Failed to authenticate with Spotify' });
+      return res
+        .status(502)
+        .json({ error: 'Failed to authenticate with Spotify' });
     }
 
-    const profileRes = await fetch(`${API_BASE}/users/${encodeURIComponent(userId)}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const profileRes = await fetch(
+      `${API_BASE}/users/${encodeURIComponent(userId)}`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
 
     if (profileRes.status === 404) {
-      nameCache.set(userId, { name: null, expires: Date.now() + NAME_TTL_MS });
-      return res.status(200).json({ displayName: null });
+      profileCache.set(userId, {
+        profile: null,
+        expires: Date.now() + PROFILE_TTL_MS,
+      });
+      return res.status(200).json({ profile: null });
     }
     if (!profileRes.ok) {
       return res
         .status(profileRes.status)
-        .json({ error: `Spotify profile fetch failed (HTTP ${profileRes.status})` });
+        .json({
+          error: `Spotify profile fetch failed (HTTP ${profileRes.status})`,
+        });
     }
 
-    const profile = (await profileRes.json()) as { display_name?: string | null };
-    const displayName = profile.display_name || null;
-    nameCache.set(userId, { name: displayName, expires: Date.now() + NAME_TTL_MS });
-    return res.status(200).json({ displayName });
+    const profile = (await profileRes.json()) as Record<string, unknown>;
+    profileCache.set(userId, {
+      profile,
+      expires: Date.now() + PROFILE_TTL_MS,
+    });
+    return res.status(200).json({ profile });
   } catch (err) {
     console.error('spotify-user error:', err);
     return res.status(502).json({ error: 'Spotify API is unavailable' });

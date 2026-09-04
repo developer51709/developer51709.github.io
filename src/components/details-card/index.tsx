@@ -71,8 +71,8 @@ const SpotifyItem: React.FC<{ userId: string }> = ({ userId }) => {
     fetch(`/api/spotify-user?id=${encodeURIComponent(userId)}`)
       .then((r) => (r.ok ? r.json() : null))
       .then(
-        (data: { displayName?: string | null } | null) => {
-          if (!cancelled) setDisplayName(data?.displayName || null);
+        (data: { profile?: { display_name?: string | null } | null } | null) => {
+          if (!cancelled) setDisplayName(data?.profile?.display_name || null);
         },
         () => {},
       );
