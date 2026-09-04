@@ -1,0 +1,7 @@
+{
+  "name": "api",
+  "private": true,
+  "dependencies": {
+    "@vercel/node": "^5.1.1"
+  }
+}

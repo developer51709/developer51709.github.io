@@ -29,6 +29,8 @@ import BlogCard from './blog-card';
 import Footer from './footer';
 import PublicationCard from './publication-card';
 import DiscordPresenceCard from './discord-presence-card';
+import SponsorPage from './sponsor-page';
+import { useHashRoute } from '../hooks/useHashRoute';
 
 /**
  * Renders the GitProfile component.
@@ -45,6 +47,7 @@ const GitProfile = ({ config }: { config: Config }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [githubProjects, setGithubProjects] = useState<GithubProject[]>([]);
+  const [route, navigate] = useHashRoute();
 
   const getGithubProjects = useCallback(
     async (publicRepoCount: number): Promise<GithubProject[]> => {
@@ -188,6 +191,9 @@ const GitProfile = ({ config }: { config: Config }) => {
         />
       ) : (
         <>
+          {route === 'sponsor' ? (
+            <SponsorPage onBack={() => navigate('')} />
+          ) : (
           <div className={`p-4 lg:p-10 min-h-full ${BG_COLOR}`}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
               <div className="col-span-1">
@@ -280,6 +286,7 @@ const GitProfile = ({ config }: { config: Config }) => {
               </div>
             </div>
           </div>
+          )}
           {sanitizedConfig.footer && (
             <footer
               className={`p-4 footer ${BG_COLOR} text-base-content footer-center`}
