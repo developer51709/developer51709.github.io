@@ -2,8 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 const GITHUB_API = 'https://api.github.com';
 
-// Long-lived in-memory cache: GitHub data barely changes minute-to-minute and
-// we want to stay far away from rate limits even on traffic spikes.
+// In-memory cache: GitHub data barely changes minute-to-minute and we want to
+// stay far away from rate limits even on traffic spikes.
 const cache = new Map<string, { data: unknown; expires: number }>();
 const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -40,11 +40,24 @@ export interface TechStackEntry {
   repoCount: number;
 }
 
+interface GithubStats {
+  publicRepos: number;
+  followers: number;
+  following: number;
+  totalStars: number;
+  totalForks: number;
+}
+
+interface GithubStatsResponse {
+  techStack: TechStackEntry[];
+  stats: GithubStats;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // CORS
   const origin = req.headers.origin as string | undefined;
   const allowed = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
+    ? process.env.ALLOWED_ORIGINS.split(',').map((o: string) => o.trim())
     : '*';
   res.setHeader(
     'Access-Control-Allow-Origin',
@@ -65,57 +78,62 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.GITHUB_TOKEN;
 
   try {
-    const headers = token ? authHeaders(token) : { Accept: 'application/vnd.github+json' };
+    const headers = token
+      ? authHeaders(token)
+      : { Accept: 'application/vnd.github+json' };
 
     // --- Profile ---
     const profileKey = `profile:${username}`;
-    let profile = getCached<Record<string, unknown>>(profileKey);
-    if (!profile) {
+    let profileRecord = getCached<Record<string, unknown>>(profileKey);
+    if (!profileRecord) {
       const r = await fetch(`${GITHUB_API}/users/${username}`, { headers });
       if (!r.ok) {
         return res
           .status(r.status)
           .json({ error: `GitHub profile fetch failed (HTTP ${r.status})` });
       }
-      profile = await r.json();
-      setCached(profileKey, profile);
+      profileRecord = (await r.json()) as Record<string, unknown>;
+      setCached(profileKey, profileRecord);
     }
+    // Non-null from here on — TypeScript-safe alias.
+    const profile = profileRecord;
 
     // --- Repos (owned, non-forked) ---
     const reposKey = `repos:${username}`;
     let repos = getCached<Array<Record<string, unknown>>>(reposKey);
     if (!repos) {
-      repos = [];
-      let page = 1;
+      const all: Array<Record<string, unknown>> = [];
       // Up to 3 pages of 100 — plenty for a personal portfolio.
-      for (; page <= 3; page++) {
+      for (let page = 1; page <= 3; page++) {
         const r = await fetch(
           `${GITHUB_API}/users/${username}/repos?per_page=100&sort=updated&page=${page}`,
           { headers },
         );
         if (!r.ok) break;
         const batch = (await r.json()) as Array<Record<string, unknown>>;
-        repos.push(...batch);
+        all.push(...batch);
         if (batch.length < 100) break;
       }
-      repos = repos.filter(
-        (r) => !r.fork && r.owner && (r.owner as Record<string, unknown>).login === username,
+      repos = all.filter(
+        (r) =>
+          !r.fork &&
+          r.owner &&
+          (r.owner as Record<string, unknown>).login === username,
       );
       setCached(reposKey, repos);
     }
+    const ownedRepos = repos;
 
-    // --- Languages per repo (parallel, capped) ---
-    const langKey = `langs:${username}`;
-    let languageMap = getCached<Map<string, { bytes: number; repos: Set<string> }>>(
-      langKey,
-    );
-    if (!languageMap) {
-      languageMap = new Map();
+    // --- Tech stack (aggregated language bytes) ---
+    const techKey = `tech:${username}`;
+    let techStack = getCached<TechStackEntry[]>(techKey);
+    if (!techStack) {
       const totalBytesByLang: Record<string, number> = {};
       const reposByLang: Record<string, number> = {};
+      const seenKeys = new Set<string>();
 
       // Fetch languages for up to 30 most recently updated repos in parallel batches.
-      const targets = repos.slice(0, 30);
+      const targets = ownedRepos.slice(0, 30);
       const batchSize = 8;
       for (let i = 0; i < targets.length; i += batchSize) {
         const batch = targets.slice(i, i + batchSize);
@@ -137,18 +155,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           if (!langs) return;
           const repoName = String(targets[i + idx].name);
           for (const [lang, bytes] of Object.entries(langs)) {
+            const seenKey = `${lang}:${repoName}`;
+            if (seenKeys.has(seenKey)) continue;
+            seenKeys.add(seenKey);
             totalBytesByLang[lang] = (totalBytesByLang[lang] || 0) + bytes;
-            if (!(lang in reposByLang)) reposByLang[lang] = 0;
-            if (!languageMap!.has(`${lang}:${repoName}`)) {
-              reposByLang[lang] += 1;
-              languageMap!.set(`${lang}:${repoName}`, { bytes, repos: new Set([repoName]) });
-            }
+            reposByLang[lang] = (reposByLang[lang] || 0) + 1;
           }
         });
       }
 
       const total = Object.values(totalBytesByLang).reduce((a, b) => a + b, 0);
-      const techStack: TechStackEntry[] = Object.entries(totalBytesByLang)
+      techStack = Object.entries(totalBytesByLang)
         .map(([language, bytes]) => ({
           language,
           bytes,
@@ -157,29 +174,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }))
         .sort((a, b) => b.bytes - a.bytes);
 
-      setCached(langKey, techStack);
-
-      // --- Response payload ---
-      const stats = {
-        publicRepos: profile.public_repos,
-        followers: profile.followers,
-        following: profile.following,
-        totalStars: repos.reduce((s, r) => s + Number(r.stargazers_count || 0), 0),
-        totalForks: repos.reduce((s, r) => s + Number(r.forks_count || 0), 0),
-      };
-
-      return res.status(200).json({ techStack, stats });
+      setCached(techKey, techStack);
     }
 
-    // Cached language map path — still need stats
-    const stats = {
-      publicRepos: profile.public_repos,
-      followers: profile.followers,
-      following: profile.following,
-      totalStars: repos.reduce((s, r) => s + Number(r.stargazers_count || 0), 0),
-      totalForks: repos.reduce((s, r) => s + Number(r.forks_count || 0), 0),
+    // --- Response payload ---
+    const stats: GithubStats = {
+      publicRepos: Number(profile.public_repos || 0),
+      followers: Number(profile.followers || 0),
+      following: Number(profile.following || 0),
+      totalStars: ownedRepos.reduce(
+        (s, r) => s + Number(r.stargazers_count || 0),
+        0,
+      ),
+      totalForks: ownedRepos.reduce(
+        (s, r) => s + Number(r.forks_count || 0),
+        0,
+      ),
     };
-    return res.status(200).json({ techStack: languageMap, stats });
+
+    return res.status(200).json({ techStack, stats });
   } catch (err) {
     console.error('github-stats error:', err);
     return res.status(502).json({ error: 'Failed to fetch GitHub data' });
