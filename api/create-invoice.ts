@@ -72,8 +72,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // OxaPay authenticates server-side calls with the merchant key.
-        merchant: apiKey,
+        // OxaPay v1 authenticates via the `merchant_api_key` header.
+        merchant_api_key: apiKey,
       },
       body: JSON.stringify({
         amount: amountNum,
