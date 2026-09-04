@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaHeart, FaBackspace } from 'react-icons/fa';
 import { SiBitcoin } from 'react-icons/si';
+import { BG_COLOR } from '../../constants';
 
 const PRESET_AMOUNTS = [3, 5, 10, 25];
 
@@ -43,7 +44,7 @@ const SponsorPage = ({ onBack }: { onBack: () => void }) => {
   };
 
   return (
-    <div className={`min-h-full ${'p-4 lg:p-10'} bg-base-300`}>
+    <div className={`min-h-full p-4 lg:p-10 ${BG_COLOR}/80 backdrop-blur-sm`}>
       <div className="max-w-2xl mx-auto">
         <button
           onClick={onBack}

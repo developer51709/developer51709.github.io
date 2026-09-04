@@ -29,7 +29,9 @@ import BlogCard from './blog-card';
 import Footer from './footer';
 import PublicationCard from './publication-card';
 import DiscordPresenceCard from './discord-presence-card';
+import { FaHeart } from 'react-icons/fa';
 import SponsorPage from './sponsor-page';
+import ThreeBackground from './three-background';
 import { useHashRoute } from '../hooks/useHashRoute';
 
 /**
@@ -183,6 +185,7 @@ const GitProfile = ({ config }: { config: Config }) => {
 
   return (
     <div className="fade-in h-screen">
+      <ThreeBackground />
       {error ? (
         <ErrorPage
           status={error.status}
@@ -191,10 +194,11 @@ const GitProfile = ({ config }: { config: Config }) => {
         />
       ) : (
         <>
+          <SponsorButton onClick={() => navigate('sponsor')} />
           {route === 'sponsor' ? (
             <SponsorPage onBack={() => navigate('')} />
           ) : (
-          <div className={`p-4 lg:p-10 min-h-full ${BG_COLOR}`}>
+          <div className={`p-4 lg:p-10 min-h-full ${BG_COLOR}/80 backdrop-blur-sm`}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 rounded-box">
               <div className="col-span-1">
                 <div className="grid grid-cols-1 gap-6">
@@ -301,5 +305,17 @@ const GitProfile = ({ config }: { config: Config }) => {
     </div>
   );
 };
+
+/** Public sponsor CTA — visible on every page. */
+const SponsorButton = ({ onClick }: { onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    className="btn btn-primary fixed bottom-6 right-6 z-50 shadow-lg gap-2 rounded-full px-5"
+    aria-label="Sponsor this project"
+  >
+    <FaHeart className="w-4 h-4" />
+    Sponsor
+  </button>
+);
 
 export default GitProfile;
