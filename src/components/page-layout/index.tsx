@@ -1,12 +1,20 @@
 import { ReactNode } from 'react';
 import {
-  AiOutlineHome,
-  AiOutlineGithub,
   AiOutlineBook,
+  AiOutlineGithub,
+  AiOutlineHome,
+  AiOutlineShoppingCart,
 } from 'react-icons/ai';
 import { FaHeart } from 'react-icons/fa';
 
-export type PageRoute = '' | 'projects' | 'articles' | 'sponsor';
+export type PageRoute =
+  | ''
+  | 'projects'
+  | 'articles'
+  | 'commissions'
+  | 'sponsor'
+  | 'terms'
+  | 'privacy';
 
 export const NAV_ITEMS: { label: string; route: PageRoute; icon: ReactNode }[] =
   [
@@ -20,6 +28,11 @@ export const NAV_ITEMS: { label: string; route: PageRoute; icon: ReactNode }[] =
       label: 'Articles',
       route: 'articles',
       icon: <AiOutlineBook className="w-4 h-4" />,
+    },
+    {
+      label: 'Commissions',
+      route: 'commissions',
+      icon: <AiOutlineShoppingCart className="w-4 h-4" />,
     },
   ];
 
@@ -53,6 +66,15 @@ const PageLayout = ({ route, onNavigate, children }: PageLayoutProps) => (
       {children}
     </div>
     <footer className="relative z-10 text-center pb-10 text-base-content/40 text-xs">
+      <div className="flex items-center justify-center gap-4 mb-2">
+        <a href="#/terms" className="link link-hover">
+          Terms of Service
+        </a>
+        <span className="text-base-content/20">·</span>
+        <a href="#/privacy" className="link link-hover">
+          Privacy Policy
+        </a>
+      </div>
       Built with React, Tailwind & Three.js
     </footer>
   </>

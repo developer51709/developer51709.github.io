@@ -26,13 +26,18 @@ import { useHashRoute } from '../hooks/useHashRoute';
 import { useGithubStats } from '../hooks/useGithubStats';
 import GithubStatsCard from './github-stats-card';
 import TechStack from './tech-stack';
+import CommissionsPage from './commissions-page';
+import LegalPage, { PRIVACY_DOC, TERMS_DOC } from './legal-page';
 
 /**
  * Multi-page GitProfile shell. Routes:
- *   ''        -> Home (profile, Discord presence, GitHub stats, tech stack)
- *   projects  -> GitHub projects grid
- *   articles  -> dev.to articles
- *   sponsor   -> OxaPay donation page
+ *   ''           -> Home (profile, Discord presence, GitHub stats, tech stack)
+ *   projects     -> GitHub projects grid
+ *   articles     -> dev.to articles
+ *   commissions  -> Commission pricing page
+ *   sponsor      -> OxaPay donation page
+ *   terms        -> Commission terms of service
+ *   privacy      -> Commission privacy policy
  */
 const GitProfile = ({ config }: { config: Config }) => {
   const [sanitizedConfig] = useState<SanitizedConfig | Record<string, never>>(
@@ -187,7 +192,7 @@ const GitProfile = ({ config }: { config: Config }) => {
         />
       ) : (
         <>
-          {pageRoute !== 'sponsor' && (
+          {!['sponsor', 'terms', 'privacy'].includes(pageRoute) && (
             <SponsorButton onClick={() => navigate('sponsor')} />
           )}
 
@@ -259,6 +264,22 @@ const GitProfile = ({ config }: { config: Config }) => {
                     />
                   )}
                 </div>
+              )}
+
+              {pageRoute === 'commissions' && (
+                <CommissionsPage
+                  social={sanitizedConfig.social}
+                  discordId={sanitizedConfig.lanyard.userId}
+                  onBack={() => navigate('')}
+                />
+              )}
+
+              {pageRoute === 'terms' && (
+                <LegalPage document={TERMS_DOC} onBack={() => navigate('')} />
+              )}
+
+              {pageRoute === 'privacy' && (
+                <LegalPage document={PRIVACY_DOC} onBack={() => navigate('')} />
               )}
             </PageLayout>
           )}
