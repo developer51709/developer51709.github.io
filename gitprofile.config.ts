@@ -19,7 +19,7 @@ const CONFIG = {
         sortBy: 'stars', // Sort projects by 'stars' or 'updated'
         limit: 8, // How many projects to display.
         exclude: {
-          forks: false, // Forked projects will not be displayed if set to true.
+          forks: true, // Forked projects will not be displayed if set to true.
           projects: [], // These projects will not be displayed. example: ['arifszn/my-project1', 'arifszn/my-project2']
         },
       },
@@ -56,7 +56,18 @@ const CONFIG = {
   seo: {
     title: 'Soren — Building Modern Web & Bot Experiences',
     description: 'Exploring clean design, smooth interactions, and creative development across web and bot projects.',
-    imageURL: '/og_banner.png',
+    // Auto-generated OpenGraph image. `scripts/generate-og-image.mjs` builds
+    // `public/og-image.svg` on every build with the current GitHub avatar
+    // embedded, and wsrv.nl rasterizes it to PNG for crawlers (SVG alone is
+    // not supported as og:image by most platforms). The `ts=` cache-buster
+    // makes each build produce a fresh URL so the preview refreshes when the
+    // avatar changes. Must be an absolute URL for crawlers.
+    imageURL:
+      'https://wsrv.nl/?url=' +
+      encodeURIComponent(
+        `https://sorenthedev.indevs.in/og-image.svg?ts=${Date.now()}`,
+      ) +
+      '&output=png&w=1200&h=630',
   },
   social: {
     linkedin: '',
@@ -76,14 +87,14 @@ const CONFIG = {
     stackoverflow: '32959452/soren', // example: '1/jeff-atwood'
     discord: 'sorenthedev',
     telegram: '',
-    website: 'https://soren.is-a.dev',
+    website: '',
     phone: '+1 (762) 435-4135',
     email: 'developer51709@proton.me',
-    tiktok: '', // example: 'myusername'
-    twitch: '', // example: 'myusername'
+    tiktok: 'sorenthedev', // example: 'myusername'
+    twitch: 'sorenthedev', // example: 'myusername'
     snapchat: '', // example: 'myusername'
     pinterest: 'sorenthedev', // example: 'myusername'
-    bluesky: '', // example: 'user.bsky.social'
+    bluesky: 'sorenthedev.bsky.social', // example: 'user.bsky.social'
     patreon: '', // example: 'myusername'
     spotify: '31kc6tv66sgkold3ojvlnyejkbn4', // example: 'myuserid'
     soundcloud: '', // example: 'myusername'
