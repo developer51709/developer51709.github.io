@@ -28,6 +28,8 @@ import GithubStatsCard from './github-stats-card';
 import TechStack from './tech-stack';
 import CommissionsPage from './commissions-page';
 import LegalPage, { PRIVACY_DOC, TERMS_DOC } from './legal-page';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 /**
  * Multi-page GitProfile shell. Routes:
@@ -183,6 +185,8 @@ const GitProfile = ({ config }: { config: Config }) => {
 
   return (
     <div className="fade-in min-h-screen">
+      <Analytics />
+      <SpeedInsights />
       <ThreeBackground />
       {error ? (
         <ErrorPage
