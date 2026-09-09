@@ -226,10 +226,14 @@ function bannerSvg(
     <text x="156" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" fill="#4f7cff">${esc(PROFILE.badge)}</text>
   </g>`;
 
-  const smallLabelRow = `<text x="640" y="252" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#6b7280">about</text>`;
+  const aboutX = 48;
+  const leftColW = 540;
+  const smallLabelRow = `<text x="${String(aboutX)}" y="252" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#6b7280">about</text>`;
   const bioLines = wrapWords(PROFILE.tagline, 56);
+  // Center each line within its column, under the "about" label.
+  const bioCenterX = aboutX + leftColW / 2;
   const bio = bioLines
-    .map((line, i) => `<text x="640" y="${284 + i * 24}" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="16" fill="#cbd5f5">${esc(line)}</text>`)
+    .map((line, i) => `<text x="${String(Math.round(bioCenterX))}" y="${284 + i * 24}" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="16" fill="#cbd5f5">${esc(line)}</text>`)
     .join('');
 
   // Stats row (4 mini cards)
