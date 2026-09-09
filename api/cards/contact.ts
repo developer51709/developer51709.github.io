@@ -19,6 +19,17 @@ const CONTACT = {
   website: 'sorenthedev.indevs.in',
 };
 
+// Lucide icons — stroke-based, viewBox 0 0 24 24, rendered at 16×16 inside the 28px circle.
+// Using the exact Lucide path data (MIT licensed) so all three icons share weight/caps/joins.
+const ICONS = {
+  // lucide/message-circle — used for Discord (cleanest match at small size; keeps the set consistent)
+  discord: `<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>`,
+  // lucide/mail
+  email: `<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
+  // lucide/phone
+  phone: `<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>`,
+} as const;
+
 function contactSvg(usernameClean: string) {
   const handle = `@${usernameClean}`;
   const badge = 'Contact';
@@ -31,14 +42,14 @@ function contactSvg(usernameClean: string) {
   const cardH = 96;
   const topY = 62;
 
-  const cards: Array<{ label: string; value: string; sub: string; accent: string; icon: string; href: string }> = [
+  const cards: Array<{ label: string; value: string; sub: string; accent: string; href: string; iconKey: keyof typeof ICONS }> = [
     {
       label: 'Discord',
       value: CONTACT.discord,
       sub: 'Quickest reply — usually within hours',
       accent: '#5865F2',
       href: `https://discord.com/users/1052690741874401360`,
-      icon: 'M19.7 4.3a.5.5 0 0 0-.5-.3h-.2a15 15 0 0 0-3.6-.9l-.2 0-.1.2a11 11 0 0 0-2.1.6 13 13 0 0 0-2.1-.6l-.1-.2h-.2A15 15 0 0 0 6.9 4l-.2 0a.5.5 0 0 0-.5.3 12 12 0 0 0-.7 4.2c0 3 1.8 5.4 4.1 5.4.7 0 1.4-.3 1.9-.8l-.6-.7a3 3 0 0 1-1.3.6 3 3 0 0 1-2.2-1.1c-.2-.2-.3-.5-.3-.8a8 8 0 0 1 .2-1.2l.1-.3.3 0a7 7 0 0 1 1.7-.4l.4 0 .2.3c.1.2.3.4.5.6a3 3 0 0 0 2.2 1 3 3 0 0 0 2.2-1c.2-.2.4-.4.5-.6l.2-.3.4 0a7 7 0 0 1 1.7.4l.3 0 .1.3a8 8 0 0 1 .2 1.2c0 .3-.1.6-.3.8a3 3 0 0 1-2.2 1.1 3 3 0 0 1-1.3-.6l-.6.7c.5.5 1.2.8 1.9.8 2.3 0 4.1-2.4 4.1-5.4A12 12 0 0 0 19.7 4.3Z M9.2 12.2c-.7 0-1.3-.6-1.3-1.4s.6-1.4 1.3-1.4 1.3.6 1.3 1.4-.6 1.4-1.3 1.4Zm5.6 0c-.7 0-1.3-.6-1.3-1.4s.6-1.4 1.3-1.4 1.3.6 1.3 1.4-.6 1.4-1.3 1.4Z',
+      iconKey: 'discord',
     },
     {
       label: 'Email',
@@ -46,15 +57,15 @@ function contactSvg(usernameClean: string) {
       sub: 'For commissions & longer threads',
       accent: '#4f7cff',
       href: `mailto:${CONTACT.email}`,
-      icon: 'M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z',
+      iconKey: 'email',
     },
     {
       label: 'Phone',
       value: CONTACT.phone,
       sub: 'Text preferred · ET (UTC-4/UTC-5)',
       accent: '#22c55e',
-      href: `tel:${CONTACT.phone.replace(/[^+\\d]/g, '')}`,
-      icon: 'M6.6 2.5c-.3 0-.6.2-.7.5L4.2 7.2c-.2.5 0 1 .4 1.3l2.2 1.6c-.4 1-1 1.9-1.7 2.7l-1.6-2.2c-.3-.4-.8-.6-1.3-.4L1 11.9c-.3.1-.5.4-.5.7v3.8c0 .4.3.7.7.7 5.4 0 9.8-4.4 9.8-9.8 0-.4-.3-.7-.7-.7H6.6Z M17.5 10.5h-2c0 2.5-2 4.5-4.5 4.5v2c3.6 0 6.5-2.9 6.5-6.5Z M17.5 6.5h-2c0 1.4-1.1 2.5-2.5 2.5v2c2.5 0 4.5-2 4.5-4.5Z',
+      href: `tel:${CONTACT.phone.replace(/[^+\d]/g, '')}`,
+      iconKey: 'phone',
     },
   ];
 
@@ -62,12 +73,14 @@ function contactSvg(usernameClean: string) {
     .map((c, i) => {
       const x = pad + i * (cardW + gapX);
       const isDiscord = c.label === 'Discord';
+      // 28px circle with a 16px Lucide glyph centered inside (16/24 = 0.666 scale, offset 6,6)
+      const lucideGlyph = `<g transform="translate(6, 6) scale(0.6667)"><g fill="none" stroke="${c.accent}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.iconKey]}</g></g>`;
       return `<g transform="translate(${x}, ${topY})">
       <rect width="${cardW}" height="${cardH}" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
       ${isDiscord ? `<rect x="${cardW - 74}" y="10" width="62" height="18" rx="9" fill="rgba(88,101,242,0.18)"/><text x="${cardW - 43}" y="23" text-anchor="middle" font-family="${FF}" font-size="9" font-weight="700" letter-spacing="0.6" fill="#a5b4fc">QUICKEST</text>` : ''}
       <g transform="translate(14, 14)">
         <circle cx="14" cy="14" r="14" fill="${c.accent}1F"/>
-        <g transform="translate(2, 2) scale(0.5)"><path d="${c.icon}" fill="${c.accent}"/></g>
+        ${lucideGlyph}
       </g>
       <text x="48" y="23" font-family="${FF}" font-size="10" font-weight="600" letter-spacing="1.4" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
       <text x="14" y="52" font-family="${FF}" font-size="${c.label === 'Email' ? '11' : '13'}" font-weight="600" fill="${TEXT}">${esc(c.value)}</text>
