@@ -19,10 +19,10 @@ const CONTACT = {
   website: 'sorenthedev.indevs.in',
 };
 
-// Lucide icons — stroke-based, viewBox 0 0 24 24, rendered at 16×16 inside the 28px circle.
-// Using the exact Lucide path data (MIT licensed) so all three icons share weight/caps/joins.
+// Lucide icons — stroke-based, viewBox 0 0 24 24, rendered at 16×16 centered in the 28px circle.
+// Using the exact Lucide path data (MIT) so all three share weight/caps/joins.
 const ICONS = {
-  // lucide/message-circle — used for Discord (cleanest match at small size; keeps the set consistent)
+  // lucide/message-circle — used for Discord (cleanest small-size match; keeps the set consistent)
   discord: `<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>`,
   // lucide/mail
   email: `<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>`,
@@ -73,16 +73,19 @@ function contactSvg(usernameClean: string) {
     .map((c, i) => {
       const x = pad + i * (cardW + gapX);
       const isDiscord = c.label === 'Discord';
-      // 28px circle with a 16px Lucide glyph centered inside (16/24 = 0.666 scale, offset 6,6)
-      const lucideGlyph = `<g transform="translate(6, 6) scale(0.6667)"><g fill="none" stroke="${c.accent}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.iconKey]}</g></g>`;
+      // 28px circle (r=14) at (14,14) inside the inner card.
+      // Lucide glyph is rendered as a nested <svg> with viewBox so the 16×16 icon is perfectly centered
+      // with 6px padding on all sides — no manual scale math, no off-by-half-pixel drift.
       return `<g transform="translate(${x}, ${topY})">
       <rect width="${cardW}" height="${cardH}" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
       ${isDiscord ? `<rect x="${cardW - 74}" y="10" width="62" height="18" rx="9" fill="rgba(88,101,242,0.18)"/><text x="${cardW - 43}" y="23" text-anchor="middle" font-family="${FF}" font-size="9" font-weight="700" letter-spacing="0.6" fill="#a5b4fc">QUICKEST</text>` : ''}
       <g transform="translate(14, 14)">
         <circle cx="14" cy="14" r="14" fill="${c.accent}1F"/>
-        ${lucideGlyph}
+        <svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="${c.accent}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.iconKey]}</g>
+        </svg>
       </g>
-      <text x="48" y="23" font-family="${FF}" font-size="10" font-weight="600" letter-spacing="1.4" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
+      <text x="48" y="28" dominant-baseline="middle" font-family="${FF}" font-size="10" font-weight="600" letter-spacing="1.4" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
       <text x="14" y="52" font-family="${FF}" font-size="${c.label === 'Email' ? '11' : '13'}" font-weight="600" fill="${TEXT}">${esc(c.value)}</text>
       <text x="14" y="70" font-family="${FF}" font-size="10" fill="${MUTED}">${esc(c.sub)}</text>
       <text x="14" y="86" font-family="${FF}" font-size="9" fill="${c.accent}">${esc(c.href.replace(/^https?:\/\//, ''))}</text>
