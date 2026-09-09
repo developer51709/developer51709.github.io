@@ -4,7 +4,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // Self-hosted GitHub Stats SVG Card
 // ---------------------------------------------------------------------------
 
-const GITHUB_API = 'https://api.github';
+const GITHUB_API = 'https://api.github.com';
 
 const cache = new Map<string, { data: unknown; expires: number }>();
 const CACHE_TTL = 1800_000; // 30 min
