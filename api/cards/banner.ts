@@ -9,7 +9,7 @@ const PROFILE = {
   subtitle: 'Full‑stack Developer · Discord Infrastructure Engineer · Automation Builder',
   tagline: 'I build reliable systems, modern dashboards, and Discord bots with a focus on clean design and a great user experience.',
   handle: 'developer51709',
-  badge: 'Nightfall',
+  badge: 'Linavo',
 };
 
 type Lang = { name: string; percent: number };
