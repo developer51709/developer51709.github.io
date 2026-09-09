@@ -233,7 +233,7 @@ function bannerSvg(
   // Center each line within its column, under the "about" label.
   const bioCenterX = aboutX + leftColW / 2;
   const bio = bioLines
-    .map((line, i) => `<text x="${String(Math.round(bioCenterX))}" y="${284 + i * 24}" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="16" fill="#cbd5f5">${esc(line)}</text>`)
+    .map((line, i) => `<text x="48" y="${284 + i * 24}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="16" fill="#cbd5f5">${esc(line)}</text>`)
     .join('');
 
   // Stats row (4 mini cards)
