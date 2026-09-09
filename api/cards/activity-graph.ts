@@ -45,7 +45,6 @@ const LEVELS = [
 
 const CELL = 8;
 const GAP = 1;
-const ROWS = 7;
 const LEFT_PAD = 27;
 const TOP_PAD = 60;
 const CARD_W = 495;
