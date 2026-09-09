@@ -21,22 +21,22 @@ const HIGHLIGHTS: Array<{ label: string; value: string; accent: string; icon: st
     label: 'Currently building',
     value: 'Discord bots, automation tools, and full\u2011stack dashboards',
     accent: '#4f7cff',
-    // lucide: hammer — stroke, viewBox 0 0 24 24
-    icon: `<path d="m3 21 8-8"/><path d="M14.5 9.5a2 2 0 0 1 0 2.83l-1.5 1.5a2 2 0 0 1-2.83 0L3 6.66a2 2 0 0 1 0-2.83L6.17 1a2 2 0 0 1 2.83 0L14.5 6.5"/><path d="m12 12 4 4"/><path d="m16 16 2 2"/>`,
+    // lucide: hammer (lucide-static v0.532.0)
+    icon: `<path d="m15 12-8.373 8.373a1 1 0 1 1-3-3L12 9"/><path d="m18 15 4-4"/><path d="m21.5 11.5-1.914-1.914A2 2 0 0 1 19 8.172V7l-2.26-2.26a6 6 0 0 0-4.202-1.756L9 2.96l.92.82A6.18 6.18 0 0 1 12 8.4V10l2 2h1.172a2 2 0 0 1 1.414.586L18.5 14.5"/>`,
   },
   {
     label: 'Learning',
     value: 'AI automation integrations',
     accent: '#a78bfa',
-    // lucide: sparkles
-    icon: `<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063A2 2 0 0 0 14.063 15.5l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v5"/><path d="M5 19H2"/>`,
+    // lucide: sparkles (lucide-static v0.532.0)
+    icon: `<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/>`,
   },
   {
     label: 'Open to',
     value: 'Collaborations, coding requests, and small freelance tasks',
     accent: '#22c55e',
-    // lucide: handshake — simplified to render cleanly at 16px
-    icon: `<path d="M11 17 5.5 11.5a2 2 0 0 1 0-2.83L8 6.17a2 2 0 0 1 2.83 0L13 8.37"/><path d="M13 8.37 18.5 13.9a2 2 0 0 1 0 2.83L16 19.17a2 2 0 0 1-2.83 0L11 17"/><path d="M8 12 13 17"/><path d="M16 8 8 16"/>`,
+    // lucide: handshake (lucide-static v0.532.0)
+    icon: `<path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/>`,
   },
 ];
 
