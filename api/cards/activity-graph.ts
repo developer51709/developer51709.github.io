@@ -14,60 +14,74 @@ const MUTED = '#6b7280';
 const W = 495, H = 195;
 function pillW(handle: string, badge: string) { return Math.round(12 + handle.length * 6.2 + 10 + badge.length * 6.2 + 12); }
 
-// Lucide calendar for header (lucide-static v0.532.0)
 const HEADER_ICON = `<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>`;
 
-const LEVELS = ['#0e0e14', '#1a2a4a', '#2a4a7a', '#4f7cff', '#7da4ff'];
+const LEVELS = ['#16161e', '#1e3358', '#2a5090', '#4f7cff', '#7da4ff'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+// Layout — matches other 495×195 cards. Heatmap inside bordered inner card.
 const PAD = 16;
 const INNER_X = PAD;
 const INNER_Y = 62;
 const INNER_W = W - PAD * 2;
-const INNER_H = 102;
+const INNER_H = 106;
 const CELL = 7;
-const GAP = 1;
-const STEP = CELL + GAP;
+const GAP = 2;
+const STEP = CELL + GAP; // 9
 const GRID_PAD_X = 28;
-const GRID_PAD_Y = 16;
+const GRID_PAD_Y = 18;
 
-function cardSvg(username: string, contributions: { date: string; count: number }[], total: number) {
+function cardSvg(username: string, contributions: { date: string; level: number }[], total: number) {
   const handle = `@${username}`;
-  const badge = 'Activity';
+  const badge = total > 0 ? `${total.toLocaleString()} contributions` : 'Activity';
   const pw = pillW(handle, badge);
 
-  const byDate = new Map(contributions.map((d) => [d.date, d.count]));
-  const sorted = contributions.filter((d) => d.count > 0).map((d) => d.date).sort();
-  const firstDate = sorted.length > 0 ? sorted[0] : new Date().toISOString().slice(0, 10);
-  const first = new Date(firstDate + 'T00:00:00Z');
-  const dayOfWeek = first.getUTCDay();
-  const start = new Date(first); start.setUTCDate(start.getUTCDate() - dayOfWeek);
+  // Map sorted days to grid positions (GitHub calendar is Sunday-start)
+  const byKey = new Map(contributions.map((d) => [d.date, d.level]));
+  const dates = contributions.map((d) => d.date).sort();
+  if (dates.length === 0) {
+    const lastYear = new Date(); lastYear.setDate(lastYear.getDate() - 364);
+    const d = new Date(lastYear);
+    while (d <= new Date()) {
+      dates.push(d.toISOString().slice(0, 10));
+      d.setDate(d.getDate() + 1);
+    }
+  }
+  const first = new Date(dates[0] + 'T00:00:00Z');
+  const start = new Date(first); start.setUTCDate(start.getUTCDate() - first.getUTCDay());
 
   const today = new Date(); today.setUTCHours(23, 59, 59, 999);
-  const allDays: { date: string; count: number; col: number; row: number }[] = [];
-  const d = new Date(start); let col = 0;
+  type Cell = { date: string; level: number; col: number; row: number };
+  const allDays: Cell[] = [];
+  const d = new Date(start);
+  let col = 0;
   while (d <= today) {
     const dateStr = d.toISOString().slice(0, 10);
-    allDays.push({ date: dateStr, count: byDate.get(dateStr) || 0, col, row: d.getUTCDay() });
+    allDays.push({ date: dateStr, level: byKey.get(dateStr) ?? 0, col, row: d.getUTCDay() });
     d.setUTCDate(d.getUTCDate() + 1);
     if (d.getUTCDay() === 0) col++;
   }
-  const maxCols = Math.floor((INNER_W - GRID_PAD_X - 8) / STEP);
-  const trimmed = allDays.filter((day) => day.col < maxCols);
-
+  const maxCols = Math.floor((INNER_W - GRID_PAD_X - 6) / STEP);
+  const trimmed = allDays.slice(-maxCols * 7).map((cell, idx) => ({
+    ...cell,
+    col: Math.floor(idx / 7),
+    row: idx % 7,
+  }));
+  // Re-derive month labels from trimmed
   const monthLabels: { label: string; x: number }[] = [];
   let lastMonth = -1;
   for (const day of trimmed) {
+    if (day.row !== 0) continue;
     const m = new Date(day.date + 'T00:00:00Z').getUTCMonth();
     if (m !== lastMonth) { monthLabels.push({ label: MONTHS[m], x: INNER_X + GRID_PAD_X + day.col * STEP }); lastMonth = m; }
   }
 
   let cells = '';
   for (const day of trimmed) {
-    const lvl = day.count === 0 ? 0 : day.count <= 2 ? 1 : day.count <= 5 ? 2 : day.count <= 10 ? 3 : 4;
     const x = INNER_X + GRID_PAD_X + day.col * STEP;
     const y = INNER_Y + GRID_PAD_Y + day.row * STEP;
-    cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2" fill="${LEVELS[lvl]}"><title>${day.date}: ${day.count} contributions</title></rect>\n`;
+    const fill = LEVELS[Math.min(day.level, 4)];
+    cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="1.8" fill="${fill}"><title>${day.date}</title></rect>\n`;
   }
 
   let monthSvg = '';
@@ -77,7 +91,7 @@ function cardSvg(username: string, contributions: { date: string; count: number 
   let daySvg = '';
   for (let i = 0; i < 7; i++) if (dayLabels[i]) {
     const y = INNER_Y + GRID_PAD_Y + i * STEP + 6;
-    daySvg += `<text x="${INNER_X + 6}" y="${y}" font-family="${FF}" font-size="6.5" fill="${MUTED}">${dayLabels[i]}</text>\n`;
+    daySvg += `<text x="${INNER_X + 5}" y="${y}" font-family="${FF}" font-size="6.5" fill="${MUTED}">${dayLabels[i]}</text>\n`;
   }
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -95,7 +109,7 @@ function cardSvg(username: string, contributions: { date: string; count: number 
   ${monthSvg}
   ${daySvg}
   ${cells}
-  <g transform="translate(${W - 118}, ${H - 16})">
+  <g transform="translate(${W - 118}, ${H - 14})">
     <text x="0" y="8" font-family="${FF}" font-size="7" fill="${MUTED}">Less</text>
     ${LEVELS.map((c, i) => `<rect x="${22 + i * 12}" y="0" width="8" height="8" rx="2" fill="${c}"/>`).join('')}
     <text x="${22 + 5 * 12 + 6}" y="8" font-family="${FF}" font-size="7" fill="${MUTED}">More</text>
@@ -108,6 +122,31 @@ function errorSvg(msg: string) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/><text x="${W / 2}" y="${H / 2 + 6}" text-anchor="middle" font-family="${FF}" font-size="13" fill="${MUTED}">${esc(msg)}</text></svg>`;
 }
 
+async function fetchViaHtml(username: string): Promise<{ days: { date: string; level: number }[]; total: number } | null> {
+  try {
+    const r = await fetch(`https://github.com/users/${encodeURIComponent(username)}/contributions`, {
+      headers: { 'User-Agent': 'github-card/1.0', Accept: 'text/html' },
+    });
+    if (!r.ok) return null;
+    const html = await r.text();
+    let total = 0;
+    const tm = html.match(/([\d,]+)\s+contributions\s+in\s+the\s+last\s+year/i);
+    if (tm) total = parseInt(tm[1].replace(/,/g, ''), 10);
+    const days: { date: string; level: number }[] = [];
+    const re = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) days.push({ date: m[1], level: parseInt(m[2], 10) });
+    if (days.length === 0) {
+      const re2 = /data-level="(\d)"[^>]*data-date="(\d{4}-\d{2}-\d{2})"/g;
+      let m2: RegExpExecArray | null;
+      while ((m2 = re2.exec(html)) !== null) days.push({ date: m2[2], level: parseInt(m2[1], 10) });
+    }
+    if (days.length === 0) return total ? { days: [], total } : null;
+    days.sort((a, b) => a.date.localeCompare(b.date));
+    return { days, total };
+  } catch { return null; }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin as string | undefined;
   res.setHeader('Access-Control-Allow-Origin', origin || '*'); res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -118,27 +157,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.GITHUB_TOKEN;
   try {
     const cacheKey = `activity:${username}`;
-    let result = cached<{ contributions: { date: string; count: number }[]; total: number }>(cacheKey);
+    let result = cached<{ days: { date: string; level: number }[]; total: number }>(cacheKey);
     if (!result) {
-      let contributions: { date: string; count: number }[] = []; let total = 0;
+      let days: { date: string; level: number }[] | null = null;
+      let total = 0;
       if (token) {
-        const now = new Date(); const to = now.toISOString().slice(0, 10); const from = new Date(now.getTime() - 365 * 86400_000).toISOString().slice(0, 10);
-        const gql = await fetch('https://api.github.com/graphql', {
-          method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `query($u:String!,$f:String!,$t:String!){user(login:$u){contributionsCollection(from:$f,to:$t){contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}`, variables: { u: username, f: from + 'T00:00:00Z', t: to + 'T23:59:59Z' } }),
-        });
-        if (gql.ok) {
-          const body = await gql.json(); const cal = body?.data?.user?.contributionsCollection?.contributionCalendar;
-          if (cal) {
-            total = cal.totalContributions;
-            contributions = cal.weeks.flatMap((w: { contributionDays: { date: string; contributionCount: number }[] }) => w.contributionDays.map((d: { date: string; contributionCount: number }) => ({ date: d.date.slice(0, 10), count: d.contributionCount })));
+        try {
+          const now = new Date(); const to = now.toISOString().slice(0, 10); const from = new Date(now.getTime() - 365 * 86400_000).toISOString().slice(0, 10);
+          const gql = await fetch('https://api.github.com/graphql', {
+            method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: `query($u:String!,$f:String!,$t:String!){user(login:$u){contributionsCollection(from:$f,to:$t){contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}`, variables: { u: username, f: from + 'T00:00:00Z', t: to + 'T23:59:59Z' } }),
+          });
+          if (gql.ok) {
+            const body = await gql.json() as { data?: { user?: { contributionsCollection?: { contributionCalendar?: { totalContributions: number; weeks: { contributionDays: { date: string; contributionCount: number }[] }[] } } } };
+            const cal = body?.data?.user?.contributionsCollection?.contributionCalendar;
+            if (cal && Array.isArray(cal.weeks)) {
+              total = cal.totalContributions;
+              const raw = cal.weeks.flatMap((w) => w.contributionDays.map((d) => ({ date: d.date.slice(0, 10), count: d.contributionCount })));
+              const maxCount = Math.max(1, ...raw.map((r) => r.count));
+              days = raw.map((r) => ({
+                date: r.date,
+                level: r.count === 0 ? 0 : r.count <= Math.ceil(maxCount * 0.25) ? 1 : r.count <= Math.ceil(maxCount * 0.5) ? 2 : r.count <= Math.ceil(maxCount * 0.75) ? 3 : 4,
+              }));
+            }
           }
-        }
+        } catch { /* fall through */ }
       }
-      if (contributions.length === 0) { contributions = []; total = 0; }
-      result = { contributions, total }; store(cacheKey, result);
+      if (!days || days.length === 0) {
+        const htmlData = await fetchViaHtml(username);
+        if (htmlData) { days = htmlData.days; total = htmlData.total || total; }
+      }
+      if (!days) days = [];
+      result = { days, total };
+      store(cacheKey, result);
     }
     res.setHeader('Content-Type', 'image/svg+xml'); res.setHeader('Cache-Control', 'public, max-age=1800');
-    return res.send(cardSvg(username, result.contributions, result.total));
+    return res.send(cardSvg(username, result.days, result.total));
   } catch (err) { console.error('card/activity-graph error:', err); return res.status(500).setHeader('Content-Type', 'image/svg+xml').send(errorSvg('Service error')); }
 }

@@ -6,7 +6,6 @@ function cached<T>(k: string): T | null { const e = cache.get(k); if (e && e.exp
 function store(k: string, v: unknown) { cache.set(k, { data: v, expires: Date.now() + CACHE_TTL }); }
 function esc(s: string) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 function num(n: number) { if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'm'; if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k'; return String(n); }
-function trunc(s: string, max = 14) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
 const FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const BG = '#060609';
@@ -19,13 +18,11 @@ function pillW(handle: string, badge: string) { return Math.round(12 + handle.le
 const HEADER_ICON = `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>`;
 // Lucide icons (lucide-static v0.532.0, MIT) — viewBox 0 0 24 24, stroke 2, round.
 const ICONS = {
-  // lucide/flame
   flame: `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>`,
-  // lucide/trophy (5 paths)
   trophy: `<path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"/><path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"/><path d="M18 9h1.5a1 1 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6 9H4.5a1 1 0 0 1 0-5H6"/>`,
 } as const;
 
-function cardSvg(username: string, data: { currentStreak: number; longestStreak: number; totalContributions: number; startDate: string; endDate: string }) {
+function cardSvg(username: string, data: { currentStreak: number; longestStreak: number; totalContributions: number }) {
   const handle = `@${username}`;
   const badge = 'Streak';
   const pw = pillW(handle, badge);
@@ -54,7 +51,6 @@ function cardSvg(username: string, data: { currentStreak: number; longestStreak:
     </g>`;
   }).join('');
 
-  // Second row: total line centered below the two cards
   const totalLine = `<text x="${W / 2}" y="138" text-anchor="middle" font-family="${FF}" font-size="11" fill="${MUTED}">Total: <tspan font-weight="600" fill="${TEXT}">${esc(num(data.totalContributions))}</tspan> contributions in the last year</text>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
@@ -79,16 +75,102 @@ function errorSvg(msg: string) {
 }
 
 function calcStreaks(days: { date: string; count: number }[]) {
-  let current = 0, streakStart = '', streakEnd = '';
+  // days must be sorted ascending by date ( YYYY-MM-DD )
+  let current = 0;
   const today = new Date().toISOString().slice(0, 10);
   let checkDate = today;
+  // walk backwards from today
   for (let i = days.length - 1; i >= 0; i--) {
-    if (days[i].date <= checkDate && days[i].count > 0) { current++; streakEnd = days[i].date; streakStart = days[i].date; const d = new Date(days[i].date + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); checkDate = d.toISOString().slice(0, 10); }
-    else if (days[i].date === checkDate && days[i].count === 0) break; else break;
+    const d = days[i];
+    if (d.date === checkDate && d.count > 0) {
+      current++;
+      const prev = new Date(d.date + 'T00:00:00Z');
+      prev.setUTCDate(prev.getUTCDate() - 1);
+      checkDate = prev.toISOString().slice(0, 10);
+    } else if (d.date === checkDate && d.count === 0) {
+      break;
+    } else if (d.date < checkDate) {
+      // No entry for checkDate means gap — break
+      // But HTML calendar includes every day, so we should have an entry for every date.
+      // If we jump over missing date, break.
+      break;
+    } else if (d.date > checkDate) {
+      continue;
+    } else {
+      break;
+    }
+  }
+  // If today has no entry yet (future), check yesterday
+  if (current === 0) {
+    const yesterday = new Date();
+    yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+    const yStr = yesterday.toISOString().slice(0, 10);
+    const yEntry = days.find((x) => x.date === yStr);
+    if (yEntry && yEntry.count > 0) {
+      // count streak ending yesterday
+      checkDate = yStr;
+      for (let i = days.length - 1; i >= 0; i--) {
+        const d = days[i];
+        if (d.date === checkDate && d.count > 0) {
+          current++;
+          const prev = new Date(d.date + 'T00:00:00Z');
+          prev.setUTCDate(prev.getUTCDate() - 1);
+          checkDate = prev.toISOString().slice(0, 10);
+        } else if (d.date === checkDate && d.count === 0) break;
+        else if (d.date > checkDate) continue;
+        else if (d.date < checkDate) break;
+      }
+    }
   }
   let longest = 0, run = 0;
   for (const d of days) { if (d.count > 0) { run++; if (run > longest) longest = run; } else run = 0; }
-  return { currentStreak: current, longestStreak: longest, startDate: streakStart || '—', endDate: streakEnd || '—' };
+  return { currentStreak: current, longestStreak: longest };
+}
+
+async function fetchViaHtml(username: string): Promise<{ days: { date: string; count: number }[]; total: number } | null> {
+  try {
+    const r = await fetch(`https://github.com/users/${encodeURIComponent(username)}/contributions`, {
+      headers: { 'User-Agent': 'github-card/1.0', Accept: 'text/html' },
+    });
+    if (!r.ok) return null;
+    const html = await r.text();
+    // total e.g. "3,161 contributions in the last year"
+    let total = 0;
+    const totalMatch = html.match(/([\d,]+)\s+contributions\s+in\s+the\s+last\s+year/i);
+    if (totalMatch) total = parseInt(totalMatch[1].replace(/,/g, ''), 10);
+    else {
+      const fallback = html.match(/([\d,]+)\s+contributions/i);
+      if (fallback) total = parseInt(fallback[1].replace(/,/g, ''), 10);
+    }
+    const days: { date: string; count: number }[] = [];
+    // GitHub renders each day as <td ... data-date="YYYY-MM-DD" ... data-level="0..4">
+    const re = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) {
+      const date = m[1];
+      const level = parseInt(m[2], 10);
+      // Map level (0..4) to a representative count that matches the existing threshold logic:
+      // level 0 -> 0, 1 -> 1, 2 -> 4, 3 -> 7, 4 -> 12 (so count>0 correctly indicates contribution)
+      const count = level === 0 ? 0 : level === 1 ? 1 : level === 2 ? 4 : level === 3 ? 7 : 12;
+      days.push({ date, count });
+    }
+    // Fallback if order is reversed (level before date)
+    if (days.length === 0) {
+      const re2 = /data-level="(\d)"[^>]*data-date="(\d{4}-\d{2}-\d{2})"/g;
+      let m2: RegExpExecArray | null;
+      while ((m2 = re2.exec(html)) !== null) {
+        const level = parseInt(m2[1], 10);
+        const date = m2[2];
+        const count = level === 0 ? 0 : level === 1 ? 1 : level === 2 ? 4 : level === 3 ? 7 : 12;
+        days.push({ date, count });
+      }
+    }
+    if (days.length === 0) return total ? { days: [], total } : null;
+    days.sort((a, b) => a.date.localeCompare(b.date));
+    return { days, total };
+  } catch {
+    return null;
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -101,29 +183,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const token = process.env.GITHUB_TOKEN;
   try {
     const cacheKey = `streak:${username}`;
-    let result = cached<{ currentStreak: number; longestStreak: number; totalContributions: number; startDate: string; endDate: string }>(cacheKey);
+    let result = cached<{ currentStreak: number; longestStreak: number; totalContributions: number }>(cacheKey);
     if (!result) {
+      let days: { date: string; count: number }[] | null = null;
+      let total = 0;
+      // Try GraphQL first if token is available (most accurate)
       if (token) {
-        const now = new Date(); const to = now.toISOString().slice(0, 10); const from = new Date(now.getTime() - 365 * 86400_000).toISOString().slice(0, 10);
-        const gql = await fetch('https://api.github.com/graphql', {
-          method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: `query($u:String!,$f:String!,$t:String!){user(login:$u){contributionsCollection(from:$f,to:$t){contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}`, variables: { u: username, f: from + 'T00:00:00Z', t: to + 'T23:59:59Z' } }),
-        });
-        if (gql.ok) {
-          const body = await gql.json(); const cal = body?.data?.user?.contributionsCollection?.contributionCalendar;
-          if (cal) {
-            const days = cal.weeks.flatMap((w: { contributionDays: { date: string; contributionCount: number }[] }) => w.contributionDays.map((d: { date: string; contributionCount: number }) => ({ date: d.date.slice(0, 10), count: d.contributionCount })));
-            result = { ...calcStreaks(days), totalContributions: cal.totalContributions };
+        try {
+          const now = new Date(); const to = now.toISOString().slice(0, 10); const from = new Date(now.getTime() - 365 * 86400_000).toISOString().slice(0, 10);
+          const gql = await fetch('https://api.github.com/graphql', {
+            method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: `query($u:String!,$f:String!,$t:String!){user(login:$u){contributionsCollection(from:$f,to:$t){contributionCalendar{totalContributions weeks{contributionDays{date contributionCount}}}}}}`, variables: { u: username, f: from + 'T00:00:00Z', t: to + 'T23:59:59Z' } }),
+          });
+          if (gql.ok) {
+            const body = await gql.json() as { data?: { user?: { contributionsCollection?: { contributionCalendar?: { totalContributions: number; weeks: { contributionDays: { date: string; contributionCount: number }[] }[] } } } };
+            const cal = body?.data?.user?.contributionsCollection?.contributionCalendar;
+            if (cal && Array.isArray(cal.weeks)) {
+              total = cal.totalContributions;
+              days = cal.weeks.flatMap((w) => w.contributionDays.map((d) => ({ date: d.date.slice(0, 10), count: d.contributionCount })));
+              days.sort((a, b) => a.date.localeCompare(b.date));
+            }
           }
+        } catch { /* fall through to HTML */ }
+      }
+      // HTML fallback (no token needed, always works)
+      if (!days || days.length === 0) {
+        const htmlData = await fetchViaHtml(username);
+        if (htmlData) {
+          days = htmlData.days;
+          total = htmlData.total || total;
         }
       }
-      if (!result) {
+      // Final fallback: try to at least get total from profile page if HTML parsing failed
+      if ((!days || days.length === 0) && total === 0) {
         try {
           const r = await fetch(`https://github.com/${username}`, { headers: { 'User-Agent': 'github-card/1.0' } });
-          if (r.ok) { const html = await r.text(); const m = html.match(/(\d[\d,]*)\s+contributions?\s+in\s+the\s+last\s+year/i); const total = m ? parseInt(m[1].replace(/,/g, ''), 10) : 0; result = { currentStreak: 0, longestStreak: 0, totalContributions: total, startDate: '—', endDate: '—' }; }
+          if (r.ok) { const html = await r.text(); const m = html.match(/([\d,]+)\s+contributions\s+in\s+the\s+last\s+year/i); if (m) total = parseInt(m[1].replace(/,/g, ''), 10); }
         } catch { /* */ }
       }
-      if (!result) result = { currentStreak: 0, longestStreak: 0, totalContributions: 0, startDate: '—', endDate: '—' };
+      if (!days) days = [];
+      const { currentStreak, longestStreak } = calcStreaks(days);
+      result = { currentStreak, longestStreak, totalContributions: total };
       store(cacheKey, result);
     }
     res.setHeader('Content-Type', 'image/svg+xml'); res.setHeader('Cache-Control', 'public, max-age=1800');
