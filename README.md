@@ -17,6 +17,12 @@
 
 ---
 
+<p align="center">
+  <img src="https://sorenthedev.indevs.in/api/cards/about?username=developer51709" width="100%" alt="About — full-stack developer building Discord bots, automation tools and dashboards" />
+</p>
+
+---
+
 ### 📊 Analytics
 
 <table>
@@ -72,7 +78,7 @@
 
 <p align="center">
   <sub>
-    Built on <a href="https://sorenthedev.indevs.in">sorenthedev.indevs.in</a> · Self-hosted cards: <code>/api/cards/banner</code> · <code>/api/cards/stats</code> · <code>/api/cards/streak</code> · <code>/api/cards/top-langs</code> · <code>/api/cards/activity-graph</code> · <code>/api/cards/stack</code> · <code>/api/cards/contact</code><br/>
+    Built on <a href="https://sorenthedev.indevs.in">sorenthedev.indevs.in</a> · Self-hosted cards: <code>/api/cards/banner</code> · <code>/api/cards/about</code> · <code>/api/cards/stats</code> · <code>/api/cards/streak</code> · <code>/api/cards/top-langs</code> · <code>/api/cards/activity-graph</code> · <code>/api/cards/stack</code> · <code>/api/cards/contact</code><br/>
     <a href="https://github.com/developer51709/developer51709/tree/d4aac28a12da5eb7afdb61b256d5674d24783e23/public_keys">🔐 Public Keys</a> · <a href="https://github.com/developer51709?tab=followers">⭐ Follow</a>
   </sub>
 </p>
