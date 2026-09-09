@@ -43,11 +43,13 @@ const LEVELS = [
   '#7da4ff', // very high (accent variant)
 ];
 
-const CELL = 12;
-const GAP = 3;
+const CELL = 8;
+const GAP = 1;
 const ROWS = 7;
-const LEFT_PAD = 32;
-const TOP_PAD = 62;
+const LEFT_PAD = 27;
+const TOP_PAD = 60;
+const CARD_W = 495;
+const CARD_H = 195;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 function cardSvg(
@@ -101,10 +103,6 @@ function cardSvg(
     }
   }
 
-  const totalCols = col + 1;
-  const W = LEFT_PAD + totalCols * (CELL + GAP) + 10;
-  const H = TOP_PAD + ROWS * (CELL + GAP) + 30;
-
   // Cells
   let cells = '';
   for (const day of allDays) {
@@ -120,13 +118,13 @@ function cardSvg(
               : 4;
     const x = LEFT_PAD + day.col * (CELL + GAP);
     const y = TOP_PAD + day.row * (CELL + GAP);
-    cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="3" fill="${LEVELS[lvl]}"><title>${day.date}: ${day.count} contributions</title></rect>\n`;
+    cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2" fill="${LEVELS[lvl]}"><title>${day.date}: ${day.count} contributions</title></rect>\n`;
   }
 
   // Month labels
   let monthSvg = '';
   for (const m of monthLabels) {
-    monthSvg += `<text x="${m.x}" y="${TOP_PAD - 10}" font-size="9" fill="${THEME.muted}">${m.label}</text>\n`;
+    monthSvg += `<text x="${m.x}" y="${TOP_PAD - 8}" font-size="8" fill="${THEME.muted}">${m.label}</text>\n`;
   }
 
   // Day-of-week labels
@@ -134,46 +132,46 @@ function cardSvg(
   let daySvg = '';
   for (let i = 0; i < 7; i++) {
     if (dayLabels[i]) {
-      daySvg += `<text x="0" y="${TOP_PAD + i * (CELL + GAP) + 10}" font-size="8" fill="${THEME.muted}">${dayLabels[i]}</text>\n`;
+      daySvg += `<text x="0" y="${TOP_PAD + i * (CELL + GAP) + 7}" font-size="7" fill="${THEME.muted}">${dayLabels[i]}</text>\n`;
     }
   }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}" viewBox="0 0 ${CARD_W} ${CARD_H}">
   <style>
     text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif}
-    title{font-size:12px}
+    title{font-size:11px}
   </style>
 
-  <rect width="${W}" height="${H}" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
+  <rect width="${CARD_W}" height="${CARD_H}" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
 
   <!-- accent bar -->
-  <rect width="${W}" height="4" rx="2" fill="${THEME.primary}"/>
+  <rect width="${CARD_W}" height="4" rx="2" fill="${THEME.primary}"/>
 
   <!-- header -->
-  <text x="14" y="36" font-size="14" font-weight="700" fill="${THEME.text}">${esc(trunc(username))}</text>
-  <text x="${W - 14}" y="36" font-size="11" fill="${THEME.muted}" text-anchor="end">${total.toLocaleString()} contributions in the last year</text>
+  <text x="14" y="34" font-size="13" font-weight="700" fill="${THEME.text}">${esc(trunc(username))}</text>
+  <text x="${CARD_W - 14}" y="34" font-size="10" fill="${THEME.muted}" text-anchor="end">${total.toLocaleString()} contributions in the last year</text>
 
   ${monthSvg}
   ${daySvg}
   ${cells}
 
   <!-- legend -->
-  <g transform="translate(${W - 130},${H - 18})">
-    <text x="0" y="9" font-size="8" fill="${THEME.muted}">Less</text>
+  <g transform="translate(${CARD_W - 110},${CARD_H - 14})">
+    <text x="0" y="8" font-size="7" fill="${THEME.muted}">Less</text>
     ${LEVELS.map(
       (c, i) =>
-        `<rect x="${26 + i * 14}" y="1" width="10" height="10" rx="2" fill="${c}"/>`,
+        `<rect x="${22 + i * 12}" y="0" width="8" height="8" rx="2" fill="${c}"/>`,
     ).join('')}
-    <text x="${26 + 5 * 14 + 2}" y="9" font-size="8" fill="${THEME.muted}">More</text>
+    <text x="${22 + 5 * 12 + 2}" y="8" font-size="7" fill="${THEME.muted}">More</text>
   </g>
 </svg>`;
 }
 
 function errorSvg(msg: string) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="722" height="160" viewBox="0 0 722 160">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}" viewBox="0 0 ${CARD_W} ${CARD_H}">
   <style>text{font-family:-apple-system,BlinkMacSystemFont,sans-serif}</style>
-  <rect width="722" height="160" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
-  <text x="361" y="84" text-anchor="middle" font-size="13" fill="${THEME.muted}">${esc(msg)}</text>
+  <rect width="${CARD_W}" height="${CARD_H}" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
+  <text x="${CARD_W / 2}" y="${CARD_H / 2}" text-anchor="middle" font-size="13" fill="${THEME.muted}">${esc(msg)}</text>
 </svg>`;
 }
 
