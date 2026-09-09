@@ -218,20 +218,25 @@ function bannerSvg(
   const nameEl = `<text x="240" y="104" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="46" font-weight="800" fill="#fafafa">${esc(PROFILE.name)}</text>`;
   const subEl = `<text x="240" y="132" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="15" fill="#9ca3af">${esc(PROFILE.subtitle)}</text>`;
 
-  // Chips + pill
+  // Pill sized to fit the actual handle + badge text.
+  function pillWidth(handle: string, badge: string): number {
+    const charW = 7.2; // ~avg glyph width at 13px for the system font
+    return Math.round(20 + handle.length * charW + 10 + badge.length * charW + 20);
+  }
+  const pillHandle = `@${usernameClean}`;
+  const pillBadge = PROFILE.badge;
+  const pillW = pillWidth(pillHandle, pillBadge);
   const handlePill = `<g transform="translate(240,152)">
-    <rect width="172" height="28" rx="14" fill="rgba(79,124,255,0.12)"/>
-    <text x="20" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" fill="#4f7cff">@${esc(usernameClean)}</text>
-    <text x="144" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" fill="#7da4ff">·</text>
-    <text x="156" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" fill="#4f7cff">${esc(PROFILE.badge)}</text>
+    <rect width="${String(pillW)}" height="28" rx="14" fill="rgba(79,124,255,0.12)"/>
+    <text x="20" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" fill="#4f7cff">${esc(pillHandle)}</text>
+    <text x="${String(Math.round(20 + pillHandle.length * 7.2 + 5))}" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" fill="#7da4ff">·</text>
+    <text x="${String(Math.round(20 + pillHandle.length * 7.2 + 15))}" y="19" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" fill="#4f7cff">${esc(pillBadge)}</text>
   </g>`;
 
   const aboutX = 48;
   const leftColW = 540;
   const smallLabelRow = `<text x="${String(aboutX)}" y="252" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" font-weight="600" letter-spacing="3" fill="#6b7280">about</text>`;
   const bioLines = wrapWords(PROFILE.tagline, 56);
-  // Center each line within its column, under the "about" label.
-  const bioCenterX = aboutX + leftColW / 2;
   const bio = bioLines
     .map((line, i) => `<text x="48" y="${284 + i * 24}" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="16" fill="#cbd5f5">${esc(line)}</text>`)
     .join('');
