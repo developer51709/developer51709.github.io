@@ -9,46 +9,57 @@ function num(n: number) { if (n >= 1_000_000) return (n / 1_000_000).toFixed(1).
 function trunc(s: string, max = 14) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
 const FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
-const T = { bg: '#060609', border: 'rgba(255,255,255,0.08)', text: '#e7e7ec', muted: '#6b7280', primary: '#4f7cff', green: '#22c55e' };
+const BG = '#060609';
+const BORDER = 'rgba(255,255,255,0.08)';
+const TEXT = '#e7e7ec';
+const MUTED = '#6b7280';
 const W = 495, H = 195;
-const pillW = (handle: string, badge: string) => Math.round(20 + handle.length * 7.2 + 10 + badge.length * 7.2 + 20);
 
 function cardSvg(username: string, data: { currentStreak: number; longestStreak: number; totalContributions: number; startDate: string; endDate: string }) {
-  const pill = `@${username}`;
-  const pw = pillW(pill, 'Streak');
+  const handle = `@${username}`;
+  const badge = 'Streak';
+  const CHA = 7.2;
+  const pw = Math.round(20 + handle.length * CHA + 10 + badge.length * CHA + 20);
+  const dotX = Math.round(20 + handle.length * 6.2 + 4);
+  const badgeX = Math.round(20 + handle.length * 6.2 + 14);
+
+  const pad = 16;
+  const gapX = 11;
+  const cardW = Math.floor((W - pad * 2 - gapX) / 2);
+  const cardH = 66;
+  const topY = 64;
+
+  const cards = [
+    { value: String(data.currentStreak), label: 'Current Streak', sub: data.startDate !== '—' ? `${data.startDate} → ${data.endDate}` : 'No active streak' },
+    { value: String(data.longestStreak), label: 'Longest Streak', sub: `${num(data.totalContributions)} total` },
+  ].map((c, i) => {
+    const x = pad + i * (cardW + gapX);
+    return `<g transform="translate(${x}, ${topY})">
+      <rect width="${cardW}" height="${cardH}" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <text x="${cardW / 2}" y="28" text-anchor="middle" font-family="${FF}" font-size="24" font-weight="700" fill="${TEXT}">${esc(c.value)}</text>
+      <text x="${cardW / 2}" y="44" text-anchor="middle" font-family="${FF}" font-size="11" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
+      <text x="${cardW / 2}" y="58" text-anchor="middle" font-family="${FF}" font-size="9" fill="${MUTED}">${esc(c.sub)}</text>
+    </g>`;
+  }).join('');
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
     <radialGradient id="glowA" cx="0.25" cy="0.35" r="0.8" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#4f7cff" stop-opacity="0.14"/><stop offset="1" stop-color="#040407" stop-opacity="0"/></radialGradient>
     <radialGradient id="glowB" cx="0.75" cy="0.75" r="0.6" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#7c5cff" stop-opacity="0.12"/><stop offset="1" stop-color="#040407" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="${W}" height="${H}" rx="18" fill="${T.bg}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${String(W - 1)}" height="${String(H - 1)}" rx="18" fill="none" stroke="${T.border}" stroke-width="1"/>
-  <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(34,197,94,0.06)"/>
-  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${T.text}">${esc(trunc(username))}</text>
-  <g transform="translate(${String(W - pw - 16)},20)"><rect width="${String(pw)}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(pill)}</text><text x="${String(12 + pill.length * 6.2 + 4)}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">· Streak</text></g>
-  <line x1="16" y1="52" x2="${String(W - 16)}" y2="52" stroke="${T.border}" stroke-width="1"/>
-
-  <g transform="translate(130,75)">
-    <text x="0" y="0" font-family="${FF}" font-size="42" font-weight="700" fill="${T.green}">${data.currentStreak}</text>
-    <text x="0" y="22" font-family="${FF}" font-size="12" font-weight="500" fill="${T.muted}">Current Streak</text>
-    <text x="0" y="38" font-family="${FF}" font-size="10" fill="${T.muted}">${data.startDate} → ${data.endDate}</text>
-  </g>
-
-  <line x1="247" y1="58" x2="247" y2="132" stroke="${T.border}" stroke-width="1"/>
-
-  <g transform="translate(365,75)">
-    <text x="0" y="0" font-family="${FF}" font-size="42" font-weight="700" fill="${T.primary}" text-anchor="middle">${data.longestStreak}</text>
-    <text x="0" y="22" font-family="${FF}" font-size="12" font-weight="500" fill="${T.muted}" text-anchor="middle">Longest Streak</text>
-  </g>
-
-  <line x1="16" y1="132" x2="${String(W - 16)}" y2="132" stroke="${T.border}" stroke-width="1"/>
-
-  <text x="20" y="155" font-family="${FF}" font-size="11" fill="${T.muted}">Total: <tspan font-weight="600" fill="${T.text}">${num(data.totalContributions)}</tspan> contributions</text>
-  <text x="${String(W - 16)}" y="${H - 10}" font-family="${FF}" font-size="9" fill="${T.muted}" text-anchor="end">Self-hosted</text>
+  <rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/>
+  <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
+  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">${esc(trunc(username))}</text>
+  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${dotX}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${badgeX}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(badge)}</text></g>
+  <line x1="16" y1="52" x2="${W - 16}" y2="52" stroke="${BORDER}" stroke-width="1"/>
+  ${cards}
+  <text x="20" y="154" font-family="${FF}" font-size="11" fill="${MUTED}">Total: <tspan font-weight="600" fill="${TEXT}">${esc(num(data.totalContributions))}</tspan> contributions in the last year</text>
+  <text x="${W - 16}" y="${H - 10}" font-family="${FF}" font-size="9" fill="${MUTED}" text-anchor="end">Self-hosted · sorenthedev.indevs.in/api/cards/streak</text>
 </svg>`;
 }
 
 function errorSvg(msg: string) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="18" fill="${T.bg}"/><text x="${String(W / 2)}" y="${String(H / 2 + 6)}" text-anchor="middle" font-family="${FF}" font-size="13" fill="${T.muted}">${esc(msg)}</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/><text x="${W / 2}" y="${H / 2 + 6}" text-anchor="middle" font-family="${FF}" font-size="13" fill="${MUTED}">${esc(msg)}</text></svg>`;
 }
 
 function calcStreaks(days: { date: string; count: number }[]) {
@@ -65,7 +76,7 @@ function calcStreaks(days: { date: string; count: number }[]) {
   return { currentStreak: current, longestStreak: longest, total, startDate: streakStart || '—', endDate: streakEnd || '—' };
 }
 
-export default async function handler(req: import('@vercel/node').VercelRequest, res: import('@vercel/node').VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin as string | undefined;
   res.setHeader('Access-Control-Allow-Origin', origin || '*'); res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).end();

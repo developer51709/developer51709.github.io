@@ -8,14 +8,36 @@ function esc(s: string) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').
 function trunc(s: string, max = 14) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
 const FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
-const T = { bg: '#060609', border: 'rgba(255,255,255,0.08)', text: '#e7e7ec', muted: '#6b7280', primary: '#4f7cff', accent: '#a78bfa' };
-const pillW = (handle: string, badge: string) => Math.round(20 + handle.length * 7.2 + 10 + badge.length * 7.2 + 20);
+const BG = '#060609';
+const BORDER = 'rgba(255,255,255,0.08)';
+const TEXT = '#e7e7ec';
+const MUTED = '#6b7280';
+const W = 495, H = 195;
+function pillW(handle: string, badge: string) { return Math.round(20 + handle.length * 7.2 + 10 + badge.length * 7.2 + 20); }
 
 const LEVELS = ['#0e0e14', '#1a2a4a', '#2a4a7a', '#4f7cff', '#7da4ff'];
-const CELL = 8, GAP = 1, LEFT_PAD = 27, TOP_PAD = 60, CARD_W = 495, CARD_H = 195;
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+// Fixed layout that matches the other 495×195 cards.
+// Heatmap lives inside a translucent inner card so it reads as part of the family.
+const PAD = 16;
+const INNER_X = PAD;
+const INNER_Y = 62;
+const INNER_W = W - PAD * 2;
+const INNER_H = 102;
+const CELL = 7;
+const GAP = 1;
+const STEP = CELL + GAP; // 8
+const GRID_PAD_X = 28; // space for day labels inside the inner card
+const GRID_PAD_Y = 16; // space for month labels inside the inner card
+
 function cardSvg(username: string, contributions: { date: string; count: number }[], total: number) {
+  const handle = `@${username}`;
+  const countLabel = `${total.toLocaleString()} contributions`;
+  const pw = pillW(handle, countLabel);
+  const dotX = Math.round(20 + handle.length * 7.2 + 5);
+  const badgeX = Math.round(20 + handle.length * 7.2 + 15);
+
   const byDate = new Map(contributions.map((d) => [d.date, d.count]));
   const sorted = contributions.filter((d) => d.count > 0).map((d) => d.date).sort();
   const firstDate = sorted.length > 0 ? sorted[0] : new Date().toISOString().slice(0, 10);
@@ -32,59 +54,68 @@ function cardSvg(username: string, contributions: { date: string; count: number 
     d.setUTCDate(d.getUTCDate() + 1);
     if (d.getUTCDay() === 0) col++;
   }
+  // Clamp to what fits in the inner card (53 cols max)
+  const maxCols = Math.floor((INNER_W - GRID_PAD_X - 8) / STEP);
+  const trimmed = allDays.filter((day) => day.col < maxCols);
 
   const monthLabels: { label: string; x: number }[] = [];
   let lastMonth = -1;
-  for (const day of allDays) {
+  for (const day of trimmed) {
     const m = new Date(day.date + 'T00:00:00Z').getUTCMonth();
-    if (m !== lastMonth) { monthLabels.push({ label: MONTHS[m], x: LEFT_PAD + day.col * (CELL + GAP) }); lastMonth = m; }
+    if (m !== lastMonth) {
+      monthLabels.push({ label: MONTHS[m], x: INNER_X + GRID_PAD_X + day.col * STEP });
+      lastMonth = m;
+    }
   }
 
   let cells = '';
-  for (const day of allDays) {
+  for (const day of trimmed) {
     const lvl = day.count === 0 ? 0 : day.count <= 2 ? 1 : day.count <= 5 ? 2 : day.count <= 10 ? 3 : 4;
-    const x = LEFT_PAD + day.col * (CELL + GAP);
-    const y = TOP_PAD + day.row * (CELL + GAP);
+    const x = INNER_X + GRID_PAD_X + day.col * STEP;
+    const y = INNER_Y + GRID_PAD_Y + day.row * STEP;
     cells += `<rect x="${x}" y="${y}" width="${CELL}" height="${CELL}" rx="2" fill="${LEVELS[lvl]}"><title>${day.date}: ${day.count} contributions</title></rect>\n`;
   }
 
   let monthSvg = '';
-  for (const m of monthLabels) monthSvg += `<text x="${m.x}" y="${TOP_PAD - 8}" font-family="${FF}" font-size="8" fill="${T.muted}">${m.label}</text>\n`;
+  for (const m of monthLabels) {
+    monthSvg += `<text x="${m.x}" y="${INNER_Y + 12}" font-family="${FF}" font-size="7.5" fill="${MUTED}">${m.label}</text>\n`;
+  }
 
-  const dayLabels = ['Sun', '', 'Tue', '', 'Thu', '', 'Sat'];
+  const dayLabels = ['Mon', '', 'Wed', '', 'Fri', '', ''];
   let daySvg = '';
-  for (let i = 0; i < 7; i++) if (dayLabels[i]) daySvg += `<text x="0" y="${TOP_PAD + i * (CELL + GAP) + 7}" font-family="${FF}" font-size="7" fill="${T.muted}">${dayLabels[i]}</text>\n`;
+  for (let i = 0; i < 7; i++) if (dayLabels[i]) {
+    const y = INNER_Y + GRID_PAD_Y + i * STEP + 6;
+    daySvg += `<text x="${INNER_X + 6}" y="${y}" font-family="${FF}" font-size="6.5" fill="${MUTED}">${dayLabels[i]}</text>\n`;
+  }
 
-  const pill = `@${username}`;
-  const pw = pillW(pill, 'Activity');
-  const countLabel = `${total.toLocaleString()} contributions`;
-
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}" viewBox="0 0 ${CARD_W} ${CARD_H}">
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
     <radialGradient id="glowA" cx="0.25" cy="0.35" r="0.8" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#4f7cff" stop-opacity="0.14"/><stop offset="1" stop-color="#040407" stop-opacity="0"/></radialGradient>
     <radialGradient id="glowB" cx="0.75" cy="0.75" r="0.6" gradientUnits="objectBoundingBox"><stop offset="0" stop-color="#7c5cff" stop-opacity="0.12"/><stop offset="1" stop-color="#040407" stop-opacity="0"/></radialGradient>
   </defs>
-  <rect width="${CARD_W}" height="${CARD_H}" rx="18" fill="${T.bg}"/><rect width="${CARD_W}" height="${CARD_H}" rx="18" fill="url(#glowA)"/><rect width="${CARD_W}" height="${CARD_H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${String(CARD_W - 1)}" height="${String(CARD_H - 1)}" rx="18" fill="none" stroke="${T.border}" stroke-width="1"/>
-  <rect width="${CARD_W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${CARD_W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
-  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${T.text}">${esc(trunc(username))}</text>
-  <g transform="translate(${String(CARD_W - pw - 16)},20)"><rect width="${String(pw)}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(pill)}</text><text x="${String(12 + pill.length * 6.2 + 4)}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">· ${esc(countLabel)}</text></g>
-  <line x1="16" y1="52" x2="${String(CARD_W - 16)}" y2="52" stroke="${T.border}" stroke-width="1"/>
+  <rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/>
+  <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
+  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">${esc(trunc(username))}</text>
+  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${dotX - 8}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${badgeX - 8}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(countLabel)}</text></g>
+  <line x1="16" y1="52" x2="${W - 16}" y2="52" stroke="${BORDER}" stroke-width="1"/>
+  <rect x="${INNER_X}" y="${INNER_Y}" width="${INNER_W}" height="${INNER_H}" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
   ${monthSvg}
   ${daySvg}
   ${cells}
-  <g transform="translate(${String(CARD_W - 110)},${CARD_H - 14})">
-    <text x="0" y="8" font-family="${FF}" font-size="7" fill="${T.muted}">Less</text>
+  <g transform="translate(${W - 118}, ${H - 16})">
+    <text x="0" y="8" font-family="${FF}" font-size="7" fill="${MUTED}">Less</text>
     ${LEVELS.map((c, i) => `<rect x="${22 + i * 12}" y="0" width="8" height="8" rx="2" fill="${c}"/>`).join('')}
-    <text x="${String(22 + 5 * 12 + 2)}" y="8" font-family="${FF}" font-size="7" fill="${T.muted}">More</text>
+    <text x="${22 + 5 * 12 + 6}" y="8" font-family="${FF}" font-size="7" fill="${MUTED}">More</text>
   </g>
+  <text x="20" y="${H - 8}" font-family="${FF}" font-size="9" fill="${MUTED}">Self-hosted · sorenthedev.indevs.in/api/cards/activity-graph</text>
 </svg>`;
 }
 
 function errorSvg(msg: string) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_W}" height="${CARD_H}" viewBox="0 0 ${CARD_W} ${CARD_H}"><rect width="${CARD_W}" height="${CARD_H}" rx="18" fill="${T.bg}"/><text x="${String(CARD_W / 2)}" y="${String(CARD_H / 2 + 6)}" text-anchor="middle" font-family="${FF}" font-size="13" fill="${T.muted}">${esc(msg)}</text></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/><text x="${W / 2}" y="${H / 2 + 6}" text-anchor="middle" font-family="${FF}" font-size="13" fill="${MUTED}">${esc(msg)}</text></svg>`;
 }
 
-export default async function handler(req: import('@vercel/node').VercelRequest, res: import('@vercel/node').VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const origin = req.headers.origin as string | undefined;
   res.setHeader('Access-Control-Allow-Origin', origin || '*'); res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   if (req.method === 'OPTIONS') return res.status(204).end();
