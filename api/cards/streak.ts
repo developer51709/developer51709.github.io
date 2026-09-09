@@ -4,8 +4,6 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 // Self-hosted GitHub Streak Stats SVG Card
 // ---------------------------------------------------------------------------
 
-const GITHUB_API = 'https://api.github.com';
-
 const cache = new Map<string, { data: unknown; expires: number }>();
 const CACHE_TTL = 1800_000;
 
@@ -17,13 +15,6 @@ function cached<T>(key: string): T | null {
 }
 function store(key: string, data: unknown) {
   cache.set(key, { data, expires: Date.now() + CACHE_TTL });
-}
-
-function ghHeaders(token?: string) {
-  return {
-    Accept: 'application/vnd.github+json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
 }
 
 function esc(s: string) {
