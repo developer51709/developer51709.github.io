@@ -294,13 +294,18 @@ function bannerSvg(
       const row = Math.floor(i / 2);
       const x = 670 + col * 284;
       const y = 248 + row * 122;
-      const shortDesc = wrapWords(repo.description || '—', 36).slice(0, 2).join(' ');
+      const allLines = wrapWords(repo.description || '—', 34);
+      const descLines = allLines.slice(0, 2);
+      if (allLines.length > 2) descLines[1] = descLines[1].trimEnd() + '…';
       const langColor = langColors[repo.language] || 'rgba(255,255,255,0.18)';
+      const descTspansWithEllipsis = descLines.map((ln, li) =>
+        li === 0 ? `<tspan x="18" y="50">${esc(ln)}</tspan>` : `<tspan x="18" y="66">${esc(ln)}</tspan>`,
+      ).join('');
       projectGrid += `<g transform="translate(${x}, ${y})">
         <rect width="272" height="108" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
         <text x="18" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="13" font-weight="600" fill="#fafafa">${esc(repo.name)}</text>
         <text x="254" y="26" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="12" fill="#facc15" text-anchor="end">★ ${String(repo.stars)}</text>
-        <text x="18" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" fill="#9ca3af" width="240" lengthAdjust="spacingAndGlyphs">${esc(shortDesc)}</text>
+        <text x="18" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="11" fill="#9ca3af">${descTspansWithEllipsis}</text>
         <circle cx="18" cy="88" r="5" fill="${langColor}"/>
         <text x="30" y="92" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="10" fill="#9ca3af">${esc(repo.language)}</text>
       </g>`;
