@@ -1,13 +1,9 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// ---------------------------------------------------------------------------
-// Self-hosted GitHub Stats SVG Card
-// ---------------------------------------------------------------------------
-
 const GITHUB_API = 'https://api.github.com';
 
 const cache = new Map<string, { data: unknown; expires: number }>();
-const CACHE_TTL = 1800_000; // 30 min
+const CACHE_TTL = 1800_000;
 
 function cached<T>(key: string): T | null {
   const e = cache.get(key);
@@ -40,67 +36,78 @@ function num(n: number) {
   return String(n);
 }
 
-const THEME = {
-  bg: '#0a0a0e',
-  card: '#101014',
-  border: '#1e1e26',
+// ── Theme (matches abyssdark) ──────────────────────────────────────────────
+
+const T = {
+  bg: '#101014',
+  border: 'rgba(231,231,236,0.08)',
   text: '#e7e7ec',
-  muted: '#888899',
+  muted: '#6b6b7b',
   primary: '#4f7cff',
   accent: '#a78bfa',
   green: '#22c55e',
+  iconBg: 'rgba(79,124,255,0.12)',
+  iconBgAccent: 'rgba(167,139,250,0.12)',
+  iconBgGreen: 'rgba(34,197,94,0.12)',
 };
 
-const ICON = {
-  star: `<path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z" fill="${THEME.accent}"/>`,
-  fork: `<path d="M12 2a3 3 0 0 0-3 3c0 1.1.6 2.1 1.5 2.6v.4L7.1 10.3a3 3 0 0 0 0 5.4l3.4 2.3v.4A3 3 0 1 0 12 20" fill="none" stroke="${THEME.primary}" stroke-width="1.8" stroke-linecap="round"/>`,
-  issue: `<circle cx="12" cy="12" r="10" fill="none" stroke="${THEME.green}" stroke-width="1.8"/><line x1="12" y1="8" x2="12" y2="13" stroke="${THEME.green}" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="${THEME.green}"/>`,
-  commit: `<circle cx="12" cy="12" r="3.5" fill="${THEME.primary}"/><line x1="12" y1="3" x2="12" y2="8.5" stroke="${THEME.primary}" stroke-width="1.8"/><line x1="12" y1="15.5" x2="12" y2="21" stroke="${THEME.primary}" stroke-width="1.8"/>`,
-};
+const W = 495;
+const H = 195;
+
+// ── SVG ────────────────────────────────────────────────────────────────────
 
 function cardSvg(
   username: string,
   stats: { stars: number; forks: number; issues: number; contributions: number },
 ) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195">
-  <style>
-    text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif}
-  </style>
+  // 2×2 grid of stat blocks. Each block: icon circle (24r) + value + label.
+  // Column centers at x=130 and x=365, rows at y=92 and y=150.
+  const col1 = 130;
+  const col2 = 365;
+  const row1 = 92;
+  const row2 = 150;
 
-  <rect width="495" height="195" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
+  const statBlocks = [
+    { x: col1, y: row1, value: num(stats.stars), label: 'Stars', color: T.accent, iconBg: T.iconBgAccent, icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14l-5-4.87 6.91-1.01z' },
+    { x: col2, y: row1, value: num(stats.forks), label: 'Forks', color: T.primary, iconBg: T.iconBg, icon: 'M12 2a3 3 0 0 0-3 3c0 1.1.6 2.1 1.5 2.6v.4L7.1 10.3a3 3 0 0 0 0 5.4l3.4 2.3v.4A3 3 0 1 0 12 20' },
+    { x: col1, y: row2, value: num(stats.issues), label: 'Issues', color: T.green, iconBg: T.iconBgGreen, icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1-4.5h-2V7h2v5z' },
+    { x: col2, y: row2, value: num(stats.contributions), label: 'Contributions', color: T.primary, iconBg: T.iconBg, icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' },
+  ];
 
-  <!-- accent bar -->
-  <rect width="495" height="4" rx="2" fill="${THEME.primary}"/>
+  const blocks = statBlocks
+    .map(
+      (s) => `
+    <circle cx="${s.x - 52}" cy="${s.y - 4}" r="16" fill="${s.iconBg}"/>
+    <g transform="translate(${s.x - 62}, ${s.y - 14}) scale(0.83)">
+      <path d="${s.icon}" fill="${s.color}"/>
+    </g>
+    <text x="${s.x}" y="${s.y}" font-size="24" font-weight="700" fill="${T.text}" text-anchor="middle">${s.value}</text>
+    <text x="${s.x}" y="${s.y + 16}" font-size="11" fill="${T.muted}" text-anchor="middle">${s.label}</text>`,
+    )
+    .join('');
 
-  <!-- header -->
-  <text x="20" y="44" font-size="14" font-weight="700" fill="${THEME.text}">${esc(trunc(username))}</text>
-  <text x="475" y="44" font-size="11" fill="${THEME.muted}" text-anchor="end">Stats</text>
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <style>text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,sans-serif}</style>
 
-  <!-- row 1 -->
-  <g transform="translate(70,78)">
-    <g transform="translate(-36,-14) scale(1.17)">${ICON.star}</g>
-    <text x="0" y="0" font-size="22" font-weight="700" fill="${THEME.text}">${num(stats.stars)}</text>
-    <text x="0" y="16" font-size="11" fill="${THEME.muted}">Total Stars</text>
-  </g>
-  <g transform="translate(315,78)">
-    <g transform="translate(-36,-14) scale(1.17)">${ICON.fork}</g>
-    <text x="0" y="0" font-size="22" font-weight="700" fill="${THEME.text}">${num(stats.forks)}</text>
-    <text x="0" y="16" font-size="11" fill="${THEME.muted}">Total Forks</text>
-  </g>
+  <rect width="${W}" height="${H}" rx="20" fill="${T.bg}" stroke="${T.border}" stroke-width="1"/>
+  <rect width="${W}" height="3" rx="1.5" fill="${T.primary}"/>
 
-  <!-- row 2 -->
-  <g transform="translate(70,140)">
-    <g transform="translate(-36,-14) scale(1.17)">${ICON.issue}</g>
-    <text x="0" y="0" font-size="22" font-weight="700" fill="${THEME.text}">${num(stats.issues)}</text>
-    <text x="0" y="16" font-size="11" fill="${THEME.muted}">Total Issues</text>
-  </g>
-  <g transform="translate(315,140)">
-    <g transform="translate(-36,-14) scale(1.17)">${ICON.commit}</g>
-    <text x="0" y="0" font-size="22" font-weight="700" fill="${THEME.text}">${num(stats.contributions)}</text>
-    <text x="0" y="16" font-size="11" fill="${THEME.muted}">Contributions</text>
-  </g>
+  <text x="20" y="38" font-size="14" font-weight="700" fill="${T.text}">${esc(trunc(username))}</text>
+  <text x="${W - 20}" y="38" font-size="11" fill="${T.muted}" text-anchor="end">GitHub Stats</text>
 
-  <text x="475" y="187" font-size="9" fill="${THEME.muted}" text-anchor="end">Self-hosted · GitHub Stats</text>
+  <line x1="20" y1="52" x2="${W - 20}" y2="52" stroke="${T.border}" stroke-width="1"/>
+
+  ${blocks}
+
+  <text x="${W - 20}" y="${H - 10}" font-size="9" fill="${T.muted}" text-anchor="end">Self-hosted</text>
+</svg>`;
+}
+
+function errorSvg(msg: string) {
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <style>text{font-family:-apple-system,BlinkMacSystemFont,sans-serif}</style>
+  <rect width="${W}" height="${H}" rx="20" fill="${T.bg}" stroke="${T.border}" stroke-width="1"/>
+  <text x="${W / 2}" y="${H / 2 + 5}" text-anchor="middle" font-size="13" fill="${T.muted}">${esc(msg)}</text>
 </svg>`;
 }
 
@@ -115,85 +122,55 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const username = String(req.query.username ?? '').trim();
   if (!username || !/^[a-zA-Z0-9-]+$/.test(username)) {
-    return res
-      .status(400)
-      .setHeader('Content-Type', 'image/svg+xml')
-      .send(errorSvg('Invalid username'));
+    return res.status(400).setHeader('Content-Type', 'image/svg+xml').send(errorSvg('Invalid username'));
   }
 
   const token = process.env.GITHUB_TOKEN;
 
   try {
-    // Profile
-    const pKey = `stats-profile:${username}`;
+    const pKey = `stats-p:${username}`;
     let profile = cached<Record<string, unknown>>(pKey);
     if (!profile) {
-      const r = await fetch(`${GITHUB_API}/users/${username}`, {
-        headers: ghHeaders(token),
-      });
-      if (!r.ok)
-        return res
-          .status(502)
-          .setHeader('Content-Type', 'image/svg+xml')
-          .send(errorSvg(`GitHub ${r.status}`));
+      const r = await fetch(`${GITHUB_API}/users/${username}`, { headers: ghHeaders(token) });
+      if (!r.ok) return res.status(502).setHeader('Content-Type', 'image/svg+xml').send(errorSvg(`GitHub ${r.status}`));
       profile = (await r.json()) as Record<string, unknown>;
       store(pKey, profile);
     }
 
-    // Repos (owned, non-fork, up to 300)
-    const rKey = `stats-repos:${username}`;
+    const rKey = `stats-r:${username}`;
     let repos = cached<Array<Record<string, unknown>>>(rKey);
     if (!repos) {
       const all: Array<Record<string, unknown>> = [];
       for (let pg = 1; pg <= 3; pg++) {
-        const r = await fetch(
-          `${GITHUB_API}/users/${username}/repos?per_page=100&sort=updated&page=${pg}`,
-          { headers: ghHeaders(token) },
-        );
+        const r = await fetch(`${GITHUB_API}/users/${username}/repos?per_page=100&sort=updated&page=${pg}`, { headers: ghHeaders(token) });
         if (!r.ok) break;
         const batch = (await r.json()) as Array<Record<string, unknown>>;
         all.push(...batch);
         if (batch.length < 100) break;
       }
-      repos = all.filter(
-        (r) =>
-          !r.fork &&
-          (r.owner as Record<string, unknown>)?.login === username,
-      );
+      repos = all.filter((r) => !r.fork && (r.owner as Record<string, unknown>)?.login === username);
       store(rKey, repos);
     }
 
-    // Contributions page (scrape the green square count)
-    const cKey = `stats-contrib:${username}`;
+    const cKey = `stats-c:${username}`;
     let contributions = cached<number>(cKey);
     if (contributions === null || contributions === undefined) {
       contributions = 0;
       try {
-        const r = await fetch(
-          `https://github.com/users/${username}`,
-          { headers: { 'User-Agent': 'github-card/1.0' } },
-        );
+        const r = await fetch(`https://github.com/users/${username}`, { headers: { 'User-Agent': 'github-card/1.0' } });
         if (r.ok) {
           const html = await r.text();
-          // Match the contributions count from the profile header
-          const m = html.match(
-            /(\d[\d,]*)\s+contributions?\s+in\s+the\s+last\s+year/i,
-          );
+          const m = html.match(/(\d[\d,]*)\s+contributions?\s+in\s+the\s+last\s+year/i);
           if (m) contributions = parseInt(m[1].replace(/,/g, ''), 10);
         }
-      } catch {
-        // Fallback: sum starred count (not ideal but non-critical)
-      }
+      } catch { /* */ }
       store(cKey, contributions);
     }
 
     const stats = {
       stars: repos!.reduce((s, r) => s + Number(r.stargazers_count || 0), 0),
       forks: repos!.reduce((s, r) => s + Number(r.forks_count || 0), 0),
-      issues: repos!.reduce(
-        (s, r) => s + Number(r.open_issues_count || 0),
-        0,
-      ),
+      issues: repos!.reduce((s, r) => s + Number(r.open_issues_count || 0), 0),
       contributions,
     };
 
@@ -202,17 +179,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.send(cardSvg(username, stats));
   } catch (err) {
     console.error('card/stats error:', err);
-    return res
-      .status(500)
-      .setHeader('Content-Type', 'image/svg+xml')
-      .send(errorSvg('Service error'));
+    return res.status(500).setHeader('Content-Type', 'image/svg+xml').send(errorSvg('Service error'));
   }
-}
-
-function errorSvg(msg: string) {
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="495" height="195" viewBox="0 0 495 195">
-  <style>text{font-family:-apple-system,BlinkMacSystemFont,sans-serif}</style>
-  <rect width="495" height="195" rx="14" fill="${THEME.bg}" stroke="${THEME.border}" stroke-width="1"/>
-  <text x="247" y="101" text-anchor="middle" font-size="13" fill="${THEME.muted}">${esc(msg)}</text>
-</svg>`;
 }
