@@ -15,7 +15,10 @@ const BORDER = 'rgba(255,255,255,0.08)';
 const TEXT = '#e7e7ec';
 const MUTED = '#6b7280';
 const W = 495, H = 195;
-const pillW = (handle: string, badge: string) => Math.round(20 + handle.length * 7.2 + 10 + badge.length * 7.2 + 20);
+function pillW(handle: string, badge: string) { return Math.round(12 + handle.length * 6.2 + 10 + badge.length * 6.2 + 12); }
+
+// Lucide layers for header (lucide-static v0.532.0)
+const HEADER_ICON = `<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>`;
 
 const LANG_COLORS: Record<string, string> = {
   JavaScript: '#f1e05a', TypeScript: '#3178c6', Python: '#3572a5', Java: '#b07219', 'C++': '#f34b7d', C: '#555555',
@@ -34,10 +37,7 @@ function cardSvg(username: string, langs: { name: string; percent: number }[]) {
   const dotX = Math.round(12 + handle.length * 6.2 + 4);
   const badgeX = Math.round(12 + handle.length * 6.2 + 14);
 
-  // Fixed 195 height: show top 4 langs with compact bars + fallback to empty bar
   const shown = langs.slice(0, 4);
-
-  // Segmented bar (full width like banner) — under the header
   const innerPad = 16;
   const barW = W - innerPad * 2;
   const barY = 62;
@@ -46,10 +46,8 @@ function cardSvg(username: string, langs: { name: string; percent: number }[]) {
   let barParts = '';
   if (shown.length > 0) {
     for (let i = 0; i < shown.length; i++) {
-      const lg = shown[i];
-      const w = (lg.percent / totalPct) * barW;
+      const lg = shown[i]; const w = (lg.percent / totalPct) * barW;
       const color = getLangColor(lg.name, i);
-      // Last segment gets no gap
       const drawW = i === shown.length - 1 ? w : Math.max(0, w - 2);
       barParts += `<rect x="${barX.toFixed(2)}" y="${barY}" width="${drawW.toFixed(2)}" height="7" rx="3.5" fill="${color}"/>`;
       barX += w;
@@ -58,20 +56,16 @@ function cardSvg(username: string, langs: { name: string; percent: number }[]) {
     barParts = `<rect x="${innerPad}" y="${barY}" width="${barW}" height="7" rx="3.5" fill="rgba(255,255,255,0.06)"/>`;
   }
 
-  // Bars list: 2 columns x 2 rows, each cell is an inner card
   const cardW = Math.floor((W - innerPad * 2 - 8) / 2);
   const cardH = 36;
   const listY = 80;
   let rows = '';
   if (shown.length > 0) {
     shown.forEach((lg, i) => {
-      const col = i % 2;
-      const row = Math.floor(i / 2);
-      const x = innerPad + col * (cardW + 8);
-      const y = listY + row * (cardH + 8);
+      const col = i % 2; const row = Math.floor(i / 2);
+      const x = innerPad + col * (cardW + 8); const y = listY + row * (cardH + 8);
       const color = getLangColor(lg.name, i);
       const pct = lg.percent.toFixed(1);
-      // mini bar inside the card
       const fillW = Math.max(2, (lg.percent / Math.max(...shown.map((s) => s.percent))) * (cardW - 24));
       rows += `<g transform="translate(${x}, ${y})">
         <rect width="${cardW}" height="${cardH}" rx="10" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
@@ -93,7 +87,8 @@ function cardSvg(username: string, langs: { name: string; percent: number }[]) {
   </defs>
   <rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/>
   <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
-  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">${esc(trunc(username, 14))}</text>
+  <g transform="translate(16, 14)"><circle cx="14" cy="14" r="14" fill="#a78bfa1F"/><svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#a78bfa" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${HEADER_ICON}</g></svg></g>
+  <text x="48" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">Top Languages</text>
   <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${dotX}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${badgeX}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(badge)}</text></g>
   <line x1="16" y1="52" x2="${W - 16}" y2="52" stroke="${BORDER}" stroke-width="1"/>
   ${barParts}

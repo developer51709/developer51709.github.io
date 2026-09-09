@@ -14,33 +14,48 @@ const BORDER = 'rgba(255,255,255,0.08)';
 const TEXT = '#e7e7ec';
 const MUTED = '#6b7280';
 const W = 495, H = 195;
+function pillW(handle: string, badge: string) { return Math.round(12 + handle.length * 6.2 + 10 + badge.length * 6.2 + 12); }
+
+const HEADER_ICON = `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>`;
+// Lucide icons (lucide-static v0.532.0, MIT) — viewBox 0 0 24 24, stroke 2, round.
+const ICONS = {
+  // lucide/flame
+  flame: `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>`,
+  // lucide/trophy (5 paths)
+  trophy: `<path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978"/><path d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"/><path d="M18 9h1.5a1 1 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z"/><path d="M6 9H4.5a1 1 0 0 1 0-5H6"/>`,
+} as const;
 
 function cardSvg(username: string, data: { currentStreak: number; longestStreak: number; totalContributions: number; startDate: string; endDate: string }) {
   const handle = `@${username}`;
   const badge = 'Streak';
-  const CHA = 7.2;
-  const pw = Math.round(20 + handle.length * CHA + 10 + badge.length * CHA + 20);
-  const dotX = Math.round(20 + handle.length * 6.2 + 4);
-  const badgeX = Math.round(20 + handle.length * 6.2 + 14);
+  const pw = pillW(handle, badge);
 
   const pad = 16;
-  const gapX = 11;
+  const gapX = 10;
   const cardW = Math.floor((W - pad * 2 - gapX) / 2);
-  const cardH = 66;
+  const cardH = 52;
   const topY = 64;
 
   const cards = [
-    { value: String(data.currentStreak), label: 'Current Streak', sub: data.startDate !== '—' ? `${data.startDate} → ${data.endDate}` : 'No active streak' },
-    { value: String(data.longestStreak), label: 'Longest Streak', sub: `${num(data.totalContributions)} total` },
+    { value: String(data.currentStreak), label: 'Current Streak', accent: '#f97316', icon: ICONS.flame },
+    { value: String(data.longestStreak), label: 'Longest Streak', accent: '#a78bfa', icon: ICONS.trophy },
   ].map((c, i) => {
     const x = pad + i * (cardW + gapX);
     return `<g transform="translate(${x}, ${topY})">
       <rect width="${cardW}" height="${cardH}" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-      <text x="${cardW / 2}" y="28" text-anchor="middle" font-family="${FF}" font-size="24" font-weight="700" fill="${TEXT}">${esc(c.value)}</text>
-      <text x="${cardW / 2}" y="44" text-anchor="middle" font-family="${FF}" font-size="11" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
-      <text x="${cardW / 2}" y="58" text-anchor="middle" font-family="${FF}" font-size="9" fill="${MUTED}">${esc(c.sub)}</text>
+      <g transform="translate(14, 12)">
+        <circle cx="14" cy="14" r="14" fill="${c.accent}1F"/>
+        <svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="${c.accent}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${c.icon}</g>
+        </svg>
+      </g>
+      <text x="48" y="26" dominant-baseline="middle" font-family="${FF}" font-size="10" font-weight="600" letter-spacing="1.2" fill="${MUTED}">${esc(c.label.toUpperCase())}</text>
+      <text x="48" y="44" font-family="${FF}" font-size="16" font-weight="700" fill="${TEXT}">${esc(c.value)}</text>
     </g>`;
   }).join('');
+
+  // Second row: total line centered below the two cards
+  const totalLine = `<text x="${W / 2}" y="138" text-anchor="middle" font-family="${FF}" font-size="11" fill="${MUTED}">Total: <tspan font-weight="600" fill="${TEXT}">${esc(num(data.totalContributions))}</tspan> contributions in the last year</text>`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs>
@@ -49,11 +64,12 @@ function cardSvg(username: string, data: { currentStreak: number; longestStreak:
   </defs>
   <rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/>
   <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
-  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">${esc(trunc(username))}</text>
-  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${dotX}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${badgeX}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(badge)}</text></g>
+  <g transform="translate(16, 14)"><circle cx="14" cy="14" r="14" fill="#f973161F"/><svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#f97316" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${HEADER_ICON}</g></svg></g>
+  <text x="48" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">Streak</text>
+  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${12 + handle.length * 6.2 + 4}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${12 + handle.length * 6.2 + 14}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(badge)}</text></g>
   <line x1="16" y1="52" x2="${W - 16}" y2="52" stroke="${BORDER}" stroke-width="1"/>
   ${cards}
-  <text x="20" y="154" font-family="${FF}" font-size="11" fill="${MUTED}">Total: <tspan font-weight="600" fill="${TEXT}">${esc(num(data.totalContributions))}</tspan> contributions in the last year</text>
+  ${totalLine}
   <text x="${W - 16}" y="${H - 10}" font-family="${FF}" font-size="9" fill="${MUTED}" text-anchor="end">Self-hosted · sorenthedev.indevs.in/api/cards/streak</text>
 </svg>`;
 }
@@ -63,7 +79,6 @@ function errorSvg(msg: string) {
 }
 
 function calcStreaks(days: { date: string; count: number }[]) {
-  const total = days.reduce((s, d) => s + d.count, 0);
   let current = 0, streakStart = '', streakEnd = '';
   const today = new Date().toISOString().slice(0, 10);
   let checkDate = today;
@@ -73,7 +88,7 @@ function calcStreaks(days: { date: string; count: number }[]) {
   }
   let longest = 0, run = 0;
   for (const d of days) { if (d.count > 0) { run++; if (run > longest) longest = run; } else run = 0; }
-  return { currentStreak: current, longestStreak: longest, total, startDate: streakStart || '—', endDate: streakEnd || '—' };
+  return { currentStreak: current, longestStreak: longest, startDate: streakStart || '—', endDate: streakEnd || '—' };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

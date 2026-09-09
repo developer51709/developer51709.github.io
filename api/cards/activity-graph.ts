@@ -5,7 +5,6 @@ const CACHE_TTL = 1800_000;
 function cached<T>(k: string): T | null { const e = cache.get(k); if (e && e.expires > Date.now()) return e.data as T; cache.delete(k); return null; }
 function store(k: string, v: unknown) { cache.set(k, { data: v, expires: Date.now() + CACHE_TTL }); }
 function esc(s: string) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-function trunc(s: string, max = 14) { return s.length > max ? s.slice(0, max - 1) + '…' : s; }
 
 const FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
 const BG = '#060609';
@@ -13,13 +12,14 @@ const BORDER = 'rgba(255,255,255,0.08)';
 const TEXT = '#e7e7ec';
 const MUTED = '#6b7280';
 const W = 495, H = 195;
-function pillW(handle: string, badge: string) { return Math.round(20 + handle.length * 7.2 + 10 + badge.length * 7.2 + 20); }
+function pillW(handle: string, badge: string) { return Math.round(12 + handle.length * 6.2 + 10 + badge.length * 6.2 + 12); }
+
+// Lucide calendar for header (lucide-static v0.532.0)
+const HEADER_ICON = `<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>`;
 
 const LEVELS = ['#0e0e14', '#1a2a4a', '#2a4a7a', '#4f7cff', '#7da4ff'];
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-// Fixed layout that matches the other 495×195 cards.
-// Heatmap lives inside a translucent inner card so it reads as part of the family.
 const PAD = 16;
 const INNER_X = PAD;
 const INNER_Y = 62;
@@ -27,16 +27,14 @@ const INNER_W = W - PAD * 2;
 const INNER_H = 102;
 const CELL = 7;
 const GAP = 1;
-const STEP = CELL + GAP; // 8
-const GRID_PAD_X = 28; // space for day labels inside the inner card
-const GRID_PAD_Y = 16; // space for month labels inside the inner card
+const STEP = CELL + GAP;
+const GRID_PAD_X = 28;
+const GRID_PAD_Y = 16;
 
 function cardSvg(username: string, contributions: { date: string; count: number }[], total: number) {
   const handle = `@${username}`;
-  const countLabel = `${total.toLocaleString()} contributions`;
-  const pw = pillW(handle, countLabel);
-  const dotX = Math.round(20 + handle.length * 7.2 + 5);
-  const badgeX = Math.round(20 + handle.length * 7.2 + 15);
+  const badge = 'Activity';
+  const pw = pillW(handle, badge);
 
   const byDate = new Map(contributions.map((d) => [d.date, d.count]));
   const sorted = contributions.filter((d) => d.count > 0).map((d) => d.date).sort();
@@ -54,7 +52,6 @@ function cardSvg(username: string, contributions: { date: string; count: number 
     d.setUTCDate(d.getUTCDate() + 1);
     if (d.getUTCDay() === 0) col++;
   }
-  // Clamp to what fits in the inner card (53 cols max)
   const maxCols = Math.floor((INNER_W - GRID_PAD_X - 8) / STEP);
   const trimmed = allDays.filter((day) => day.col < maxCols);
 
@@ -62,10 +59,7 @@ function cardSvg(username: string, contributions: { date: string; count: number 
   let lastMonth = -1;
   for (const day of trimmed) {
     const m = new Date(day.date + 'T00:00:00Z').getUTCMonth();
-    if (m !== lastMonth) {
-      monthLabels.push({ label: MONTHS[m], x: INNER_X + GRID_PAD_X + day.col * STEP });
-      lastMonth = m;
-    }
+    if (m !== lastMonth) { monthLabels.push({ label: MONTHS[m], x: INNER_X + GRID_PAD_X + day.col * STEP }); lastMonth = m; }
   }
 
   let cells = '';
@@ -77,9 +71,7 @@ function cardSvg(username: string, contributions: { date: string; count: number 
   }
 
   let monthSvg = '';
-  for (const m of monthLabels) {
-    monthSvg += `<text x="${m.x}" y="${INNER_Y + 12}" font-family="${FF}" font-size="7.5" fill="${MUTED}">${m.label}</text>\n`;
-  }
+  for (const m of monthLabels) monthSvg += `<text x="${m.x}" y="${INNER_Y + 12}" font-family="${FF}" font-size="7.5" fill="${MUTED}">${m.label}</text>\n`;
 
   const dayLabels = ['Mon', '', 'Wed', '', 'Fri', '', ''];
   let daySvg = '';
@@ -95,8 +87,9 @@ function cardSvg(username: string, contributions: { date: string; count: number 
   </defs>
   <rect width="${W}" height="${H}" rx="18" fill="${BG}"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowA)"/><rect width="${W}" height="${H}" rx="18" fill="url(#glowB)"/><rect x="0.5" y="0.5" width="${W - 1}" height="${H - 1}" rx="18" fill="none" stroke="${BORDER}" stroke-width="1"/>
   <rect width="${W}" height="52" rx="18" fill="rgba(255,255,255,0.02)"/><rect width="${W}" height="52" rx="18" fill="rgba(79,124,255,0.04)"/>
-  <text x="20" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">${esc(trunc(username))}</text>
-  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${dotX - 8}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${badgeX - 8}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(countLabel)}</text></g>
+  <g transform="translate(16, 14)"><circle cx="14" cy="14" r="14" fill="#22c55e1F"/><svg x="6" y="6" width="16" height="16" viewBox="0 0 24 24" overflow="visible" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#22c55e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${HEADER_ICON}</g></svg></g>
+  <text x="48" y="36" font-family="${FF}" font-size="13" font-weight="700" fill="${TEXT}">Activity</text>
+  <g transform="translate(${W - pw - 16}, 18)"><rect width="${pw}" height="24" rx="12" fill="rgba(79,124,255,0.12)"/><text x="12" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(handle)}</text><text x="${12 + handle.length * 6.2 + 4}" y="16" font-family="${FF}" font-size="11" fill="#7da4ff">·</text><text x="${12 + handle.length * 6.2 + 14}" y="16" font-family="${FF}" font-size="11" fill="#4f7cff">${esc(badge)}</text></g>
   <line x1="16" y1="52" x2="${W - 16}" y2="52" stroke="${BORDER}" stroke-width="1"/>
   <rect x="${INNER_X}" y="${INNER_Y}" width="${INNER_W}" height="${INNER_H}" rx="12" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
   ${monthSvg}
