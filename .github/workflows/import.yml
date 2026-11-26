@@ -1,0 +1,35 @@
+name: Import portfolio source
+
+# One-time copy of the site source out of old_portfolio, which still tracks
+# node_modules and the build output. Delete this file once the import lands.
+on:
+  push:
+    paths:
+      - .github/workflows/import.yml
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Copy source from old_portfolio
+        run: |
+          git clone --depth 1 https://github.com/developer51709/old_portfolio.git /tmp/source
+          rsync -a \
+            --exclude .git \
+            --exclude node_modules \
+            --exclude dist \
+            --exclude tsconfig.tsbuildinfo \
+            /tmp/source/ ./
+
+      - name: Commit and push
+        run: |
+          git config user.name "Soren"
+          git config user.email "jgarland13191@gmail.com"
+          git add -A
+          git commit -m "Import portfolio source from old_portfolio"
+          git push
