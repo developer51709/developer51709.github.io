@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="soren — terminal prompt">
+  <rect width="64" height="64" rx="14" fill="#0a0a0a"/>
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="none" stroke="#00ff00" stroke-opacity="0.45" stroke-width="2"/>
+  <path d="M17 18 L33 32 L17 46" fill="none" stroke="#00ff00" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"/>
+  <rect x="44" y="38" width="12" height="8" fill="#00ff00"/>
+</svg>
